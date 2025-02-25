@@ -1,0 +1,11 @@
+{
+  "cSpell.words": ["Bananank", "BIWEEK", "cuid", "healthcheck", "uuidv"],
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#4b054e",
+    "titleBar.activeForeground": "#e286e5",
+    "titleBar.inactiveBackground": "#00640d",
+    "titleBar.inactiveForeground": "#6bd869",
+    "editor.background": "#000000",
+    "terminal.background": "#000000"
+  }
+}
