@@ -32,5 +32,5 @@ export default function SignIn() {
   //     fetchProviders();
   //   }, []);
 
-  return <Login />;
+  return <h1>NOT IMPLEMENTED</h1>;
 }

@@ -16,14 +16,20 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const mockCallAPI = async () => {
+  console.log('API GIT Call');
+  const response = await fetch('/api/hello');
+  const data = await response.json();
+  console.log('API GIT Data', data);
+};
+
 export default function Home() {
   const session = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    console.log('session.data', session.data);
     if (!session.data && session.status !== 'loading') {
-      router.push('/auth');
+      router.replace('/auth');
     }
   }, [session.data, session.status, router]);
 
@@ -44,6 +50,7 @@ export default function Home() {
       >
         <main className={styles.main}>
           <h1>IT IS ON!</h1>
+          <button onClick={mockCallAPI}>CALL API</button>
         </main>
         <footer className={styles.footer}></footer>
       </div>

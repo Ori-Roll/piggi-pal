@@ -1,4 +1,4 @@
-import { signIn } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
 export const LoginButton = () => {
@@ -17,7 +17,7 @@ export const LogoutButton = () => {
   return (
     <button
       onClick={() => {
-        signIn('signout', { callbackUrl: '/' });
+        signOut({ callbackUrl: '/' });
       }}
     >
       Logout

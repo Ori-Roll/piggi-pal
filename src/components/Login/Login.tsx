@@ -16,6 +16,8 @@ import {
 import YourSvg from '@/assets/pigibank_all.svg';
 import { useIsMobile } from '@/hooks/configHooks';
 
+import { GoogleButton } from '@/components/base/buttons/AuthButtons';
+
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -68,6 +70,7 @@ export default function LoginPage() {
           <Divider label="Or continue with" labelPosition="center" my="lg" />
 
           <Group grow mb="md" mt="md">
+            <GoogleButton />;
             {/* <LoginButton auth={{ name: 'Google', id: 'google' }} /> */}
             {/* <Button variant="default">Facebook</Button> */}
           </Group>

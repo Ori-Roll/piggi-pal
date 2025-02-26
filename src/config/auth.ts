@@ -99,16 +99,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return `${baseUrl}`;
     },
     async session({ session, token }) {
-      if (session.user?.name) session.user.name = token.name;
+      if (token.id) console.log('NOTE _- IMPLEMENT token.id', token.id);
+      if (token.name) session.user.name = token.name;
+      if (token.email) session.user.email = token.email;
+      if (token.picture) session.user.image = token.picture;
+
       return session;
     },
     async jwt({ token, user }) {
-      const newUser = { ...user } as unknown as {
-        first_name: string;
-        last_name: string;
-      };
-      if (newUser.first_name && newUser.last_name)
-        token.name = `${newUser.first_name} ${newUser.last_name}`;
+      token.user = user;
       return token;
     },
   },
