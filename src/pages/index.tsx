@@ -1,6 +1,10 @@
 import Head from 'next/head';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { useRouter } from 'next/navigation';
 import styles from '@/styles/Home.module.css';
+import { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { Loader } from '@mantine/core';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -13,10 +17,24 @@ const geistMono = Geist_Mono({
 });
 
 export default function Home() {
+  const session = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log('session.data', session.data);
+    if (!session.data && session.status !== 'loading') {
+      router.push('/auth');
+    }
+  }, [session.data, session.status, router]);
+
+  if (session.status === 'loading' || !session.data) {
+    return <Loader />;
+  }
+
   return (
     <>
       <Head>
-        <title>Create Next App</title>
+        <title>piggi-pal</title>
         <meta name="description" content="Piggi-pal app" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

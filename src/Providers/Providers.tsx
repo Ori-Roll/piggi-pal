@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { MantineProvider } from '@mantine/core';
+import { SessionProvider } from 'next-auth/react';
 import '@mantine/core/styles.css';
 import '@mantine/carousel/styles.css';
 import '@mantine/dates/styles.css';
@@ -9,9 +10,11 @@ import theme from '@/config/mantine';
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <MantineProvider theme={theme}>{children}</MantineProvider>
-    </QueryClientProvider>
+    <SessionProvider>
+      <QueryClientProvider client={queryClient}>
+        <MantineProvider theme={theme}>{children}</MantineProvider>
+      </QueryClientProvider>
+    </SessionProvider>
   );
 };
 

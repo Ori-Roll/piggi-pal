@@ -68,10 +68,8 @@ export default function LoginPage() {
           <Divider label="Or continue with" labelPosition="center" my="lg" />
 
           <Group grow mb="md" mt="md">
-            <Button variant="default" onClick={() => console.log('Google!')}>
-              Google
-            </Button>
-            <Button variant="default">Facebook</Button>
+            {/* <LoginButton auth={{ name: 'Google', id: 'google' }} /> */}
+            {/* <Button variant="default">Facebook</Button> */}
           </Group>
         </Paper>
         <img style={{ height: '620px' }} src={YourSvg} />
