@@ -83,15 +83,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       clientId: process.env.AUTH_AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_AUTH_GOOGLE_SECRET,
       // Get the user profile from Google OAuth
-      // profile(profile) {
-      //   console.log('IN profile', profile);
-      //   return {
-      //     id: profile.email,
-      //     name: profile.name,
-      //     email: profile.email,
-      //     image: profile.picture,
-      //   };
-      // },
+      profile(profile) {
+        console.log('IN profile', profile);
+        return {
+          ...profile,
+        };
+      },
     }),
   ],
   pages: {
@@ -110,19 +107,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
 
       const { type, provider, providerAccountId } = account || {};
-      const existingUser = await db.user.findFirst({
-        where: {
-          OR: [
-            {
-              id: user.id,
+
+      const existingUser = user.email
+        ? await db.user.findUnique({
+            where: {
+              email: user.email,
             },
-            {
-              providerId: provider,
-              providerAccountId: providerAccountId,
-            },
-          ],
-        },
-      });
+          })
+        : null;
       if (!existingUser) {
         const newUserEmail = user.email;
         const userDisplayName = user.name;
@@ -148,8 +140,17 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return `${baseUrl}`;
     },
     async session({ session, token }) {
-      //TODO: This now uses sub for id, but should it not be id from profile? Note that id appears in userDetail in signIn callback
-      if (token.sub) session.user.id = token.sub;
+      // console.log('token', token);
+      // console.log('session', session);
+      if (token.email) {
+        const existingUser = await db.user.findFirst({
+          where: {
+            email: token.email,
+          },
+        });
+        //TODO: This now uses sub for id, but should it not be id from profile? Note that id appears in userDetail in signIn callback
+        if (existingUser?.id) session.user.id = existingUser.id;
+      }
       if (token.name) session.user.name = token.name;
       if (token.email) session.user.email = token.email;
       if (token.picture) session.user.image = token.picture;
@@ -157,6 +158,28 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return session;
     },
     async jwt({ token, user }) {
+      // console.log('IN JWT CALLBACK user', user);
+      // console.log('IN JWT CALLBACK account', account);
+      // let existingUser;
+      // if (account && account.providerAccountId) {
+      //   existingUser = await db.user.findFirst({
+      //     where: {
+      //       providerAccountId: account.providerAccountId,
+      //     },
+      //   });
+      // }
+      // if (!existingUser && user?.email) {
+      //   existingUser = await db.user.findFirst({
+      //     where: {
+      //       email: user.email,
+      //     },
+      //   });
+      // }
+      // console.log('existingUser', existingUser);
+      // token.user = {
+      //   ...user,
+      //   ...(existingUser?.id ? { id: existingUser.id } : {}),
+      // };
       token.user = user;
       return token;
     },
