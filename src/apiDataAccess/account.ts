@@ -1,6 +1,7 @@
 import { Account } from '@prisma/client';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
 import { db } from '@/server/db';
+import { APIError } from '@/common/apiUtils';
 
 const getAllUserAccounts = async (userID: string) => {
   try {
@@ -12,9 +13,10 @@ const getAllUserAccounts = async (userID: string) => {
     return accounts;
   } catch (error) {
     console.error(error);
-    throw new Error(HttpStatusCodes.INTERNAL_SERVER_ERROR, {
-      cause: 'Could not get accounts',
-    });
+    throw new APIError(
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      'Could not get accounts'
+    );
   }
 };
 
@@ -39,9 +41,10 @@ const getOneAccount = async (id: string, userId: string) => {
     return account;
   } catch (error) {
     console.error(error);
-    throw new Error(HttpStatusCodes.INTERNAL_SERVER_ERROR, {
-      cause: 'Could not get account',
-    });
+    throw new APIError(
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      'Could not get account'
+    );
   }
 };
 
@@ -55,9 +58,10 @@ const getOneAccountByIdOnly = async (id: string) => {
     return account;
   } catch (error) {
     console.error(error);
-    throw new Error(HttpStatusCodes.INTERNAL_SERVER_ERROR, {
-      cause: 'Could not get account',
-    });
+    throw new APIError(
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      'Could not get account'
+    );
   }
 };
 
@@ -73,9 +77,10 @@ const getManyAccountsByIds = async (ids: string[]) => {
     return accounts;
   } catch (error) {
     console.error(error);
-    throw new Error(HttpStatusCodes.INTERNAL_SERVER_ERROR, {
-      cause: 'Could not get accounts',
-    });
+    throw new APIError(
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      'Could not get accounts'
+    );
   }
 };
 
@@ -93,9 +98,10 @@ const addAccount = async (data: Account) => {
     return account;
   } catch (error) {
     console.error(error);
-    throw new Error(HttpStatusCodes.INTERNAL_SERVER_ERROR, {
-      cause: 'Could not add account',
-    });
+    throw new APIError(
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      'Could not add account'
+    );
   }
 };
 
@@ -107,9 +113,10 @@ const deleteAccount = async (id: string) => {
     return account;
   } catch (error) {
     console.error(error);
-    throw new Error(HttpStatusCodes.INTERNAL_SERVER_ERROR, {
-      cause: 'Could not delete account',
-    });
+    throw new APIError(
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      'Could not delete account'
+    );
   }
 };
 
@@ -122,9 +129,10 @@ const updateAccount = async (id: string, data: Account, userId: string) => {
     return account;
   } catch (error) {
     console.error(error);
-    throw new Error(HttpStatusCodes.INTERNAL_SERVER_ERROR, {
-      cause: 'Could not update account',
-    });
+    throw new APIError(
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      'Could not update account'
+    );
   }
 };
 
@@ -137,9 +145,10 @@ const updateAccountWithIdOnly = async (id: string, data: Partial<Account>) => {
     return account;
   } catch (error) {
     console.error(error);
-    throw new Error(HttpStatusCodes.INTERNAL_SERVER_ERROR, {
-      cause: 'Could not update account',
-    });
+    throw new APIError(
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      'Could not update account'
+    );
   }
 };
 

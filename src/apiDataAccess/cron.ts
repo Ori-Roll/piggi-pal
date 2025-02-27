@@ -2,6 +2,7 @@ import { Interval, Periodic, TransactionReason } from '@prisma/client';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
 import { db } from '@/server/db';
 import { addDays, addWeeks, addMonths, addYears } from 'date-fns';
+import { APIError } from '@/common/apiUtils';
 
 // import { Periodic } from '@prisma/client';
 // import accountHandler from '@src/handlers/accountHandler';
@@ -97,9 +98,10 @@ const processPeriodicTransactions = async (minDate: Date, maxDate: Date) => {
     for (const periodic of periodics) {
       const account = accounts.find((a) => a.id === periodic.accountId);
       if (!account) {
-        throw new Error(HttpStatusCodes.NOT_FOUND, {
-          cause: 'Account not found for periodic',
-        });
+        throw new APIError(
+          HttpStatusCodes.NOT_FOUND,
+          'Account not found for periodic'
+        );
       }
       const { actionType, amount } = periodic;
       if (actionType === 'ADD' && amount) {

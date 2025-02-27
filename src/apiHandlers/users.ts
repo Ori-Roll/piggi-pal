@@ -1,10 +1,11 @@
 import HttpStatusCodes from '@/common/HttpStatusCodes';
 import UsersAccess from '@/apiDataAccess/users';
 import { User } from '@prisma/client';
+import { APIError } from '@/common/apiUtils';
 
 // **** Variables **** //
 
-export const USER_NOT_FOUND_ERR = 'User not found';
+export const USER_NOT_FOUND_ERR_MESSAGE = 'User not found';
 
 // **** Functions **** //
 
@@ -18,6 +19,7 @@ function getAll(): Promise<User[]> {
 }
 
 function getOne(id: string): Promise<User | null> {
+  console.log('getOne id', id);
   return UsersAccess.getOne(id);
 }
 
@@ -40,7 +42,7 @@ function addOne(user: User): Promise<User> {
 async function updateOne(id: string, user: Partial<User>): Promise<User> {
   const persists = await UsersAccess.persists(id);
   if (!persists) {
-    throw new Error(HttpStatusCodes.NOT_FOUND, { cause: USER_NOT_FOUND_ERR });
+    throw new APIError(HttpStatusCodes.NOT_FOUND, USER_NOT_FOUND_ERR_MESSAGE);
   }
   // Return user
   return UsersAccess.updateUser(id, user);
@@ -52,7 +54,7 @@ async function updateOne(id: string, user: Partial<User>): Promise<User> {
 async function _delete(id: string): Promise<void> {
   const persists = await UsersAccess.persists(id);
   if (!persists) {
-    throw new Error(HttpStatusCodes.NOT_FOUND, { cause: USER_NOT_FOUND_ERR });
+    throw new APIError(HttpStatusCodes.NOT_FOUND, USER_NOT_FOUND_ERR_MESSAGE);
   }
   // Delete user
   return UsersAccess.delete(id);
