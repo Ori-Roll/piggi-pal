@@ -383,79 +383,82 @@ enum HttpStatusCodesEnum {
 }
 
 const HttpStatusCodes = {
-  CONTINUE: String(HttpStatusCodesEnum.CONTINUE),
-  SWITCHING_PROTOCOLS: String(HttpStatusCodesEnum.SWITCHING_PROTOCOLS),
-  PROCESSING: String(HttpStatusCodesEnum.PROCESSING),
-  OK: String(HttpStatusCodesEnum.OK),
-  CREATED: String(HttpStatusCodesEnum.CREATED),
-  ACCEPTED: String(HttpStatusCodesEnum.ACCEPTED),
-  NON_AUTHORITATIVE_INFORMATION: String(
+  CONTINUE: Number(HttpStatusCodesEnum.CONTINUE),
+  SWITCHING_PROTOCOLS: Number(HttpStatusCodesEnum.SWITCHING_PROTOCOLS),
+  PROCESSING: Number(HttpStatusCodesEnum.PROCESSING),
+  OK: Number(HttpStatusCodesEnum.OK),
+  CREATED: Number(HttpStatusCodesEnum.CREATED),
+  ACCEPTED: Number(HttpStatusCodesEnum.ACCEPTED),
+  NON_AUTHORITATIVE_INFORMATION: Number(
     HttpStatusCodesEnum.NON_AUTHORITATIVE_INFORMATION
   ),
-  NO_CONTENT: String(HttpStatusCodesEnum.NO_CONTENT),
-  RESET_CONTENT: String(HttpStatusCodesEnum.RESET_CONTENT),
-  PARTIAL_CONTENT: String(HttpStatusCodesEnum.PARTIAL_CONTENT),
-  MULTI_STATUS: String(HttpStatusCodesEnum.MULTI_STATUS),
-  ALREADY_REPORTED: String(HttpStatusCodesEnum.ALREADY_REPORTED),
-  IM_USED: String(HttpStatusCodesEnum.IM_USED),
-  MULTIPLE_CHOICES: String(HttpStatusCodesEnum.MULTIPLE_CHOICES),
-  MOVED_PERMANENTLY: String(HttpStatusCodesEnum.MOVED_PERMANENTLY),
-  FOUND: String(HttpStatusCodesEnum.FOUND),
-  SEE_OTHER: String(HttpStatusCodesEnum.SEE_OTHER),
-  NOT_MODIFIED: String(HttpStatusCodesEnum.NOT_MODIFIED),
-  USE_PROXY: String(HttpStatusCodesEnum.USE_PROXY),
-  SWITCH_PROXY: String(HttpStatusCodesEnum.SWITCH_PROXY),
-  TEMPORARY_REDIRECT: String(HttpStatusCodesEnum.TEMPORARY_REDIRECT),
-  PERMANENT_REDIRECT: String(HttpStatusCodesEnum.PERMANENT_REDIRECT),
-  BAD_REQUEST: String(HttpStatusCodesEnum.BAD_REQUEST),
-  UNAUTHORIZED: String(HttpStatusCodesEnum.UNAUTHORIZED),
-  PAYMENT_REQUIRED: String(HttpStatusCodesEnum.PAYMENT_REQUIRED),
-  FORBIDDEN: String(HttpStatusCodesEnum.FORBIDDEN),
-  NOT_FOUND: String(HttpStatusCodesEnum.NOT_FOUND),
-  METHOD_NOT_ALLOWED: String(HttpStatusCodesEnum.METHOD_NOT_ALLOWED),
-  NOT_ACCEPTABLE: String(HttpStatusCodesEnum.NOT_ACCEPTABLE),
-  PROXY_AUTHENTICATION_REQUIRED: String(
+  NO_CONTENT: Number(HttpStatusCodesEnum.NO_CONTENT),
+  RESET_CONTENT: Number(HttpStatusCodesEnum.RESET_CONTENT),
+  PARTIAL_CONTENT: Number(HttpStatusCodesEnum.PARTIAL_CONTENT),
+  MULTI_STATUS: Number(HttpStatusCodesEnum.MULTI_STATUS),
+  ALREADY_REPORTED: Number(HttpStatusCodesEnum.ALREADY_REPORTED),
+  IM_USED: Number(HttpStatusCodesEnum.IM_USED),
+  MULTIPLE_CHOICES: Number(HttpStatusCodesEnum.MULTIPLE_CHOICES),
+  MOVED_PERMANENTLY: Number(HttpStatusCodesEnum.MOVED_PERMANENTLY),
+  FOUND: Number(HttpStatusCodesEnum.FOUND),
+  SEE_OTHER: Number(HttpStatusCodesEnum.SEE_OTHER),
+  NOT_MODIFIED: Number(HttpStatusCodesEnum.NOT_MODIFIED),
+  USE_PROXY: Number(HttpStatusCodesEnum.USE_PROXY),
+  SWITCH_PROXY: Number(HttpStatusCodesEnum.SWITCH_PROXY),
+  TEMPORARY_REDIRECT: Number(HttpStatusCodesEnum.TEMPORARY_REDIRECT),
+  PERMANENT_REDIRECT: Number(HttpStatusCodesEnum.PERMANENT_REDIRECT),
+  BAD_REQUEST: Number(HttpStatusCodesEnum.BAD_REQUEST),
+  UNAUTHORIZED: Number(HttpStatusCodesEnum.UNAUTHORIZED),
+  PAYMENT_REQUIRED: Number(HttpStatusCodesEnum.PAYMENT_REQUIRED),
+  FORBIDDEN: Number(HttpStatusCodesEnum.FORBIDDEN),
+  NOT_FOUND: Number(HttpStatusCodesEnum.NOT_FOUND),
+  METHOD_NOT_ALLOWED: Number(HttpStatusCodesEnum.METHOD_NOT_ALLOWED),
+  NOT_ACCEPTABLE: Number(HttpStatusCodesEnum.NOT_ACCEPTABLE),
+  PROXY_AUTHENTICATION_REQUIRED: Number(
     HttpStatusCodesEnum.PROXY_AUTHENTICATION_REQUIRED
   ),
-  REQUEST_TIMEOUT: String(HttpStatusCodesEnum.REQUEST_TIMEOUT),
-  CONFLICT: String(HttpStatusCodesEnum.CONFLICT),
-  GONE: String(HttpStatusCodesEnum.GONE),
-  LENGTH_REQUIRED: String(HttpStatusCodesEnum.LENGTH_REQUIRED),
-  PRECONDITION_FAILED: String(HttpStatusCodesEnum.PRECONDITION_FAILED),
-  PAYLOAD_TOO_LARGE: String(HttpStatusCodesEnum.PAYLOAD_TOO_LARGE),
-  URI_TOO_LONG: String(HttpStatusCodesEnum.URI_TOO_LONG),
-  UNSUPPORTED_MEDIA_TYPE: String(HttpStatusCodesEnum.UNSUPPORTED_MEDIA_TYPE),
-  RANGE_NOT_SATISFIABLE: String(HttpStatusCodesEnum.RANGE_NOT_SATISFIABLE),
-  EXPECTATION_FAILED: String(HttpStatusCodesEnum.EXPECTATION_FAILED),
-  I_AM_A_TEAPOT: String(HttpStatusCodesEnum.I_AM_A_TEAPOT),
-  MISDIRECTED_REQUEST: String(HttpStatusCodesEnum.MISDIRECTED_REQUEST),
-  UNPROCESSABLE_ENTITY: String(HttpStatusCodesEnum.UNPROCESSABLE_ENTITY),
-  LOCKED: String(HttpStatusCodesEnum.LOCKED),
-  FAILED_DEPENDENCY: String(HttpStatusCodesEnum.FAILED_DEPENDENCY),
-  UPGRADE_REQUIRED: String(HttpStatusCodesEnum.UPGRADE_REQUIRED),
-  PRECONDITION_REQUIRED: String(HttpStatusCodesEnum.PRECONDITION_REQUIRED),
-  TOO_MANY_REQUESTS: String(HttpStatusCodesEnum.TOO_MANY_REQUESTS),
-  REQUEST_HEADER_FIELDS_TOO_LARGE: String(
+  REQUEST_TIMEOUT: Number(HttpStatusCodesEnum.REQUEST_TIMEOUT),
+  CONFLICT: Number(HttpStatusCodesEnum.CONFLICT),
+  GONE: Number(HttpStatusCodesEnum.GONE),
+  LENGTH_REQUIRED: Number(HttpStatusCodesEnum.LENGTH_REQUIRED),
+  PRECONDITION_FAILED: Number(HttpStatusCodesEnum.PRECONDITION_FAILED),
+  PAYLOAD_TOO_LARGE: Number(HttpStatusCodesEnum.PAYLOAD_TOO_LARGE),
+  URI_TOO_LONG: Number(HttpStatusCodesEnum.URI_TOO_LONG),
+  UNSUPPORTED_MEDIA_TYPE: Number(HttpStatusCodesEnum.UNSUPPORTED_MEDIA_TYPE),
+  RANGE_NOT_SATISFIABLE: Number(HttpStatusCodesEnum.RANGE_NOT_SATISFIABLE),
+  EXPECTATION_FAILED: Number(HttpStatusCodesEnum.EXPECTATION_FAILED),
+  I_AM_A_TEAPOT: Number(HttpStatusCodesEnum.I_AM_A_TEAPOT),
+  MISDIRECTED_REQUEST: Number(HttpStatusCodesEnum.MISDIRECTED_REQUEST),
+  UNPROCESSABLE_ENTITY: Number(HttpStatusCodesEnum.UNPROCESSABLE_ENTITY),
+  LOCKED: Number(HttpStatusCodesEnum.LOCKED),
+  FAILED_DEPENDENCY: Number(HttpStatusCodesEnum.FAILED_DEPENDENCY),
+  UPGRADE_REQUIRED: Number(HttpStatusCodesEnum.UPGRADE_REQUIRED),
+  PRECONDITION_REQUIRED: Number(HttpStatusCodesEnum.PRECONDITION_REQUIRED),
+  TOO_MANY_REQUESTS: Number(HttpStatusCodesEnum.TOO_MANY_REQUESTS),
+  REQUEST_HEADER_FIELDS_TOO_LARGE: Number(
     HttpStatusCodesEnum.REQUEST_HEADER_FIELDS_TOO_LARGE
   ),
-  UNAVAILABLE_FOR_LEGAL_REASONS: String(
+  UNAVAILABLE_FOR_LEGAL_REASONS: Number(
     HttpStatusCodesEnum.UNAVAILABLE_FOR_LEGAL_REASONS
   ),
-  INTERNAL_SERVER_ERROR: String(HttpStatusCodesEnum.INTERNAL_SERVER_ERROR),
-  NOT_IMPLEMENTED: String(HttpStatusCodesEnum.NOT_IMPLEMENTED),
-  BAD_GATEWAY: String(HttpStatusCodesEnum.BAD_GATEWAY),
-  SERVICE_UNAVAILABLE: String(HttpStatusCodesEnum.SERVICE_UNAVAILABLE),
-  GATEWAY_TIMEOUT: String(HttpStatusCodesEnum.GATEWAY_TIMEOUT),
-  HTTP_VERSION_NOT_SUPPORTED: String(
+  INTERNAL_SERVER_ERROR: Number(HttpStatusCodesEnum.INTERNAL_SERVER_ERROR),
+  NOT_IMPLEMENTED: Number(HttpStatusCodesEnum.NOT_IMPLEMENTED),
+  BAD_GATEWAY: Number(HttpStatusCodesEnum.BAD_GATEWAY),
+  SERVICE_UNAVAILABLE: Number(HttpStatusCodesEnum.SERVICE_UNAVAILABLE),
+  GATEWAY_TIMEOUT: Number(HttpStatusCodesEnum.GATEWAY_TIMEOUT),
+  HTTP_VERSION_NOT_SUPPORTED: Number(
     HttpStatusCodesEnum.HTTP_VERSION_NOT_SUPPORTED
   ),
-  VARIANT_ALSO_NEGOTIATES: String(HttpStatusCodesEnum.VARIANT_ALSO_NEGOTIATES),
-  INSUFFICIENT_STORAGE: String(HttpStatusCodesEnum.INSUFFICIENT_STORAGE),
-  LOOP_DETECTED: String(HttpStatusCodesEnum.LOOP_DETECTED),
-  NOT_EXTENDED: String(HttpStatusCodesEnum.NOT_EXTENDED),
-  NETWORK_AUTHENTICATION_REQUIRED: String(
+  VARIANT_ALSO_NEGOTIATES: Number(HttpStatusCodesEnum.VARIANT_ALSO_NEGOTIATES),
+  INSUFFICIENT_STORAGE: Number(HttpStatusCodesEnum.INSUFFICIENT_STORAGE),
+  LOOP_DETECTED: Number(HttpStatusCodesEnum.LOOP_DETECTED),
+  NOT_EXTENDED: Number(HttpStatusCodesEnum.NOT_EXTENDED),
+  NETWORK_AUTHENTICATION_REQUIRED: Number(
     HttpStatusCodesEnum.NETWORK_AUTHENTICATION_REQUIRED
   ),
 };
+
+export type HttpStatusCodesValues =
+  (typeof HttpStatusCodesEnum)[keyof typeof HttpStatusCodesEnum];
 
 export default HttpStatusCodes;
