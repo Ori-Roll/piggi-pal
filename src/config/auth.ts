@@ -1,3 +1,4 @@
+import { db } from '@/server/db';
 import NextAuth from 'next-auth';
 // import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
@@ -81,6 +82,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     Google({
       clientId: process.env.AUTH_AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_AUTH_GOOGLE_SECRET,
+      // Get the user profile from Google OAuth
+      // profile(profile) {
+      //   console.log('IN profile', profile);
+      //   return {
+      //     id: profile.email,
+      //     name: profile.name,
+      //     email: profile.email,
+      //     image: profile.picture,
+      //   };
+      // },
     }),
   ],
   pages: {
@@ -93,13 +104,52 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (Object.keys(userDetail).length === 0) {
         return false;
       }
+      const { user, account } = userDetail;
+      if (!user) {
+        return false;
+      }
+
+      const { type, provider, providerAccountId } = account || {};
+      const existingUser = await db.user.findFirst({
+        where: {
+          OR: [
+            {
+              id: user.id,
+            },
+            {
+              providerId: provider,
+              providerAccountId: providerAccountId,
+            },
+          ],
+        },
+      });
+      if (!existingUser) {
+        const newUserEmail = user.email;
+        const userDisplayName = user.name;
+
+        if (!newUserEmail) {
+          throw new Error('No email found in provider');
+        }
+        await db.user.create({
+          data: {
+            name: userDisplayName,
+            email: newUserEmail,
+            ...(type ? { providerType: type } : {}),
+            ...(provider ? { providerId: provider } : {}),
+            ...(providerAccountId
+              ? { providerAccountId: providerAccountId }
+              : {}),
+          },
+        });
+      }
       return true;
     },
     async redirect({ baseUrl }) {
       return `${baseUrl}`;
     },
     async session({ session, token }) {
-      if (token.id) console.log('NOTE _- IMPLEMENT token.id', token.id);
+      //TODO: This now uses sub for id, but should it not be id from profile? Note that id appears in userDetail in signIn callback
+      if (token.sub) session.user.id = token.sub;
       if (token.name) session.user.name = token.name;
       if (token.email) session.user.email = token.email;
       if (token.picture) session.user.image = token.picture;
