@@ -2,6 +2,8 @@ import { Periodic } from '@prisma/client';
 import periodicAccess from '@/apiDataAccess/periodic';
 import accountHandler from './accountHandler';
 import { startOfDay, endOfDay } from 'date-fns';
+import { APIError } from '@/common/apiUtils';
+import HttpStatusCodes from '@/common/HttpStatusCodes';
 
 /**
  * Get all periodics.
@@ -15,7 +17,10 @@ const getAll = async (
 
   const accounts = await accountHandler.getAllUserAccounts(userId);
   if (!accounts.find((account) => account.id === accountId)) {
-    throw new Error('User not authorized to access this account');
+    throw new APIError(
+      HttpStatusCodes.FORBIDDEN,
+      'User not authorized to access this account'
+    );
   }
   return await periodicAccess.getAllPeriodicsForAccount(accountId);
 };
@@ -49,7 +54,10 @@ const add = async (
   // TODO: check periodic user rules for the account?
   const accounts = await accountHandler.getOneAccount(data.accountId, userId);
   if (!accounts) {
-    throw new Error('User not authorized to access this account');
+    throw new APIError(
+      HttpStatusCodes.FORBIDDEN,
+      'User not authorized to access this account'
+    );
   }
 
   const dataWithNextOccurrence = createDataWithNextOccurrence(data);

@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 const mockCallAPI = async () => {
   console.log('API GIT Call');
-  const response = await fetch('/api/hello');
+  const response = await fetch('/api/users');
   const data = await response.json();
   console.log('API GIT Data', data);
 };

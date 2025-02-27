@@ -1,18 +1,26 @@
 import { ParentLock } from '@prisma/client';
 import parentLockAccess from '@/apiDataAccess/parentLock';
+import { APIError } from '@/common/apiUtils';
+import HttpStatusCodes from '@/common/HttpStatusCodes';
 
 const validateParentLock = async (userId: string, pin: number) => {
   const parentLock = await parentLockAccess.getParentLock(userId);
 
   if (!parentLock) {
-    throw new Error('Parent lock does not exist');
+    throw new APIError(HttpStatusCodes.NOT_FOUND, 'Parent lock does not exist');
   }
   if (parentLock.pin !== pin) {
-    throw new Error('Invalid pin');
+    throw new APIError(
+      HttpStatusCodes.UNAUTHORIZED,
+      'Pin does not match parent lock'
+    );
   }
 
   if (parentLock.userId !== userId) {
-    throw new Error('Invalid user');
+    throw new APIError(
+      HttpStatusCodes.FORBIDDEN,
+      'User not authorized to access this parent lock'
+    );
   }
 
   return true;
@@ -25,7 +33,10 @@ const createParentLockWithPinAndQuestion = async (
   const parentLock = await parentLockAccess.getParentLock(userId);
 
   if (parentLock) {
-    throw new Error('Parent lock already exists');
+    throw new APIError(
+      HttpStatusCodes.CONFLICT,
+      'Parent lock already exists for user'
+    );
   }
 
   return await parentLockAccess.addParentLock(userId, parentLockData);
@@ -38,7 +49,10 @@ const updateParentLockPinAndQuestion = async (
   const parentLock = await parentLockAccess.getParentLock(userId);
 
   if (!parentLock) {
-    throw new Error('Parent lock does not exist');
+    throw new APIError(
+      HttpStatusCodes.NOT_FOUND,
+      'Parent lock does not exist for user'
+    );
   }
 
   return await parentLockAccess.updateParentLock(userId, data);
@@ -48,7 +62,10 @@ const deleteParentLock = async (userId: string) => {
   const parentLock = await parentLockAccess.getParentLock(userId);
 
   if (!parentLock) {
-    throw new Error('Parent lock does not exist');
+    throw new APIError(
+      HttpStatusCodes.NOT_FOUND,
+      'Parent lock does not exist for user'
+    );
   }
 
   return await parentLockAccess.deleteParentLock(userId);
