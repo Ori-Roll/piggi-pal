@@ -4,11 +4,7 @@ import { Account } from '@prisma/client';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
 import accountHandler from '@/apiHandlers/accountHandler';
 import { APIError, apiErrorMiddleware } from '@/common/apiUtils';
-
-type RouteFunction<T> = (
-  req: NextApiRequest,
-  res: NextApiResponse<T | T[] | { message: string }>
-) => void;
+import { RouteFunction } from '@/types/apiTypes';
 
 // **** Functions **** //
 
@@ -26,7 +22,7 @@ const getAllUserAccounts: RouteFunction<Account> = async (req, res) => {
 
   const accounts = await accountHandler.getAllUserAccounts(user.id);
 
-  res.status(HttpStatusCodes.OK).json({ ...accounts });
+  res.status(HttpStatusCodes.OK).json({ data: accounts });
 };
 
 const getOneAccount: RouteFunction<Account> = async (req, res) => {
@@ -57,7 +53,7 @@ const getOneAccount: RouteFunction<Account> = async (req, res) => {
     throw new APIError(HttpStatusCodes.NOT_FOUND, 'Account not found');
   }
 
-  res.status(HttpStatusCodes.OK).json({ ...account });
+  res.status(HttpStatusCodes.OK).json({ data: account });
 };
 
 const addAccount: RouteFunction<Account> = async (req, res) => {
@@ -71,7 +67,7 @@ const addAccount: RouteFunction<Account> = async (req, res) => {
 
   const account = await accountHandler.addAccount(data, user.id);
 
-  res.status(HttpStatusCodes.CREATED).json({ ...account });
+  res.status(HttpStatusCodes.CREATED).json({ data: account });
 };
 
 const updateAccount: RouteFunction<Account> = async (req, res) => {
@@ -95,7 +91,7 @@ const updateAccount: RouteFunction<Account> = async (req, res) => {
 
   const account = await accountHandler.updateAccount(id, data, user.id);
 
-  res.status(HttpStatusCodes.OK).json({ ...account });
+  res.status(HttpStatusCodes.OK).json({ data: account });
 };
 
 const getAccountsGEThandlers = (req: NextApiRequest) => {
