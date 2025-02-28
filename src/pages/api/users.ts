@@ -4,12 +4,11 @@ import { User } from '@prisma/client';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
 import userHandler from '@/apiHandlers/users';
 import { APIError, apiErrorMiddleware } from '@/common/apiUtils';
-import { RouteFunction } from '@/types/apiTypes';
+import { ResponseFormat, RouteFunction } from '@/types/apiTypes';
 
 const getMe: RouteFunction<User> = async (req, res) => {
   const session = await auth(req, res);
   const user = session?.user;
-  console.log('user', user);
   if (!user || !user.id) {
     res.status(HttpStatusCodes.UNAUTHORIZED).json({
       message: 'Unauthorized',
@@ -40,10 +39,8 @@ const getMe: RouteFunction<User> = async (req, res) => {
 const update: RouteFunction<User> = async (req, res) => {
   const { id } = req.query;
   const user = req.body;
-  console.log('IN UPDATE id is ', id);
   //@ts-expect-error - Fix this later
   const updatedUser = await userHandler.updateOne(id, user);
-
   res.status(HttpStatusCodes.OK).json({ data: updatedUser });
 };
 /**
@@ -60,34 +57,38 @@ const _delete: RouteFunction<User> = async (req, res) => {
 
 const getUsersGEThandlers = (req: NextApiRequest) => {
   const { id } = req.query;
-
   if (id) {
     // routeFunction = getMe;
     return;
-  } else {
-    return getMe;
   }
+  return getMe;
 };
 
-const getUsersHandlers = async (
+const useUsersHandlers = async (
   req: NextApiRequest,
-  res: NextApiResponse<User | User[] | { message: string }>
+  res: NextApiResponse<ResponseFormat<User | User[]> | { message: string }>
 ) => {
   const { method } = req;
-
   let routeFunction;
   switch (method) {
     case 'GET':
       routeFunction = getUsersGEThandlers(req);
+      break;
     // case 'POST':
-    //   handler = add;
+    //   routeFunction = add;
+    // break;
     case 'PATCH':
       routeFunction = update;
+      break;
     // case 'PUT':
     //   routeFunction = update;
+    // break;
     case 'DELETE':
       routeFunction = _delete;
+      break;
   }
+
+  console.log('IN useUsersH routeFunction', routeFunction);
 
   if (!method || !routeFunction) {
     throw new APIError(
@@ -99,4 +100,4 @@ const getUsersHandlers = async (
   await routeFunction(req, res);
 };
 
-export default apiErrorMiddleware(getUsersHandlers);
+export default apiErrorMiddleware(useUsersHandlers);

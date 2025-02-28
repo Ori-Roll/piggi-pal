@@ -1,9 +1,10 @@
 import { Periodic } from '@prisma/client';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
 import periodicHandler from '@/apiHandlers/periodicHandler';
-import { RouteFunction } from '@/types/apiTypes';
-import { APIError } from '@/common/apiUtils';
+import { ResponseFormat, RouteFunction } from '@/types/apiTypes';
+import { APIError, apiErrorMiddleware } from '@/common/apiUtils';
 import { auth } from '@/config/auth';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 /**
  * Get all periodics.
@@ -69,7 +70,51 @@ const addPeriodic: RouteFunction<Periodic> = async (req, res) => {
   res.status(HttpStatusCodes.CREATED).json({ data: newPeriodic });
 };
 
-export default {
-  getAllPeriodicsForAccount,
-  addPeriodic,
-} as const;
+// const usePeriodicHandlers = (req: NextApiRequest) => {
+//   const { id } = req.query;
+
+//   if (id) {
+//     return ;
+//   } else {
+//     return ;
+//   }
+// }
+
+const useTaskHandlers = async (
+  req: NextApiRequest,
+  res: NextApiResponse<
+    ResponseFormat<Periodic | Periodic[]> | { message: string }
+  >
+) => {
+  const { method } = req;
+
+  let routeFunction: RouteFunction<Periodic> | undefined;
+  switch (method) {
+    case 'GET':
+      routeFunction = getAllPeriodicsForAccount;
+      break;
+    case 'POST':
+      routeFunction = addPeriodic;
+      break;
+    // case 'PATCH':
+    // routeFunction = updateTask;
+    // break;
+    // case 'PUT':
+    //   routeFunction = update;
+    // break;
+    // case 'DELETE':
+    //   routeFunction = deleteTask;
+    // break;
+  }
+
+  if (!method || !routeFunction) {
+    throw new APIError(
+      HttpStatusCodes.METHOD_NOT_ALLOWED,
+      `Request method ${method} Not Allowed for this route`
+    );
+  }
+
+  await routeFunction(req, res);
+};
+
+export default apiErrorMiddleware(useTaskHandlers);

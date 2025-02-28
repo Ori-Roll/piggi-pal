@@ -89,7 +89,7 @@ const deleteParentLock: RouteFunction<ParentLock> = async (req, res) => {
   res.status(HttpStatusCodes.OK).json({ message: 'deleted' });
 };
 
-const getParentLockRouteHandlers = async (
+const useParentLockRouteHandlers = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
@@ -99,12 +99,16 @@ const getParentLockRouteHandlers = async (
   switch (method) {
     case 'GET':
       routeFunction = validateParentLock;
+      break;
     case 'POST':
       routeFunction = createParentLockWithPinAndQuestion;
+      break;
     case 'PATCH':
       routeFunction = updateParentLockPinAndQuestion;
+      break;
     case 'DELETE':
       routeFunction = deleteParentLock;
+      break;
   }
 
   if (!method || !routeFunction) {
@@ -117,4 +121,4 @@ const getParentLockRouteHandlers = async (
   await routeFunction(req, res);
 };
 
-export default apiErrorMiddleware(getParentLockRouteHandlers);
+export default apiErrorMiddleware(useParentLockRouteHandlers);

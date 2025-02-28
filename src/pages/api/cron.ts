@@ -1,13 +1,12 @@
-import { APIError } from '@/common/apiUtils';
+import { APIError, apiErrorMiddleware } from '@/common/apiUtils';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
 import cronHandler from '@/apiHandlers/cronHandler';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { auth } from '@/config/auth';
-import { RouteFunction } from '@/types/apiTypes';
 
-const executeDailyAction: RouteFunction<unknown> = async (
+const executeDailyAction = async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<{ message: string }>
 ) => {
   const session = await auth(req, res);
   const user = session?.user;
@@ -29,6 +28,35 @@ const executeDailyAction: RouteFunction<unknown> = async (
   res.status(200).json({ message: 'Handled cron job' });
 };
 
-export default {
-  executeDailyAction,
+const useCronHandlers = async (
+  req: NextApiRequest,
+  res: NextApiResponse<{ message: string }>
+) => {
+  const { method } = req;
+
+  let routeFunction;
+  switch (method) {
+    case 'GET':
+      routeFunction = executeDailyAction;
+      break;
+    // case 'POST':
+    //   routeFunction = addAccount;
+    // case 'PATCH':
+    //   routeFunction = updateAccount;
+    // case 'PUT':
+    //   routeFunction = update;
+    // case 'DELETE':
+    //   routeFunction = _delete;
+  }
+
+  if (!method || !routeFunction) {
+    throw new APIError(
+      HttpStatusCodes.METHOD_NOT_ALLOWED,
+      `Request method ${method} Not Allowed for this route`
+    );
+  }
+
+  await routeFunction(req, res);
 };
+
+export default apiErrorMiddleware(useCronHandlers);

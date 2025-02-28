@@ -4,7 +4,7 @@ import { Account } from '@prisma/client';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
 import accountHandler from '@/apiHandlers/accountHandler';
 import { APIError, apiErrorMiddleware } from '@/common/apiUtils';
-import { RouteFunction } from '@/types/apiTypes';
+import { ResponseFormat, RouteFunction } from '@/types/apiTypes';
 
 // **** Functions **** //
 
@@ -130,9 +130,11 @@ const _delete: RouteFunction<Account> = async (req, res) => {
   });
 };
 
-const getAccountsHandlers = async (
+const useAccountsHandlers = async (
   req: NextApiRequest,
-  res: NextApiResponse<Account | Account[] | { message: string }>
+  res: NextApiResponse<
+    ResponseFormat<Account | Account[]> | { message: string }
+  >
 ) => {
   const { method } = req;
 
@@ -140,14 +142,19 @@ const getAccountsHandlers = async (
   switch (method) {
     case 'GET':
       routeFunction = getAccountsGEThandlers(req);
+      break;
     case 'POST':
       routeFunction = addAccount;
+      break;
     case 'PATCH':
       routeFunction = updateAccount;
+      break;
     // case 'PUT':
     //   routeFunction = update;
+    // break;
     case 'DELETE':
       routeFunction = _delete;
+      break;
   }
 
   if (!method || !routeFunction) {
@@ -160,4 +167,4 @@ const getAccountsHandlers = async (
   await routeFunction(req, res);
 };
 
-export default apiErrorMiddleware(getAccountsHandlers);
+export default apiErrorMiddleware(useAccountsHandlers);

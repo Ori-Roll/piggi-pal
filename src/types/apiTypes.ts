@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-type ResponseFormat<T> =
+export type ResponseFormat<T> =
   | {
       data: T | T[];
     }

@@ -1,9 +1,10 @@
 import { Task } from '@prisma/client';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
 import taskHandler from '@/apiHandlers/taskHandler';
-import { RouteFunction } from '@/types/apiTypes';
+import { ResponseFormat, RouteFunction } from '@/types/apiTypes';
 import { auth } from '@/config/auth';
-import { APIError } from '@/common/apiUtils';
+import { APIError, apiErrorMiddleware } from '@/common/apiUtils';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 /**
  * Get all tasks.
@@ -142,10 +143,49 @@ const deleteTask: RouteFunction<Task> = async (req, res) => {
     .json({ data: task });
 };
 
-export default {
-  getAllTasksForAccount,
-  getOneTask,
-  addTask,
-  updateTask,
-  deleteTask,
-} as const;
+const getTasksGEThandlers = (req: NextApiRequest) => {
+  const { id } = req.query;
+
+  if (id) {
+    return getOneTask;
+  } else {
+    return getAllTasksForAccount;
+  }
+};
+
+const useTaskHandlers = async (
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseFormat<Task | Task[]> | { message: string }>
+) => {
+  const { method } = req;
+
+  let routeFunction;
+  switch (method) {
+    case 'GET':
+      routeFunction = getTasksGEThandlers(req);
+      break;
+    case 'POST':
+      routeFunction = addTask;
+      break;
+    case 'PATCH':
+      routeFunction = updateTask;
+      break;
+    // case 'PUT':
+    //   routeFunction = update;
+    // break;
+    case 'DELETE':
+      routeFunction = deleteTask;
+      break;
+  }
+
+  if (!method || !routeFunction) {
+    throw new APIError(
+      HttpStatusCodes.METHOD_NOT_ALLOWED,
+      `Request method ${method} Not Allowed for this route`
+    );
+  }
+
+  await routeFunction(req, res);
+};
+
+export default apiErrorMiddleware(useTaskHandlers);
