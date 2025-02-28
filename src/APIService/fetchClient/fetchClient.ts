@@ -1,3 +1,5 @@
+import { notifications } from '@mantine/notifications';
+
 export class HttpError extends Error {
   constructor(public response: Response, message?: string) {
     super(message);
@@ -8,11 +10,17 @@ type DataResponse<T> = { data: T };
 
 async function handleResponse<T>(response: Response): Promise<DataResponse<T>> {
   if (!response.ok) {
-    if (response.status === 401) {
-      //TODO: Add a logout function here and a snackbar to show the user they have been logged out
-      window.location.href = '/login';
-    }
-    throw new HttpError(response);
+    // if (response.status === 401) {
+    //   //TODO: Add a logout function here and a snackbar to show the user they have been logged out
+    //   window.location.href = '/login';
+    // }
+    //TODO:  show the user the error message
+    notifications.show({
+      title: 'API Call Error.',
+      message: 'API Call Error occurred. Please try again',
+      color: 'red',
+    });
+    // throw new HttpError(response);
   }
 
   return await response.json();
@@ -23,7 +31,7 @@ const defaultHeaders = {
   'Cross-origin-Opener-Policy': 'same-origin',
 };
 
-const API_BASE_URL = '/';
+const API_BASE_URL = 'api';
 
 export const client = {
   get: async <T>(endpoint: string): Promise<DataResponse<T>> => {
