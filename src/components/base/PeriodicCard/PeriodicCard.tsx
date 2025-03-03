@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { addDays, endOfDay, formatDistanceToNow } from 'date-fns';
 import { Text, Flex } from '@mantine/core';
-import AnimatedShake from '@/components/base/Animated/AnimatedShake';
+// import AnimatedShake from '@/components/base/Animated/AnimatedShake';
 import AmountWithSign from '@/components/base/AmountWithSign/AmountWithSign';
 import style from './PeriodicCard.module.css';
 
@@ -44,9 +44,9 @@ const PeriodicCard = (props: PropsWithChildren<PeriodicCardProps>) => {
   return (
     <Flex align={'center'} justify={'center'} gap="lg" className={style.card}>
       <div className={style.top_icon}>$</div>
-      <AnimatedShake delay={delay}>
-        <AmountWithSign amount={amount} currencySign={currencySign} />
-      </AnimatedShake>
+      {/* <AnimatedShake delay={delay}> */}
+      <AmountWithSign amount={amount} currencySign={currencySign} />
+      {/* </AnimatedShake> */}
       <Flex direction="column">
         <Text className={style.name}>{name}</Text>
         <Text size="sm" className={style.nextTimeDescription}>

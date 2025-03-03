@@ -2,7 +2,7 @@ import { Grid, Text } from '@mantine/core';
 import { Account, Task } from '@prisma/client';
 import { useIsMobile } from '@/hooks/configHooks';
 import AmountWithSign from '@/components/base/AmountWithSign/AmountWithSign';
-import AnimatedShake from '@/components/base/Animated/AnimatedShake';
+// import AnimatedShake from '@/components/base/Animated/AnimatedShake';
 import NothingHere from '@/components/base/NothingHere/NothingHere';
 import DoableCard from '@/components/base/DoableCard/DoableCard';
 import style from './TaskSection.module.css';
@@ -35,9 +35,9 @@ function TaskSection(props: TaskSectionProps) {
           >
             <Text fw={700}>{task.title}</Text>
             <Text c="dimmed">{task.description}</Text>
-            <AnimatedShake delay={i * 100}>
-              <AmountWithSign amount={task.amount} />
-            </AnimatedShake>
+            {/* <AnimatedShake delay={i * 100}> */}
+            <AmountWithSign amount={task.amount} />
+            {/* </AnimatedShake> */}
           </DoableCard>
         </Grid.Col>
       ))}
