@@ -1,9 +1,9 @@
 import { Center, Loader } from '@mantine/core';
 import { useQueryClient } from '@tanstack/react-query';
 // import OopsPage from '../../../components/base/OopsPage/Oops';
-import { selectCurrentAccount } from '@/utils/generalDataUtils';
-import { useSelectedAccount } from '@/store/useCurrentAccount';
-import { User, Account } from '@prisma/client';
+import { selectCurrentChildAccount } from '@/utils/generalDataUtils';
+import { useSelectedChildAccount } from '@/store/useCurrentChildAccount';
+import { User, ChildAccount } from '@prisma/client';
 import { useUserQuery } from '@/hooks/query/user';
 import { PropsWithChildren } from 'react';
 
@@ -15,18 +15,24 @@ const BasicDataLoader = (props: PrivateRouteProps) => {
   const { children } = props;
 
   const queryClient = useQueryClient(); // To update the query cache
-  const setSelectedAccount = useSelectedAccount(
-    (state) => state?.setSelectedAccount
+  const setSelectedChildAccount = useSelectedChildAccount(
+    (state) => state?.setSelectedChildAccount
   );
 
-  const updateCurrentAccountData = (data: User) => {
-    data.accounts.forEach((account: Account) => {
-      queryClient.setQueryData(['currentAccount', account.id], account);
+  const updateCurrentChildAccountData = (data: User) => {
+    data.childAccounts.forEach((childAccount: ChildAccount) => {
+      queryClient.setQueryData(
+        ['currentChildAccount', childAccount.id],
+        childAccount
+      );
     });
 
-    const currentAccount = selectCurrentAccount(data, data.accounts);
-    if (currentAccount) {
-      setSelectedAccount?.(currentAccount);
+    const currentChildAccount = selectCurrentChildAccount(
+      data,
+      data.childAccounts
+    );
+    if (currentChildAccount) {
+      setSelectedChildAccount?.(currentChildAccount);
     }
   };
 
@@ -35,7 +41,7 @@ const BasicDataLoader = (props: PrivateRouteProps) => {
     isLoading,
     isFetching,
     // error,
-  } = useUserQuery(updateCurrentAccountData);
+  } = useUserQuery(updateCurrentChildAccountData);
 
   //   const navigate = useNavigate();
 

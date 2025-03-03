@@ -1,13 +1,13 @@
 import { Grid } from '@mantine/core';
 // import { Carousel } from '@mantine/carousel';
-import { Account, Periodic } from '@prisma/client';
+import { ChildAccount, Periodic } from '@prisma/client';
 import { useIsMobile } from '@/hooks/configHooks';
 import PeriodicCard from '@/components/base/PeriodicCard/PeriodicCard';
 import NothingHere from '@/components/base/NothingHere/NothingHere';
 import style from './PeriodicsSection.module.css';
 
 type PeriodicsSectionProps = {
-  account: Account;
+  childAccount: ChildAccount;
 };
 //TODO: Move all these somewhere else
 const actionTypeToMessageMap = {
@@ -26,7 +26,7 @@ const intervalToMessageMap = {
 
 const PeriodicsSection = (props: PeriodicsSectionProps) => {
   const {
-    account: { periodics },
+    childAccount: { periodics },
   } = props;
 
   const isMobile = useIsMobile();

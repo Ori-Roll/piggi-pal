@@ -3,7 +3,7 @@ import { Button, NumberInput, Select, Space, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { IconCalendar } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Account, Periodic } from '@prisma/client';
+import { ChildAccount, Periodic } from '@prisma/client';
 import periodicsService from '@/APIService/periodics';
 import {
   actionTypeOptions,
@@ -14,12 +14,12 @@ import {
 
 type periodicFormProps = {
   periodic?: Partial<Periodic>;
-  selectedAccount: Partial<Account>;
+  selectedChildAccount: Partial<ChildAccount>;
   onSubmitCallback: (data: Partial<Periodic>) => void;
 };
 
 const PeriodicForm = (props: periodicFormProps) => {
-  const { periodic, onSubmitCallback, selectedAccount } = props;
+  const { periodic, onSubmitCallback, selectedChildAccount } = props;
 
   const queryClient = useQueryClient();
 
@@ -30,31 +30,36 @@ const PeriodicForm = (props: periodicFormProps) => {
     onMutate: async (newPeriodic: Partial<Periodic>) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries({ queryKey: ['currentAccount'] });
+      await queryClient.cancelQueries({ queryKey: ['currentChildAccount'] });
 
       // Snapshot the previous value
-      const previousAccountData = queryClient.getQueryData(['currentAccount']);
+      const previousChildAccountData = queryClient.getQueryData([
+        'currentChildAccount',
+      ]);
 
       // Optimistically update to the new value
-      queryClient.setQueryData(['currentAccount'], (old: Partial<Account>) => ({
-        ...old,
-        newPeriodic,
-      }));
+      queryClient.setQueryData(
+        ['currentChildAccount'],
+        (old: Partial<ChildAccount>) => ({
+          ...old,
+          newPeriodic,
+        })
+      );
 
       // Return a context object with the snapshotted value
-      return { previousAccountData };
+      return { previousChildAccountData };
     },
     // If the mutation fails,
     // use the context returned from onMutate to roll back
     onError: (err, newPeriodicData, context) => {
       queryClient.setQueryData(
-        ['currentAccount'],
-        context?.previousAccountData
+        ['currentChildAccount'],
+        context?.previousChildAccountData
       );
     },
     // Always refetch after error or success:
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['currentAccount'] });
+      queryClient.invalidateQueries({ queryKey: ['currentChildAccount'] });
     },
   });
 
@@ -65,7 +70,7 @@ const PeriodicForm = (props: periodicFormProps) => {
 
   const initialValues = {
     ...(periodic ? periodic : {}),
-    accountId: selectedAccount.id,
+    childAccountId: selectedChildAccount.id,
     interval: intervalOptions[0].value,
     actionType: actionTypeOptions[0].value,
     title: 'Allowance', //TODO: This is now fixed - think what is it for
@@ -92,7 +97,7 @@ const PeriodicForm = (props: periodicFormProps) => {
         {...form.getInputProps('interval')}
       />
       <Select
-        label="The account will be"
+        label="The child's account will be"
         placeholder="Pick value"
         data={actionTypeOptions}
         defaultValue={actionTypeOptions[0].value}

@@ -4,45 +4,6 @@ import { db } from '@/server/db';
 import { addDays, addWeeks, addMonths, addYears } from 'date-fns';
 import { APIError } from '@/common/apiUtils';
 
-// import { Periodic } from '@prisma/client';
-// import accountHandler from '@src/handlers/accountHandler';
-// import periodicHandler from '@src/handlers/periodicHandler';
-
-// const calculateAdd = async (periodic: Periodic) => {
-//   const { actionType, amount } = periodic;
-//   const account = await accountHandler.getOneAccountByIdOnly(
-//     periodic.accountId
-//   );
-//   if (!account) {
-//     throw new Error('Account not found');
-//   }
-//   const newBalance = account.current + amount;
-//   const newAccount = await accountHandler.updateAccountWithIdOnly(account.id, {
-//     current: newBalance,
-//   });
-//   return newAccount;
-// };
-
-// const executeDailyAction = async () => {
-//   const periodics = await periodicHandler.getAllWithTodayNextOccurrence();
-
-//   const resolvedPeriodics = [];
-
-//   console.log('periodics ', periodics);
-//   if (periodics.length === 0) {
-//     console.log('No periodics to execute today');
-//     return;
-//   }
-//   for (const periodic of periodics) {
-//     const newAccount = await calculateAdd(periodic);
-//     resolvedPeriodics.push(newAccount);
-//   }
-//   console.log('resolvedPeriodics :');
-//   console.log('-------------------');
-//   console.log(resolvedPeriodics);
-//   return resolvedPeriodics;
-// };
-
 const periodicIntervalToNextOccurrence: Record<Interval, (date: Date) => Date> =
   {
     [Interval.DAY]: (date: Date) => addDays(date, 1),
@@ -86,45 +47,47 @@ const processPeriodicTransactions = async (minDate: Date, maxDate: Date) => {
         },
       },
     });
-    const accountIds = periodics.map((p) => p.accountId);
-    const accounts = await prisma.account.findMany({
+    const childAccountIds = periodics.map((p) => p.childAccountId);
+    const childAccounts = await prisma.childAccount.findMany({
       where: {
         id: {
-          in: accountIds,
+          in: childAccountIds,
         },
       },
     });
 
     for (const periodic of periodics) {
-      const account = accounts.find((a) => a.id === periodic.accountId);
-      if (!account) {
+      const childAccount = childAccounts.find(
+        (childAccount) => childAccount.id === periodic.childAccountId
+      );
+      if (!childAccount) {
         throw new APIError(
           HttpStatusCodes.NOT_FOUND,
-          'Account not found for periodic'
+          'ChildAccount not found for periodic'
         );
       }
       const { actionType, amount } = periodic;
       if (actionType === 'ADD' && amount) {
-        const newAccount = await prisma.account.update({
+        const newChildAccount = await prisma.childAccount.update({
           where: {
-            id: account.id,
+            id: childAccount.id,
           },
           data: {
             current: { increment: amount },
           },
         });
-        console.log('newAccount ', newAccount);
+        console.log('newChildAccount ', newChildAccount);
       }
       if (actionType === 'SUBTRACT' && amount) {
-        const newAccount = await prisma.account.update({
+        const newChildAccount = await prisma.childAccount.update({
           where: {
-            id: account.id,
+            id: childAccount.id,
           },
           data: {
             current: { decrement: amount },
           },
         });
-        console.log('newAccount ', newAccount);
+        console.log('newChildAccount ', newChildAccount);
       }
 
       //TODO: This might have a problem if a periodic is executed multiple times in a day (it comes from the same periodic const above and will not change after each update)
@@ -134,9 +97,9 @@ const processPeriodicTransactions = async (minDate: Date, maxDate: Date) => {
           type: actionType,
           executedAt: new Date(),
           reason: TransactionReason.PERIODIC,
-          account: {
+          childAccount: {
             connect: {
-              id: account.id,
+              id: childAccount.id,
             },
           },
           periodic: {

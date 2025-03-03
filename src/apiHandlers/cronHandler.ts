@@ -2,28 +2,28 @@ import cronAccess from '@/apiDataAccess/cron';
 import { startOfDay, endOfDay } from 'date-fns';
 
 //TODO: This is ugly. Refactor this.
-// const getUpdatedAccounts = (
+// const getUpdatedChildAccounts = (
 //   periodics: Periodic[],
-//   accounts: Account[]
-// ): Account[] => {
-//   const resolvedAccounts = [];
+//   childAccounts: ChildAccount[]
+// ): ChildAccount[] => {
+//   const resolvedChildAccounts = [];
 //   for (const periodic of periodics) {
-//     const account = accounts.find((a) => a.id === periodic.accountId);
-//     if (!account) {
-//       throw new Error('Account not found');
+//     const childAccount = childAccounts.find((a) => a.id === periodic.childAccountId);
+//     if (!childAccount) {
+//       throw new Error('ChildAccount not found');
 //     }
-//     let newCurrent = account.current;
+//     let newCurrent = childAccount.current;
 //     const { actionType, amount } = periodic;
 //     if (actionType === ActionType.ADD) {
-//       newCurrent = account.current + amount;
+//       newCurrent = childAccount.current + amount;
 //     }
 //     if (actionType === ActionType.SUBTRACT) {
-//       newCurrent = account.current - amount;
+//       newCurrent = childAccount.current - amount;
 //     }
-//     const newAccount = { ...account, current: newCurrent };
-//     resolvedAccounts.push(newAccount);
+//     const newChildAccount = { ...childAccount, current: newCurrent };
+//     resolvedChildAccounts.push(newChildAccount);
 //   }
-//   return resolvedAccounts;
+//   return resolvedChildAccounts;
 // };
 
 // const getUpdatedPeriodics = (periodics: Periodic[]): Periodic[] => {
@@ -35,13 +35,13 @@ import { startOfDay, endOfDay } from 'date-fns';
 const executePeriodicActions = async () => {
   //   const periodics = await periodicHandler.getAllWithTodayNextOccurrence();
   //   console.log('1. periodics ', periodics);
-  //   const allPeriodicsAccountIds = periodics.map((p) => p.accountId);
-  //   console.log('2. allPeriodicsAccountIds ', allPeriodicsAccountIds);
-  //   const accounts = await accountHandler.getManyAccountsByIds(
-  //     allPeriodicsAccountIds
+  //   const allPeriodicsChildAccountIds = periodics.map((p) => p.childAccountId);
+  //   console.log('2. allPeriodicsChildAccountIds ', allPeriodicsChildAccountIds);
+  //   const childAccounts = await childAccountHandler.getManyChildAccountsByIds(
+  //     allPeriodicsChildAccountIds
   //   );
-  //   console.log('3. accounts ', accounts);
-  //   const updatedAccounts = getUpdatedAccounts(periodics, accounts);
+  //   console.log('3. childAccounts ', childAccounts);
+  //   const updatedChildAccounts = getUpdatedChildAccounts(periodics, childAccounts);
 
   //   const resolvedPeriodics = [];
 
@@ -51,8 +51,8 @@ const executePeriodicActions = async () => {
   //     return;
   //   }
   //   for (const periodic of periodics) {
-  //     const newAccount = await calculateAdd(periodic);
-  //     resolvedPeriodics.push(newAccount);
+  //     const newChildAccount = await calculateAdd(periodic);
+  //     resolvedPeriodics.push(newChildAccount);
   //   }
   const now = new Date();
   await cronAccess.processPeriodicTransactions(startOfDay(now), endOfDay(now));

@@ -1,21 +1,28 @@
 import { Task } from '@prisma/client';
 import taskAccess from '@/apiDataAccess/task';
-import accountHandler from './accountHandler';
+import childAccountHandler from './childAccountHandler';
 import { APIError } from '@/common/apiUtils';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
 
 /**
  * Get all tasks.
  */
-const getAll = async (accountId: string, userId: string): Promise<Task[]> => {
-  const accounts = await accountHandler.getAllUserAccounts(userId);
-  if (!accounts.find((account) => account.id === accountId)) {
+const getAll = async (
+  childAccountId: string,
+  userId: string
+): Promise<Task[]> => {
+  const childAccounts = await childAccountHandler.getAllUserChildAccounts(
+    userId
+  );
+  if (
+    !childAccounts.find((childAccount) => childAccount.id === childAccountId)
+  ) {
     throw new APIError(
       HttpStatusCodes.FORBIDDEN,
-      'User not authorized to access this account'
+      'User not authorized to access this childAccount'
     );
   }
-  return await taskAccess.getAllTasksForAccount(accountId);
+  return await taskAccess.getAllTasksForChildAccount(childAccountId);
 };
 
 /**
@@ -23,13 +30,19 @@ const getAll = async (accountId: string, userId: string): Promise<Task[]> => {
  */
 
 const getOne = async (id: string, userId: string): Promise<Task | null> => {
-  const accounts = await accountHandler.getAllUserAccounts(userId);
+  const childAccounts = await childAccountHandler.getAllUserChildAccounts(
+    userId
+  );
   const task = await taskAccess.getTaskById(id);
 
-  if (!accounts.find((account) => account.id === task?.accountId)) {
+  if (
+    !childAccounts.find(
+      (childAccount) => childAccount.id === task?.childAccountId
+    )
+  ) {
     throw new APIError(
       HttpStatusCodes.FORBIDDEN,
-      'User not authorized to access this account'
+      'User not authorized to access this childAccount'
     );
   }
   return task;
@@ -40,16 +53,19 @@ const getOne = async (id: string, userId: string): Promise<Task | null> => {
  */
 
 const add = async (userId: string, data: Omit<Task, 'id'>): Promise<Task> => {
-  const { accountId, periodicId, ...restData } = data;
+  const { childAccountId, periodicId, ...restData } = data;
 
-  const account = await accountHandler.getOneAccount(accountId, userId);
-  if (!account) {
+  const childAccount = await childAccountHandler.getOneChildAccount(
+    childAccountId,
+    userId
+  );
+  if (!childAccount) {
     throw new APIError(
       HttpStatusCodes.FORBIDDEN,
-      'User not authorized to access this account'
+      'User not authorized to access this childAccount'
     );
   }
-  return await taskAccess.addTask(restData, accountId, periodicId);
+  return await taskAccess.addTask(restData, childAccountId, periodicId);
 };
 
 /**
@@ -61,13 +77,16 @@ const update = async (
   userId: string,
   data: Omit<Task, 'id'>
 ): Promise<Task> => {
-  const { accountId, periodicId, ...restData } = data;
+  const { childAccountId, periodicId, ...restData } = data;
 
-  const account = await accountHandler.getOneAccount(accountId, userId);
-  if (!account) {
+  const childAccount = await childAccountHandler.getOneChildAccount(
+    childAccountId,
+    userId
+  );
+  if (!childAccount) {
     throw new APIError(
       HttpStatusCodes.FORBIDDEN,
-      'User not authorized to access this account'
+      'User not authorized to access this childAccount'
     );
   }
 
@@ -85,11 +104,14 @@ const deleteOne = async (id: string, userId: string): Promise<Task> => {
     throw new APIError(HttpStatusCodes.NOT_FOUND, 'Task not found');
   }
 
-  const account = await accountHandler.getOneAccount(task.accountId, userId);
-  if (!account) {
+  const childAccount = await childAccountHandler.getOneChildAccount(
+    task.childAccountId,
+    userId
+  );
+  if (!childAccount) {
     throw new APIError(
       HttpStatusCodes.FORBIDDEN,
-      'User not authorized to access this account'
+      'User not authorized to access this childAccount'
     );
   }
 

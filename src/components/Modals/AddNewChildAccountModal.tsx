@@ -2,11 +2,11 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm, zodResolver } from '@mantine/form';
 import { NumberInput, TextInput, Button, Space } from '@mantine/core';
 import { z } from 'zod';
-import { Account } from '@prisma/client';
+import { ChildAccount } from '@prisma/client';
 import queryClient from '@/config/queryClient';
-import accountsService from '@/APIService/accounts';
+import childAccountsService from '@/APIService/childAccounts';
 
-type AddNewAccountModalProps = {
+type AddNewChildAccountModalProps = {
   onSubmitCallback: () => void;
 };
 
@@ -24,10 +24,10 @@ const schema = z.object({
     .max(1000, { message: `That's a lot of money!` }),
 });
 
-const AddNewAccountModal = (props: AddNewAccountModalProps) => {
+const AddNewChildAccountModal = (props: AddNewChildAccountModalProps) => {
   const { onSubmitCallback } = props;
 
-  const accountForm = useForm({
+  const childAccountForm = useForm({
     mode: 'uncontrolled',
     initialValues: {
       name: '',
@@ -45,36 +45,36 @@ const AddNewAccountModal = (props: AddNewAccountModalProps) => {
   });
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: accountsService.createAccount,
+    mutationFn: childAccountsService.createChildAccount,
   });
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
-    const accountData: Partial<Account> = {
+    const childAccountData: Partial<ChildAccount> = {
       kidName: values.name,
       current: values.initialBalance,
     };
     try {
-      await mutateAsync(accountData);
+      await mutateAsync(childAccountData);
       queryClient.invalidateQueries({
-        queryKey: ['userAccounts'],
+        queryKey: ['userChildAccounts'],
       });
       onSubmitCallback();
     } catch (error) {
-      console.error('Error adding account', error);
-      alert('Error adding account');
+      console.error('Error adding child account', error);
+      alert('Error adding child account');
     }
   };
 
   return (
-    <form onSubmit={accountForm.onSubmit(onSubmit)}>
+    <form onSubmit={childAccountForm.onSubmit(onSubmit)}>
       <TextInput
         label="Name"
         placeholder="Enter your child's name"
         required
         withAsterisk
         disabled={isPending}
-        key={accountForm.key('name')}
-        {...accountForm.getInputProps('name')}
+        key={childAccountForm.key('name')}
+        {...childAccountForm.getInputProps('name')}
       />
       <NumberInput
         label="Initial Balance"
@@ -82,15 +82,15 @@ const AddNewAccountModal = (props: AddNewAccountModalProps) => {
         required
         withAsterisk
         disabled={isPending}
-        key={accountForm.key('initialBalance')}
-        {...accountForm.getInputProps('initialBalance')}
+        key={childAccountForm.key('initialBalance')}
+        {...childAccountForm.getInputProps('initialBalance')}
       />
       <Space h="md" />
       <Button disabled={isPending} type="submit" color="blue">
-        Add Account
+        Add Child Account
       </Button>
     </form>
   );
 };
 
-export default AddNewAccountModal;
+export default AddNewChildAccountModal;

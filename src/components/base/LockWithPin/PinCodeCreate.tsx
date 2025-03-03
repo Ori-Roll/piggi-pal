@@ -44,7 +44,7 @@ const PinCodeCreate = (props: PinCodeCreateProps) => {
       </Text>
       <Text size="md">
         After locking your child can use the app as his own without being able
-        to change the account.
+        to change the child&apos;s account.
       </Text>
       <Space h={30} />
       <Center>

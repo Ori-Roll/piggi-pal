@@ -1,54 +1,62 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Flex, Text } from '@mantine/core';
-import { Account } from '@prisma/client';
+import { ChildAccount } from '@prisma/client';
 import Current from '@/components/base/Current/Current';
 import { useEditMode } from '@/store/useEditMode';
 import style from './CurrentSection.module.css';
-import accountsService from '@/APIService/accounts';
+import childAccountsService from '@/APIService/childAccounts';
 
 type CurrentSectionProps = {
-  account: Account;
+  childAccount: ChildAccount;
 };
 
 export const CurrentSection = (props: CurrentSectionProps) => {
-  const { account } = props;
+  const { childAccount } = props;
 
   const editMode = useEditMode((state) => state.edit);
 
   const queryClient = useQueryClient();
 
   const { mutateAsync } = useMutation({
-    mutationFn: (accountData: Partial<Account>) =>
-      accountsService.updateAccount(accountData, account.id),
+    mutationFn: (childAccountData: Partial<ChildAccount>) =>
+      childAccountsService.updateChildAccount(
+        childAccountData,
+        childAccount.id
+      ),
     // When mutate is called:
-    onMutate: async (newAccount: Partial<Account>) => {
+    onMutate: async (newChildAccount: Partial<ChildAccount>) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries({ queryKey: ['currentAccount'] });
+      await queryClient.cancelQueries({ queryKey: ['currentChildAccount'] });
 
       // Snapshot the previous value
-      const previousAccountData = queryClient.getQueryData(['currentAccount']);
+      const previousChildAccountData = queryClient.getQueryData([
+        'currentChildAccount',
+      ]);
 
       // Optimistically update to the new value
-      queryClient.setQueryData(['currentAccount'], (old: Partial<Account>) => ({
-        ...old,
-        newAccount,
-      }));
+      queryClient.setQueryData(
+        ['currentChildAccount'],
+        (old: Partial<ChildAccount>) => ({
+          ...old,
+          newChildAccount,
+        })
+      );
 
       // Return a context object with the snapshotted value
-      return { previousAccountData };
+      return { previousChildAccountData };
     },
     // If the mutation fails,
     // use the context returned from onMutate to roll back
-    onError: (err, newAccountData, context) => {
+    onError: (err, newChildAccountData, context) => {
       queryClient.setQueryData(
-        ['currentAccount'],
-        context?.previousAccountData
+        ['currentChildAccount'],
+        context?.previousChildAccountData
       );
     },
     // Always refetch after error or success:
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['currentAccount'] });
+      queryClient.invalidateQueries({ queryKey: ['currentChildAccount'] });
     },
   });
 
@@ -68,7 +76,7 @@ export const CurrentSection = (props: CurrentSectionProps) => {
 
       <Flex>
         <Current
-          current={account.current}
+          current={childAccount.current}
           sign={'$'}
           handleChange={handleCurrentChange}
           edit={editMode}

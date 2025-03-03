@@ -1,18 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { auth } from '@/config/auth';
-import { Account } from '@prisma/client';
+import { ChildAccount } from '@prisma/client';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
-import accountHandler from '@/apiHandlers/accountHandler';
+import childAccountHandler from '@/apiHandlers/childAccountHandler';
 import { APIError, apiErrorMiddleware } from '@/common/apiUtils';
 import { ResponseFormat, RouteFunction } from '@/types/apiTypes';
 
 // **** Functions **** //
 
 /**
- * Get all accounts for user
+ * Get all childAccounts for user
  */
 
-const getAllUserAccounts: RouteFunction<Account> = async (req, res) => {
+const getAllUserChildAccounts: RouteFunction<ChildAccount> = async (
+  req,
+  res
+) => {
   const session = await auth(req, res);
   const user = session?.user;
 
@@ -20,12 +23,14 @@ const getAllUserAccounts: RouteFunction<Account> = async (req, res) => {
     throw new APIError(HttpStatusCodes.UNAUTHORIZED, 'User not found');
   }
 
-  const accounts = await accountHandler.getAllUserAccounts(user.id);
+  const childAccounts = await childAccountHandler.getAllUserChildAccounts(
+    user.id
+  );
 
-  res.status(HttpStatusCodes.OK).json({ data: accounts });
+  res.status(HttpStatusCodes.OK).json({ data: childAccounts });
 };
 
-const getOneAccount: RouteFunction<Account> = async (req, res) => {
+const getOneChildAccount: RouteFunction<ChildAccount> = async (req, res) => {
   const session = await auth(req, res);
   const user = session?.user;
   const { id } = req.query;
@@ -37,26 +42,32 @@ const getOneAccount: RouteFunction<Account> = async (req, res) => {
   }
 
   if (!id) {
-    throw new APIError(HttpStatusCodes.BAD_REQUEST, 'Account ID not found');
+    throw new APIError(
+      HttpStatusCodes.BAD_REQUEST,
+      'ChildAccount ID not found'
+    );
   }
 
   if (typeof id !== 'string') {
     throw new APIError(
       HttpStatusCodes.BAD_REQUEST,
-      'Only on account id can be fetched at a time'
+      'Only on childAccount id can be fetched at a time'
     );
   }
 
-  const account = await accountHandler.getOneAccount(id, user.id);
+  const childAccount = await childAccountHandler.getOneChildAccount(
+    id,
+    user.id
+  );
 
-  if (!account) {
-    throw new APIError(HttpStatusCodes.NOT_FOUND, 'Account not found');
+  if (!childAccount) {
+    throw new APIError(HttpStatusCodes.NOT_FOUND, 'ChildAccount not found');
   }
 
-  res.status(HttpStatusCodes.OK).json({ data: account });
+  res.status(HttpStatusCodes.OK).json({ data: childAccount });
 };
 
-const addAccount: RouteFunction<Account> = async (req, res) => {
+const addChildAccount: RouteFunction<ChildAccount> = async (req, res) => {
   const session = await auth(req, res);
   const user = session?.user;
   const data = req.body;
@@ -65,12 +76,12 @@ const addAccount: RouteFunction<Account> = async (req, res) => {
     throw new APIError(HttpStatusCodes.UNAUTHORIZED, 'User not found');
   }
 
-  const account = await accountHandler.addAccount(data, user.id);
+  const childAccount = await childAccountHandler.addChildAccount(data, user.id);
 
-  res.status(HttpStatusCodes.CREATED).json({ data: account });
+  res.status(HttpStatusCodes.CREATED).json({ data: childAccount });
 };
 
-const updateAccount: RouteFunction<Account> = async (req, res) => {
+const updateChildAccount: RouteFunction<ChildAccount> = async (req, res) => {
   const session = await auth(req, res);
   const user = session?.user;
   const data = req.body;
@@ -80,30 +91,37 @@ const updateAccount: RouteFunction<Account> = async (req, res) => {
     throw new APIError(HttpStatusCodes.UNAUTHORIZED, 'User not found');
   }
   if (!id) {
-    throw new APIError(HttpStatusCodes.BAD_REQUEST, 'Account ID not found');
+    throw new APIError(
+      HttpStatusCodes.BAD_REQUEST,
+      'ChildAccount ID not found'
+    );
   }
   if (typeof id !== 'string') {
     throw new APIError(
       HttpStatusCodes.BAD_REQUEST,
-      'Only on account id can be updated at a time'
+      'Only on childAccount id can be updated at a time'
     );
   }
 
-  const account = await accountHandler.updateAccount(id, data, user.id);
+  const childAccount = await childAccountHandler.updateChildAccount(
+    id,
+    data,
+    user.id
+  );
 
-  res.status(HttpStatusCodes.OK).json({ data: account });
+  res.status(HttpStatusCodes.OK).json({ data: childAccount });
 };
 
-const getAccountsGEThandlers = (req: NextApiRequest) => {
+const getChildAccountsGEThandlers = (req: NextApiRequest) => {
   const { id } = req.query;
   if (id) {
-    return getOneAccount;
+    return getOneChildAccount;
   } else {
-    return getAllUserAccounts;
+    return getAllUserChildAccounts;
   }
 };
 
-const _delete: RouteFunction<Account> = async (req, res) => {
+const _delete: RouteFunction<ChildAccount> = async (req, res) => {
   const session = await auth(req, res);
   const user = session?.user;
   const { id } = req.query;
@@ -113,27 +131,30 @@ const _delete: RouteFunction<Account> = async (req, res) => {
   }
 
   if (!id) {
-    throw new APIError(HttpStatusCodes.BAD_REQUEST, 'Account ID not found');
+    throw new APIError(
+      HttpStatusCodes.BAD_REQUEST,
+      'ChildAccount ID not found'
+    );
   }
 
   if (typeof id !== 'string') {
     throw new APIError(
       HttpStatusCodes.BAD_REQUEST,
-      'Only on account id can be deleted at a time'
+      'Only on childAccount id can be deleted at a time'
     );
   }
 
-  await accountHandler.deleteAccount(id, user.id);
+  await childAccountHandler.deleteChildAccount(id, user.id);
 
   res.status(HttpStatusCodes.NO_CONTENT).json({
-    message: 'Account deleted',
+    message: 'ChildAccount deleted',
   });
 };
 
-const useAccountsHandlers = async (
+const useChildAccountsHandlers = async (
   req: NextApiRequest,
   res: NextApiResponse<
-    ResponseFormat<Account | Account[]> | { message: string }
+    ResponseFormat<ChildAccount | ChildAccount[]> | { message: string }
   >
 ) => {
   const { method } = req;
@@ -141,13 +162,13 @@ const useAccountsHandlers = async (
   let routeFunction;
   switch (method) {
     case 'GET':
-      routeFunction = getAccountsGEThandlers(req);
+      routeFunction = getChildAccountsGEThandlers(req);
       break;
     case 'POST':
-      routeFunction = addAccount;
+      routeFunction = addChildAccount;
       break;
     case 'PATCH':
-      routeFunction = updateAccount;
+      routeFunction = updateChildAccount;
       break;
     // case 'PUT':
     //   routeFunction = update;
@@ -167,4 +188,4 @@ const useAccountsHandlers = async (
   await routeFunction(req, res);
 };
 
-export default apiErrorMiddleware(useAccountsHandlers);
+export default apiErrorMiddleware(useChildAccountsHandlers);

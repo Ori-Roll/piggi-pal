@@ -8,26 +8,28 @@ const getTaskById = async (id: string): Promise<Task | null> => {
   });
 };
 
-const getAllTasksForAccount = async (accountId: string): Promise<Task[]> => {
+const getAllTasksForChildAccount = async (
+  childAccountId: string
+): Promise<Task[]> => {
   return await db.task.findMany({
     where: {
-      accountId,
+      childAccountId,
     },
   });
 };
 
 const addTask = async (
-  data: Omit<Task, 'id' | 'accountId' | 'periodicId'>,
-  accountId: string,
+  data: Omit<Task, 'id' | 'childAccountId' | 'periodicId'>,
+  childAccountId: string,
   periodicId: string | null
 ): Promise<Task> => {
   return await db.task.create({
     data: {
       ...data,
       ...(periodicId && { periodic: { connect: { id: periodicId } } }),
-      account: {
+      childAccount: {
         connect: {
-          id: accountId,
+          id: childAccountId,
         },
       },
     },
@@ -36,7 +38,7 @@ const addTask = async (
 
 const updateTask = async (
   id: string,
-  data: Omit<Task, 'id' | 'accountId' | 'periodicId'>
+  data: Omit<Task, 'id' | 'childAccountId' | 'periodicId'>
 ): Promise<Task> => {
   return await db.task.update({
     where: { id },
@@ -52,7 +54,7 @@ const deleteTask = async (id: string): Promise<Task> => {
 
 export default {
   getTaskById,
-  getAllTasksForAccount,
+  getAllTasksForChildAccount,
   addTask,
   updateTask,
   deleteTask,

@@ -40,9 +40,9 @@ const useCronHandlers = async (
       routeFunction = executeDailyAction;
       break;
     // case 'POST':
-    //   routeFunction = addAccount;
+    //   routeFunction = addChildAccount;
     // case 'PATCH':
-    //   routeFunction = updateAccount;
+    //   routeFunction = updateChildAccount;
     // case 'PUT':
     //   routeFunction = update;
     // case 'DELETE':

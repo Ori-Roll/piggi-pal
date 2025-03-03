@@ -1,8 +1,8 @@
 import { Flex, Burger } from '@mantine/core';
 import { useEditMode } from '@/store/useEditMode';
 import { useIsMobile } from '@/hooks/configHooks';
-import { useSelectedAccount } from '@/store/useCurrentAccount';
-import AccountSelect from '@/components/AccountSelect/AccountSelect';
+import { useSelectedChildAccount } from '@/store/useCurrentChildAccount';
+import ChildAccountSelect from '@/components/ChildAccountSelect/ChildAccountSelect';
 // import AddTask from '@/components/AddTask/AddTask';
 // import AddPeriodic from '@/components/AddPeriodic/AddPeriodic';
 import LockWithPin from '@/components/base/LockWithPin/LockWithPin';
@@ -18,7 +18,9 @@ const Navbar = (props: NavbarProps) => {
 
   const editMode = useEditMode((state) => state.edit);
   const isMobile = useIsMobile();
-  const selectedAccount = useSelectedAccount((state) => state?.selectedAccount);
+  const selectedChildAccount = useSelectedChildAccount(
+    (state) => state?.selectedChildAccount
+  );
 
   return (
     <Flex
@@ -53,11 +55,11 @@ const Navbar = (props: NavbarProps) => {
           w="100%"
           gap={10}
         >
-          <AccountSelect />
+          <ChildAccountSelect />
           {editMode && (
             <>
-              {/* <AddTask selectedAccount={selectedAccount} /> */}
-              <AddPeriodic selectedAccount={selectedAccount} />
+              {/* <AddTask selectedChildAccount={selectedChildAccount} /> */}
+              <AddPeriodic selectedChildAccount={selectedChildAccount} />
             </>
           )}
         </Flex>

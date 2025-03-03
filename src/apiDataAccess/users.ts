@@ -24,7 +24,7 @@ async function getOne(id: string): Promise<User | null> {
   const user = await db.user.findUnique({
     where: { id },
     include: {
-      accounts: {
+      childAccounts: {
         include: {
           periodics: true,
           tasks: true,
@@ -53,7 +53,7 @@ async function getOneBasic(id: string): Promise<Partial<User> | null> {
 async function getAll(): Promise<User[]> {
   const allUsers = await db.user.findMany({
     include: {
-      accounts: {
+      childAccounts: {
         include: {
           periodics: true,
         },

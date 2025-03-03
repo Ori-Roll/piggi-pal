@@ -1,5 +1,5 @@
 import { Grid, Text } from '@mantine/core';
-import { Account, Task } from '@prisma/client';
+import { ChildAccount, Task } from '@prisma/client';
 import { useIsMobile } from '@/hooks/configHooks';
 import AmountWithSign from '@/components/base/AmountWithSign/AmountWithSign';
 // import AnimatedShake from '@/components/base/Animated/AnimatedShake';
@@ -8,21 +8,21 @@ import DoableCard from '@/components/base/DoableCard/DoableCard';
 import style from './TaskSection.module.css';
 
 type TaskSectionProps = {
-  account: Account;
+  childAccount: ChildAccount;
 };
 
 function TaskSection(props: TaskSectionProps) {
-  const { account } = props;
+  const { childAccount } = props;
 
   const isMobile = useIsMobile();
 
-  if (account.tasks.length === 0) {
+  if (childAccount.tasks.length === 0) {
     return <NothingHere>You have no tasks yet</NothingHere>;
   }
 
-  return account.tasks.length > 0 ? (
+  return childAccount.tasks.length > 0 ? (
     <Grid p="lg" gutter={isMobile ? 'md' : 'lg'} className={style.task_wrapper}>
-      {account.tasks.map((task: Task, i) => (
+      {childAccount.tasks.map((task: Task, i) => (
         <Grid.Col span={isMobile ? 12 : 4} key={task.id}>
           <DoableCard
             key={task.id}

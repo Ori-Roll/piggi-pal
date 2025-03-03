@@ -101,12 +101,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (Object.keys(userDetail).length === 0) {
         return false;
       }
-      const { user, account } = userDetail;
+      const { user, childAccount } = userDetail;
       if (!user) {
         return false;
       }
 
-      const { type, provider, providerAccountId } = account || {};
+      const { type, provider, providerChildAccountId } = childAccount || {};
 
       const existingUser = user.email
         ? await db.user.findUnique({
@@ -128,8 +128,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             email: newUserEmail,
             ...(type ? { providerType: type } : {}),
             ...(provider ? { providerId: provider } : {}),
-            ...(providerAccountId
-              ? { providerAccountId: providerAccountId }
+            ...(providerChildAccountId
+              ? { providerChildAccountId: providerChildAccountId }
               : {}),
           },
         });
@@ -159,12 +159,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
     async jwt({ token, user }) {
       // console.log('IN JWT CALLBACK user', user);
-      // console.log('IN JWT CALLBACK account', account);
+      // console.log('IN JWT CALLBACK childAccount', childAccount);
       // let existingUser;
-      // if (account && account.providerAccountId) {
+      // if (childAccount && childAccount.providerChildAccountId) {
       //   existingUser = await db.user.findFirst({
       //     where: {
-      //       providerAccountId: account.providerAccountId,
+      //       providerChildAccountId: childAccount.providerChildAccountId,
       //     },
       //   });
       // }

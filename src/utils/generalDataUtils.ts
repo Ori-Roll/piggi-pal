@@ -1,12 +1,17 @@
-import { Account, User } from '@prisma/client';
+import { ChildAccount, User } from '@prisma/client';
 
-export const selectCurrentAccount = (user: User, accounts: Account[]) => {
-  if (!accounts?.length) {
+export const selectCurrentChildAccount = (
+  user: User,
+  childAccounts: ChildAccount[]
+) => {
+  if (!childAccounts?.length) {
     return null;
   }
-  //TODO: Fix this logic, take into account that there might be a user with different devices, each should open with it's corresponding account
-  if (!user?.lastOpenedAccountId) {
-    return accounts[0];
+  //TODO: Fix this logic, take into childAccount that there might be a user with different devices, each should open with it's corresponding childAccount
+  if (!user?.lastOpenedChildAccountId) {
+    return childAccounts[0];
   }
-  return accounts.find((account) => account.id === user.lastOpenedAccountId);
+  return childAccounts.find(
+    (childAccount) => childAccount.id === user.lastOpenedChildAccountId
+  );
 };

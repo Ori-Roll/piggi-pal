@@ -1,29 +1,29 @@
-import { Account } from '@prisma/client';
+import { ChildAccount } from '@prisma/client';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
 import { db } from '@/server/db';
 import { APIError } from '@/common/apiUtils';
 
-const getAllUserAccounts = async (userID: string) => {
+const getAllUserChildAccounts = async (userID: string) => {
   try {
-    const accounts = await db.account.findMany({
+    const childAccounts = await db.childAccount.findMany({
       where: {
         userId: userID,
       },
     });
-    return accounts;
+    return childAccounts;
   } catch (error) {
     console.error(error);
     throw new APIError(
       HttpStatusCodes.INTERNAL_SERVER_ERROR,
-      'Could not get accounts'
+      'Could not get childAccounts'
     );
   }
 };
 
-const getOneAccount = async (id: string, userId: string) => {
+const getOneChildAccount = async (id: string, userId: string) => {
   // TODO: Is this the correct way to handle this? (with the userId as a safety check?)
   try {
-    const account = await db.account.findUnique({
+    const childAccount = await db.childAccount.findUnique({
       where: {
         id,
         userId,
@@ -38,127 +38,134 @@ const getOneAccount = async (id: string, userId: string) => {
         transactions: true,
       },
     });
-    return account;
+    return childAccount;
   } catch (error) {
     console.error(error);
     throw new APIError(
       HttpStatusCodes.INTERNAL_SERVER_ERROR,
-      'Could not get account'
+      'Could not get childAccount'
     );
   }
 };
 
-const getOneAccountByIdOnly = async (id: string) => {
+const getOneChildAccountByIdOnly = async (id: string) => {
   try {
-    const account = await db.account.findFirst({
+    const childAccount = await db.childAccount.findFirst({
       where: {
         id,
       },
     });
-    return account;
+    return childAccount;
   } catch (error) {
     console.error(error);
     throw new APIError(
       HttpStatusCodes.INTERNAL_SERVER_ERROR,
-      'Could not get account'
+      'Could not get childAccount'
     );
   }
 };
 
-const getManyAccountsByIds = async (ids: string[]) => {
+const getManyChildAccountsByIds = async (ids: string[]) => {
   try {
-    const accounts = await db.account.findMany({
+    const childAccounts = await db.childAccount.findMany({
       where: {
         id: {
           in: ids,
         },
       },
     });
-    return accounts;
+    return childAccounts;
   } catch (error) {
     console.error(error);
     throw new APIError(
       HttpStatusCodes.INTERNAL_SERVER_ERROR,
-      'Could not get accounts'
+      'Could not get childAccounts'
     );
   }
 };
 
-const addAccount = async (data: Account) => {
+const addChildAccount = async (data: ChildAccount) => {
   console.log('GOT DATA', data);
 
   try {
-    const account = await db.account.create({
+    const childAccount = await db.childAccount.create({
       data,
       include: {
         periodics: true,
       },
     });
-    console.log('returning account', account);
-    return account;
+    console.log('returning childAccount', childAccount);
+    return childAccount;
   } catch (error) {
     console.error(error);
     throw new APIError(
       HttpStatusCodes.INTERNAL_SERVER_ERROR,
-      'Could not add account'
+      'Could not add childAccount'
     );
   }
 };
 
-const deleteAccount = async (id: string) => {
+const deleteChildAccount = async (id: string) => {
   try {
-    const account = await db.account.delete({
+    const childAccount = await db.childAccount.delete({
       where: { id },
     });
-    return account;
+    return childAccount;
   } catch (error) {
     console.error(error);
     throw new APIError(
       HttpStatusCodes.INTERNAL_SERVER_ERROR,
-      'Could not delete account'
+      'Could not delete childAccount'
     );
   }
 };
 
-const updateAccount = async (id: string, data: Account, userId: string) => {
+const updateChildAccount = async (
+  id: string,
+  data: ChildAccount,
+  userId: string
+) => {
   try {
-    const account = await db.account.update({
+    const childAccount = await db.childAccount.update({
       where: { userId, id },
       data,
     });
-    return account;
+    return childAccount;
   } catch (error) {
     console.error(error);
     throw new APIError(
       HttpStatusCodes.INTERNAL_SERVER_ERROR,
-      'Could not update account'
+      'Could not update childAccount'
     );
   }
 };
 
-const updateAccountWithIdOnly = async (id: string, data: Partial<Account>) => {
+const updateChildAccountWithIdOnly = async (
+  id: string,
+  data: Partial<ChildAccount>
+) => {
   try {
-    const account = await db.account.update({
+    const childAccount = await db.childAccount.update({
       where: { id },
       data,
     });
-    return account;
+    return childAccount;
   } catch (error) {
     console.error(error);
     throw new APIError(
       HttpStatusCodes.INTERNAL_SERVER_ERROR,
-      'Could not update account'
+      'Could not update childAccount'
     );
   }
 };
 
 export default {
-  getAllUserAccounts,
-  getOneAccount,
-  getOneAccountByIdOnly,
-  getManyAccountsByIds,
-  addAccount,
-  updateAccount,
-  updateAccountWithIdOnly,
-  deleteAccount,
+  getAllUserChildAccounts,
+  getOneChildAccount,
+  getOneChildAccountByIdOnly,
+  getManyChildAccountsByIds,
+  addChildAccount,
+  updateChildAccount,
+  updateChildAccountWithIdOnly,
+  deleteChildAccount,
 } as const;

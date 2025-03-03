@@ -1,6 +1,6 @@
 import { Text, Modal } from '@mantine/core';
-import { useAddAccountModalToggle } from '@/store/useModalActive';
-import AddNewAccountModal from './AddNewAccountModal';
+import { useAddChildAccountModalToggle } from '@/store/useModalActive';
+import AddNewChildAccountModal from './AddNewChildAccountModal';
 
 type ModalNiceHeaderProps = { title: string };
 
@@ -26,12 +26,12 @@ type ModalsControllerProps = {};
 const ModalsController = (props: ModalsControllerProps) => {
   const {} = props;
   const modals = {
-    addAccount: {
-      name: 'addAccount',
-      title: <ModalNiceHeader title="Add New Account" />,
-      active: useAddAccountModalToggle((state) => state.modalActive),
-      deactivate: useAddAccountModalToggle((state) => state.setFalse),
-      component: AddNewAccountModal,
+    addChildAccount: {
+      name: 'addChildAccount',
+      title: <ModalNiceHeader title="Add New child account" />,
+      active: useAddChildAccountModalToggle((state) => state.modalActive),
+      deactivate: useAddChildAccountModalToggle((state) => state.setFalse),
+      component: AddNewChildAccountModal,
     },
   };
 
@@ -48,7 +48,7 @@ const ModalsController = (props: ModalsControllerProps) => {
     <Modal
       opened={activeModals}
       onClose={() => {}}
-      title={modals.addAccount.title}
+      title={modals.addChildAccount.title}
       centered={true}
     >
       {Object.values(modals).map((modal) =>

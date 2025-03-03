@@ -43,7 +43,8 @@ const PinCodeValidate = (props: PinCodeValidateProps) => {
   return (
     <Flex direction="column" align="center">
       <Text size="md">
-        Make sure you re-lock after you finish editing your child account.
+        Make sure you re-lock after you finish editing your child&apos;s
+        account.
       </Text>
       <Space h={30} />
       <Flex direction="row" justify="center" align="center" gap={30}>

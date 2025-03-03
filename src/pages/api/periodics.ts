@@ -10,7 +10,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
  * Get all periodics.
  */
 
-const getAllPeriodicsForAccount: RouteFunction<Periodic> = async (req, res) => {
+const getAllPeriodicsForChildAccount: RouteFunction<Periodic> = async (
+  req,
+  res
+) => {
   const session = await auth(req, res);
   const user = session?.user;
   const userId = user?.id;
@@ -21,13 +24,16 @@ const getAllPeriodicsForAccount: RouteFunction<Periodic> = async (req, res) => {
   }
 
   if (!id) {
-    throw new APIError(HttpStatusCodes.BAD_REQUEST, 'Account ID not found');
+    throw new APIError(
+      HttpStatusCodes.BAD_REQUEST,
+      'ChildAccount ID not found'
+    );
   }
 
   if (typeof id !== 'string') {
     throw new APIError(
       HttpStatusCodes.BAD_REQUEST,
-      'Only on account id can be fetched at a time'
+      'Only one childAccount id can be fetched at a time'
     );
   }
 
@@ -91,7 +97,7 @@ const useTaskHandlers = async (
   let routeFunction: RouteFunction<Periodic> | undefined;
   switch (method) {
     case 'GET':
-      routeFunction = getAllPeriodicsForAccount;
+      routeFunction = getAllPeriodicsForChildAccount;
       break;
     case 'POST':
       routeFunction = addPeriodic;

@@ -4,7 +4,7 @@ import { useIsMobile } from '@/hooks/configHooks';
 import Navbar from '@/components/Navbar/Navbar';
 import ModalsController from '@/components/Modals/ModalsController';
 import AppLogo from '@/components/base/AppLogo/AppLogo';
-import Account from '@/components/Account/Account';
+import ChildAccount from '@/components/ChildAccount/ChildAccount';
 
 const DashboardLayout = () => {
   // TODO: put this in store and make the burger work from wherever with a new component
@@ -40,7 +40,7 @@ const DashboardLayout = () => {
         <Navbar navBarOpened={opened} toggleNavBarOpened={toggle} />
       </AppShell.Navbar>
       <AppShell.Main>
-        <Account />
+        <ChildAccount />
       </AppShell.Main>
     </AppShell>
   );

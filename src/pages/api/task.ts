@@ -10,8 +10,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
  * Get all tasks.
  */
 
-const getAllTasksForAccount: RouteFunction<Task> = async (req, res) => {
-  const { accountId } = req.body;
+const getAllTasksForChildAccount: RouteFunction<Task> = async (req, res) => {
+  const { childAccountId } = req.body;
   const session = await auth(req, res);
   const user = session?.user;
   const userId = user?.id;
@@ -20,11 +20,14 @@ const getAllTasksForAccount: RouteFunction<Task> = async (req, res) => {
     throw new APIError(HttpStatusCodes.UNAUTHORIZED, 'User not found');
   }
 
-  if (!accountId) {
-    throw new APIError(HttpStatusCodes.BAD_REQUEST, 'Account ID not found');
+  if (!childAccountId) {
+    throw new APIError(
+      HttpStatusCodes.BAD_REQUEST,
+      'ChildAccount ID not found'
+    );
   }
 
-  const tasks = await taskHandler.getAll(accountId, userId);
+  const tasks = await taskHandler.getAll(childAccountId, userId);
   res.status(HttpStatusCodes.OK).json({ data: tasks });
 };
 
@@ -149,7 +152,7 @@ const getTasksGEThandlers = (req: NextApiRequest) => {
   if (id) {
     return getOneTask;
   } else {
-    return getAllTasksForAccount;
+    return getAllTasksForChildAccount;
   }
 };
 

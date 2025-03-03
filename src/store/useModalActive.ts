@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 
-type AddAccountModalToggle = {
+type AddChildAccountModalToggle = {
   modalActive: boolean;
   setFalse: () => void;
   setTrue: () => void;
   toggle: () => void;
 };
 
-export const useAddAccountModalToggle = create<AddAccountModalToggle>(
+export const useAddChildAccountModalToggle = create<AddChildAccountModalToggle>(
   (set) => ({
     modalActive: false,
     setFalse: () => set({ modalActive: false }),

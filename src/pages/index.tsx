@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Loader } from '@mantine/core';
 import { userService } from '@/APIService/users';
-import accountsService from '@/APIService/accounts';
+import childAccountsService from '@/APIService/childAccounts';
 import BasicDataLoader from '@/components/BasicDataLoader';
 import DashboardLayout from '@/components/Dashboard/Dashboard';
 
@@ -25,20 +25,20 @@ const mockCall_users = async () => {
   console.log('Got response ', response);
 };
 
-const mockCall_accounts = async () => {
-  const res = await accountsService.getUserAccounts();
+const mockCall_childAccounts = async () => {
+  const res = await childAccountsService.getUserChildAccounts();
   console.log('Got response ', res.data);
 };
 
-let mockAccountId: string = 'cm7p3iy3f0001tb4ktvowvjel';
+let mockChildAccountId: string = 'cm7p3iy3f0001tb4ktvowvjel';
 
-const mockCall_one_account = async () => {
-  const res = await accountsService.getAccount(mockAccountId);
+const mockCall_one_childAccount = async () => {
+  const res = await childAccountsService.getChildAccount(mockChildAccountId);
   console.log('Got response ', res.data);
 };
 
-const mockCall_create_account = async () => {
-  const res = await accountsService.createAccount({
+const mockCall_create_childAccount = async () => {
+  const res = await childAccountsService.createChildAccount({
     kidName: 'stringi',
     current: 0,
   });

@@ -1,49 +1,53 @@
 import { useQuery } from '@tanstack/react-query';
-import { Account as AccountData } from '@prisma/client';
+import { ChildAccount as ChildAccountData } from '@prisma/client';
 import { Flex, Grid, Loader } from '@mantine/core';
-import { useSelectedAccount } from '@/store/useCurrentAccount';
-import accountsService from '@/APIService/accounts';
+import { useSelectedChildAccount } from '@/store/useCurrentChildAccount';
+import childAccountsService from '@/APIService/childAccounts';
 import { useIsMobile } from '@/hooks/configHooks';
 import NothingHere from '@/components/base/NothingHere/NothingHere';
 import { CurrentSection } from '@/components/CurrentSection/CurrentSection';
 import PeriodicsSection from '@/components/PeriodicsSection/PeriodicsSection';
 import OopsPage from '@/components/base/OopsPage/Oops';
 import TaskSection from '@/components/TaskSection/TaskSection';
-import style from './Account.module.css';
+import style from './ChildAccount.module.css';
 
-type AccountProps = {};
+type ChildAccountProps = {};
 
-const Account = (props: AccountProps) => {
+const ChildAccount = (props: ChildAccountProps) => {
   const {} = props;
-  const selectedAccount = useSelectedAccount((state) => state?.selectedAccount);
+  const selectedChildAccount = useSelectedChildAccount(
+    (state) => state?.selectedChildAccount
+  );
   const isMobile = useIsMobile();
 
   const {
-    data: account,
-    isLoading: accountLoading,
-    error: accountError,
-    isFetching: accountFetching,
-  } = useQuery<AccountData | null>({
-    queryKey: ['currentAccount', selectedAccount?.id],
+    data: childAccount,
+    isLoading: childAccountLoading,
+    error: childAccountError,
+    isFetching: childAccountFetching,
+  } = useQuery<ChildAccountData | null>({
+    queryKey: ['currentChildAccount', selectedChildAccount?.id],
     queryFn: async () => {
-      if (!selectedAccount?.id) return null;
-      const resData = await accountsService.getAccount(selectedAccount.id);
+      if (!selectedChildAccount?.id) return null;
+      const resData = await childAccountsService.getChildAccount(
+        selectedChildAccount.id
+      );
       return resData.data;
     },
-    enabled: !!selectedAccount?.id,
+    enabled: !!selectedChildAccount?.id,
     refetchOnMount: false,
   });
 
-  return accountLoading ? (
+  return childAccountLoading ? (
     <NothingHere>
       <Flex justify="center" align="center" style={{ height: '100%' }}>
-        Loading your account
+        Loading your child&apos;s account
         <Loader />
       </Flex>
     </NothingHere>
   ) : (
     <>
-      {account ? (
+      {childAccount ? (
         <Grid
           className={
             isMobile ? style.gridWrapperMobile : style.gridWrapperDesktop
@@ -52,14 +56,14 @@ const Account = (props: AccountProps) => {
           pt={0}
         >
           <Grid.Col className={style.gridColCurrent}>
-            <CurrentSection account={account} />
+            <CurrentSection childAccount={childAccount} />
           </Grid.Col>
           <Grid.Col className={style.gridColPeriodics}>
-            <PeriodicsSection account={account} />
+            <PeriodicsSection childAccount={childAccount} />
           </Grid.Col>
 
           <Grid.Col className={style.gridColTasks}>
-            <TaskSection account={account} />
+            <TaskSection childAccount={childAccount} />
           </Grid.Col>
         </Grid>
       ) : (
@@ -69,4 +73,4 @@ const Account = (props: AccountProps) => {
   );
 };
 
-export default Account;
+export default ChildAccount;

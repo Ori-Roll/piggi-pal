@@ -9,25 +9,25 @@ const getPeriodicById = async (id: string): Promise<Periodic | null> => {
   });
 };
 
-const getAllPeriodicsForAccount = async (
-  accountId: string
+const getAllPeriodicsForChildAccount = async (
+  childAccountId: string
 ): Promise<Periodic[]> => {
   return await db.periodic.findMany({
     where: {
-      accountId,
+      childAccountId,
     },
   });
 };
 
 const addPeriodic = async (data: Omit<Periodic, 'id'>): Promise<Periodic> => {
-  const { accountId, ...modPeriodic } = data;
+  const { childAccountId, ...modPeriodic } = data;
 
   return await db.periodic.create({
     data: {
       ...modPeriodic,
-      account: {
+      childAccount: {
         connect: {
-          id: accountId,
+          id: childAccountId,
         },
       },
     },
@@ -66,7 +66,7 @@ const getAllByNextOccurrenceBetweenDates = async (
 
 export default {
   getPeriodicById,
-  getAllPeriodicsForAccount,
+  getAllPeriodicsForChildAccount,
   addPeriodic,
   updatePeriodic,
   deletePeriodic,

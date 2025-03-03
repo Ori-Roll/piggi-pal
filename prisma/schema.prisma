@@ -14,35 +14,35 @@ datasource db {
 }
 
 model User {
-  id                    String   @id @default(cuid())
-  email                 String   @unique
-  name                  String?
-  accounts              Account[]
-  providerType          String?
-  providerId            String?
-  providerAccountId     String?
-  parentLock            ParentLock?
-  lastOpenedAccountId   String?
+  id                          String   @id @default(cuid())
+  email                       String   @unique
+  name                        String?
+  childAccounts               ChildAccount[]
+  providerType                String?
+  providerId                  String?
+  providerChildAccountId      String?
+  parentLock                  ParentLock?
+  lastOpenedChildAccountId    String?
 }
 
 model ParentLock {
-  id         String   @id  @default(cuid()) 
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String   @unique
-  pin        Int
-  question   String?
-  answer     String?
+  id              String   @id  @default(cuid()) 
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String   @unique
+  pin             Int
+  question        String?
+  answer          String?
 }
 
-model Account {
-  id        String     @id @default(cuid())
-  kidName   String
-  current   Int        @default(0)
-  periodics Periodic[]
-  tasks     Task[]
-  transactions Transaction[]
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String    
+model ChildAccount {
+  id              String     @id @default(cuid())
+  kidName         String
+  current         Int        @default(0)
+  periodics       Periodic[]
+  tasks           Task[]
+  transactions    Transaction[]
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String    
 
 }
 
@@ -68,32 +68,32 @@ enum Interval {
   YEAR
 }
 model Periodic {
-  id                      String       @id @default(cuid())
-  name                    String
-  title                   String
-  actionType              ActionType
-  amount                  Int?
-  task                    Task?
-  interval                Interval
-  nextOccurrence          DateTime?
-  startsAt                DateTime?
-  endsAt                  DateTime?
-  transactions            Transaction[] 
-  account                 Account?      @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  accountId               String       
+  id                  String       @id @default(cuid())
+  name                String
+  title               String
+  actionType          ActionType
+  amount              Int?
+  task                Task?
+  interval            Interval
+  nextOccurrence      DateTime?
+  startsAt            DateTime?
+  endsAt              DateTime?
+  transactions        Transaction[] 
+  childAccount        ChildAccount?      @relation(fields: [childAccountId], references: [id], onDelete: Cascade)
+  childAccountId      String       
 }
 
 model Transaction {
-  id         String     @id @default(cuid())
-  type       ActionType
-  reason     TransactionReason
-  amount     Int
-  executedAt DateTime
-  viewed     Boolean    @default(false)
-  periodic   Periodic?  @relation(fields: [periodicId], references: [id], onDelete: Cascade)
-  periodicId String?
-  account    Account?   @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  accountId  String
+  id                  String     @id @default(cuid())
+  type                ActionType
+  reason              TransactionReason
+  amount              Int
+  executedAt          DateTime
+  viewed              Boolean    @default(false)
+  periodic            Periodic?  @relation(fields: [periodicId], references: [id], onDelete: Cascade)
+  periodicId          String?
+  childAccount        ChildAccount?   @relation(fields: [childAccountId], references: [id], onDelete: Cascade)
+  childAccountId      String
 }
 
 
@@ -103,8 +103,8 @@ model Task {
   expiresAt           DateTime?
   title               String
   description         String?
-  account             Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  accountId           String
+  childAccount        ChildAccount @relation(fields: [childAccountId], references: [id], onDelete: Cascade)
+  childAccountId      String
   completed           Boolean  @default(false)
   completedAt         DateTime?
   amount              Int?

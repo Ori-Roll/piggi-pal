@@ -1,6 +1,6 @@
 import { Periodic } from '@prisma/client';
 import periodicAccess from '@/apiDataAccess/periodic';
-import accountHandler from './accountHandler';
+import childAccountHandler from './childAccountHandler';
 import { startOfDay, endOfDay } from 'date-fns';
 import { APIError } from '@/common/apiUtils';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
@@ -9,20 +9,24 @@ import HttpStatusCodes from '@/common/HttpStatusCodes';
  * Get all periodics.
  */
 const getAll = async (
-  accountId: string,
+  childAccountId: string,
   userId: string
 ): Promise<Periodic[]> => {
   // TODO: check if the user is authorized to access this data
   // TODO: Implement pagination? Is that necessary in this case?
 
-  const accounts = await accountHandler.getAllUserAccounts(userId);
-  if (!accounts.find((account) => account.id === accountId)) {
+  const childAccounts = await childAccountHandler.getAllUserChildAccounts(
+    userId
+  );
+  if (
+    !childAccounts.find((childAccount) => childAccount.id === childAccountId)
+  ) {
     throw new APIError(
       HttpStatusCodes.FORBIDDEN,
-      'User not authorized to access this account'
+      'User not authorized to access this childAccount'
     );
   }
-  return await periodicAccess.getAllPeriodicsForAccount(accountId);
+  return await periodicAccess.getAllPeriodicsForChildAccount(childAccountId);
 };
 
 /**
@@ -51,12 +55,15 @@ const add = async (
 ): Promise<Periodic> => {
   console.log('userId ', userId);
   console.log('data ', data);
-  // TODO: check periodic user rules for the account?
-  const accounts = await accountHandler.getOneAccount(data.accountId, userId);
-  if (!accounts) {
+  // TODO: check periodic user rules for the childAccount?
+  const childAccounts = await childAccountHandler.getOneChildAccount(
+    data.childAccountId,
+    userId
+  );
+  if (!childAccounts) {
     throw new APIError(
       HttpStatusCodes.FORBIDDEN,
-      'User not authorized to access this account'
+      'User not authorized to access this childAccount'
     );
   }
 
