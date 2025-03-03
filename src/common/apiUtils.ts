@@ -19,6 +19,14 @@ export class APIError extends Error {
   }
 }
 
+type ErrorResponseBody = {
+  error: {
+    message: string;
+    code?: string;
+    details?: ErrorDetails[];
+  };
+};
+
 type Function = (req: NextApiRequest, res: NextApiResponse) => Promise<void>;
 
 export const apiErrorMiddleware = (handler: Function) => {

@@ -1,0 +1,26 @@
+.gridWrapperMobile {
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    ' current  '
+    ' periodics  '
+    ' tasks  ';
+  grid-gap: 20px;
+}
+
+.gridWrapperDesktop {
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    ' current   current  '
+    ' periodics tasks ';
+  grid-gap: 20px;
+}
+
+.gridColCurrent {
+  grid-area: current;
+}
+.gridColPeriodics {
+  grid-area: periodics;
+}
+.gridColTasks {
+  grid-area: tasks;
+}

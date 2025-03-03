@@ -7,6 +7,8 @@ import { useSession } from 'next-auth/react';
 import { Loader } from '@mantine/core';
 import { userService } from '@/APIService/users';
 import accountsService from '@/APIService/accounts';
+import BasicDataLoader from '@/components/BasicDataLoader';
+import DashboardLayout from '@/components/Dashboard/Dashboard';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -70,19 +72,9 @@ export default function Home() {
         className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
       >
         <main className={styles.main}>
-          <h1>IT IS ON!</h1>
-          <button onClick={mockCall_users}>
-            CALL GET api/users (will get the me)
-          </button>
-          <button onClick={mockCall_accounts}>
-            CALL GET api/accounts (will get all accounts)
-          </button>
-          <button onClick={mockCall_create_account}>
-            CALL POST api/accounts (will create an account)
-          </button>
-          <button onClick={mockCall_one_account}>
-            CALL GET api/accounts/:id (will get one account)
-          </button>
+          <BasicDataLoader>
+            <DashboardLayout />
+          </BasicDataLoader>
         </main>
         <footer className={styles.footer}></footer>
       </div>

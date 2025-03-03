@@ -12,18 +12,22 @@ import theme from '@/config/mantine';
 import ErrorBoundary from '@/components/base/providers/ErrorBoundary';
 
 const Providers = ({ children }: { children: ReactNode }) => {
-  return (
-    <ErrorBoundary>
-      <SessionProvider>
-        <QueryClientProvider client={queryClient}>
-          <MantineProvider theme={theme}>
-            <Notifications />
-            {children}
-          </MantineProvider>
-        </QueryClientProvider>
-      </SessionProvider>
-    </ErrorBoundary>
-  );
+  try {
+    return (
+      <ErrorBoundary>
+        <SessionProvider>
+          <QueryClientProvider client={queryClient}>
+            <MantineProvider theme={theme}>
+              <Notifications />
+              {children}
+            </MantineProvider>
+          </QueryClientProvider>
+        </SessionProvider>
+      </ErrorBoundary>
+    );
+  } catch (e) {
+    console.log('ERROOOOORRRR', e);
+  }
 };
 
 export default Providers;

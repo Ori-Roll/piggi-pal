@@ -6,24 +6,44 @@ export class HttpError extends Error {
   }
 }
 
-type DataResponse<T> = { data: T };
+//TODO: This is a temporary type
+type DataResponse<T> =
+  | { data: T }
+  | { message: string }
+  | { error: { message: string } };
 
 async function handleResponse<T>(response: Response): Promise<DataResponse<T>> {
   if (!response.ok) {
-    // if (response.status === 401) {
-    //   //TODO: Add a logout function here and a snackbar to show the user they have been logged out
-    //   window.location.href = '/login';
-    // }
-    //TODO:  show the user the error message
+    const data = await response.json();
     notifications.show({
-      title: 'API Call Error.',
-      message: 'API Call Error occurred. Please try again',
+      title: 'Error.',
+      message:
+        data.message ||
+        data.error.message ||
+        'API Call Error occurred. Please try again',
       color: 'red',
     });
-    // throw new HttpError(response);
+    return data;
   }
-
   return await response.json();
+
+  // if (!response.ok) {
+  //   // if (response.status === 401) {
+  //   //   //TODO: Add a logout function here and a snackbar to show the user they have been logged out
+  //   //   window.location.href = '/login';
+  //   // }
+  //   //TODO:  show the user the error message
+  //   const data = await response.json();
+  //   notifications.show({
+  //     title: 'Error.',
+  //     message: data.message || 'API Call Error occurred. Please try again',
+  //     color: 'red',
+  //   });
+  //   // throw new HttpError(response);
+  //   console.error('API Call Error occurred. Please try again');
+  // }
+
+  // return await response.json();
 }
 
 const defaultHeaders = {

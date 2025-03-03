@@ -1,0 +1,37 @@
+.card {
+  border-radius: 1.5rem;
+  background-color: #abc6ed;
+  padding: 2rem 1.5rem;
+  min-height: 10rem;
+  margin-top: 2rem;
+  position: relative;
+}
+
+.nameWrapper {
+}
+
+.top_icon {
+  font-family: 'Titan One', serif;
+  font-size: 2rem;
+  position: absolute;
+  top: -2rem;
+  color: #4f7ccf;
+  background-color: #ffffff;
+  width: 4rem;
+  height: 4rem;
+  border: 3px solid #abc6ed;
+  border-radius: 50%;
+  text-align: center;
+  padding-top: 0.3rem;
+  display: inline-block;
+}
+
+.name {
+  font-family: 'Titan One', serif;
+  font-size: 1rem;
+  color: #525252;
+}
+
+.nextTimeDescription {
+  color: '#999';
+}

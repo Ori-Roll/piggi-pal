@@ -1,0 +1,37 @@
+.card_wrapper {
+  position: relative;
+  overflow: visible;
+}
+
+.checkmark_circle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 15px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit_button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.in_icon {
+  padding-top: 0;
+  padding-bottom: 0;
+}
