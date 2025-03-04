@@ -10,6 +10,12 @@ import '@mantine/notifications/styles.css';
 import queryClient from '@/config/queryClient';
 import theme from '@/config/mantine';
 import ErrorBoundary from '@/components/base/providers/ErrorBoundary';
+import { Titan_One } from 'next/font/google';
+
+const font = Titan_One({
+  subsets: ['latin'],
+  weight: ['400'],
+});
 
 const Providers = ({ children }: { children: ReactNode }) => {
   try {
@@ -18,7 +24,9 @@ const Providers = ({ children }: { children: ReactNode }) => {
         <SessionProvider>
           <QueryClientProvider client={queryClient}>
             <MantineProvider theme={theme}>
-              <Notifications />
+              <main className={font.className}>
+                <Notifications />
+              </main>
               {children}
             </MantineProvider>
           </QueryClientProvider>
