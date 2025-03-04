@@ -85,9 +85,7 @@ const PeriodicCardItem = (props: PeriodicCardItemProps) => {
       actionName={actionTypeToMessageMap[periodic.actionType]}
       currencySign={'$'}
       intervalName={intervalToMessageMap[periodic.interval]}
-      nextOccurrence={
-        periodic.nextOccurrence ? periodic.nextOccurrence?.toISOString() : null
-      }
+      nextOccurrence={periodic.nextOccurrence ? periodic.nextOccurrence : null}
       imageUrl="https://source.unsplash.com/random"
     />
   );
