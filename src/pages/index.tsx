@@ -20,32 +20,6 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-const mockCall_users = async () => {
-  const response = await userService.getCurrentUser();
-  console.log('Got response ', response);
-};
-
-const mockCall_childAccounts = async () => {
-  const res = await childAccountsService.getUserChildAccounts();
-  console.log('Got response ', res.data);
-};
-
-let mockChildAccountId: string = 'cm7p3iy3f0001tb4ktvowvjel';
-
-const mockCall_one_childAccount = async () => {
-  const res = await childAccountsService.getChildAccount(mockChildAccountId);
-  console.log('Got response ', res.data);
-};
-
-const mockCall_create_childAccount = async () => {
-  const res = await childAccountsService.createChildAccount({
-    kidName: 'stringi',
-    current: 0,
-  });
-  console.log('Got response ', res.data);
-  mockAccountId = res.data.id;
-};
-
 export default function Home() {
   const session = useSession();
   const router = useRouter();

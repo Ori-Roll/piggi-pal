@@ -1,9 +1,9 @@
 import { client } from './fetchClient/fetchClient';
-import { User } from '@prisma/client';
+import { UserWithAllData, UserWithParentLock } from '@/types/dataTypes';
 
 export const userService = {
-  getCurrentUser: () => client.get<User>('/users'),
+  getCurrentUser: () => client.get<UserWithAllData>('/users'),
 
-  updateProfile: (id: string, userData: Partial<User>) =>
-    client.patch<User>(`/users?id=${id}`, userData),
+  updateProfile: (id: string, userData: Partial<UserWithParentLock>) =>
+    client.patch<UserWithParentLock>(`/users?id=${id}`, userData),
 };

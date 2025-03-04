@@ -1,13 +1,14 @@
 import { Grid } from '@mantine/core';
 // import { Carousel } from '@mantine/carousel';
-import { ChildAccount, Periodic } from '@prisma/client';
+import { Periodic } from '@prisma/client';
 import { useIsMobile } from '@/hooks/configHooks';
 import PeriodicCard from '@/components/base/PeriodicCard/PeriodicCard';
 import NothingHere from '@/components/base/NothingHere/NothingHere';
 import style from './PeriodicsSection.module.css';
+import { ChildAccountWithPeriodics } from '@/types/dataTypes';
 
 type PeriodicsSectionProps = {
-  childAccount: ChildAccount;
+  childAccount: ChildAccountWithPeriodics;
 };
 //TODO: Move all these somewhere else
 const actionTypeToMessageMap = {
@@ -72,6 +73,10 @@ type PeriodicCardItemProps = {
 const PeriodicCardItem = (props: PeriodicCardItemProps) => {
   const { periodic } = props;
 
+  if (!periodic || !periodic.amount) {
+    return null;
+  }
+
   return (
     <PeriodicCard
       key={periodic.id}
@@ -80,7 +85,9 @@ const PeriodicCardItem = (props: PeriodicCardItemProps) => {
       actionName={actionTypeToMessageMap[periodic.actionType]}
       currencySign={'$'}
       intervalName={intervalToMessageMap[periodic.interval]}
-      nextOccurrence={periodic.nextOccurrence}
+      nextOccurrence={
+        periodic.nextOccurrence ? periodic.nextOccurrence?.toISOString() : null
+      }
       imageUrl="https://source.unsplash.com/random"
     />
   );

@@ -1,10 +1,11 @@
+import { ChildAccountWithAllData } from '@/types/dataTypes';
 import { client } from './fetchClient/fetchClient';
 import { ChildAccount } from '@prisma/client';
 
 const childAccountsService = {
   getUserChildAccounts: () => client.get<ChildAccount[]>('/childAccounts'),
   getChildAccount: (id: string) =>
-    client.get<ChildAccount>(`/childAccounts?id=${id}`),
+    client.get<ChildAccountWithAllData>(`/childAccounts?id=${id}`),
   createChildAccount: (childAccountData: Partial<ChildAccount>) =>
     client.post<ChildAccount>('/childAccounts', childAccountData),
   updateChildAccount: (

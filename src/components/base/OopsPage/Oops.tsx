@@ -1,9 +1,11 @@
 import React from 'react';
 import styles from './Oops.module.css';
 import { Container, Title, Text, Button, Center, Flex } from '@mantine/core';
+import { useRouter } from 'next/router';
 
 const OopsPage: React.FC = () => {
   // const navigate = useNavigate(); // For navigation (e.g., redirecting to the home page)
+  const router = useRouter();
 
   return (
     <Flex
@@ -30,7 +32,11 @@ const OopsPage: React.FC = () => {
             We couldn't find the page you were looking for. It might have been
             removed or the URL could be incorrect.
           </Text>
-          <Button variant="filled" color="blue" onClick={() => navigate('/')}>
+          <Button
+            variant="filled"
+            color="blue"
+            onClick={() => router.push('/')}
+          >
             Go back to Home
           </Button>
         </Container>

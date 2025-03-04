@@ -10,6 +10,7 @@ import PeriodicsSection from '@/components/PeriodicsSection/PeriodicsSection';
 import OopsPage from '@/components/base/OopsPage/Oops';
 import TaskSection from '@/components/TaskSection/TaskSection';
 import style from './ChildAccount.module.css';
+import { ChildAccountWithAllData } from '@/types/dataTypes';
 
 type ChildAccountProps = {};
 
@@ -25,7 +26,7 @@ const ChildAccount = (props: ChildAccountProps) => {
     isLoading: childAccountLoading,
     error: childAccountError,
     isFetching: childAccountFetching,
-  } = useQuery<ChildAccountData | null>({
+  } = useQuery<ChildAccountWithAllData | null>({
     queryKey: ['currentChildAccount', selectedChildAccount?.id],
     queryFn: async () => {
       if (!selectedChildAccount?.id) return null;

@@ -22,7 +22,8 @@ const PinCodeValidate = (props: PinCodeValidateProps) => {
   const { mutateAsync, isPending, isError } = useMutation({
     mutationFn: async (pin: string) => {
       const data = await parentLock.validate(pin);
-
+      // TODO: Fix this hack
+      //@ts-expect-error - this is a hack - change this!
       if (data.error) {
         return;
       }

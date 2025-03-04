@@ -11,7 +11,7 @@ type PeriodicCardProps = {
   currencySign?: string;
   intervalName: string;
   amount: number;
-  nextOccurrence?: string;
+  nextOccurrence?: string | null;
   imageUrl: string;
   componentIndex?: number;
 };

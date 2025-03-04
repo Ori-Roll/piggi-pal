@@ -6,13 +6,18 @@ export class HttpError extends Error {
   }
 }
 
-//TODO: This is a temporary type
-type DataResponse<T> =
-  | { data: T }
-  | { message: string }
-  | { error: { message: string } };
+type DataResponseTypes = 'data' | 'message' | 'error';
 
-async function handleResponse<T>(response: Response): Promise<DataResponse<T>> {
+//TODO: This is a temporary type
+type DataResponse<D, T extends DataResponseTypes = 'data'> = T extends 'data'
+  ? { data: D }
+  : T extends 'message'
+  ? { message: string }
+  : { error: { message: string } };
+
+async function handleResponse<D, T extends DataResponseTypes = 'data'>(
+  response: Response
+): Promise<DataResponse<D, T>> {
   if (!response.ok) {
     const data = await response.json();
     notifications.show({
@@ -54,20 +59,22 @@ const defaultHeaders = {
 const API_BASE_URL = 'api';
 
 export const client = {
-  get: async <T>(endpoint: string): Promise<DataResponse<T>> => {
+  get: async <D, T extends DataResponseTypes = 'data'>(
+    endpoint: string
+  ): Promise<DataResponse<D, T>> => {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       credentials: 'include',
       headers: {
         ...defaultHeaders,
       },
     });
-    return await handleResponse<T>(response);
+    return await handleResponse<D, T>(response);
   },
 
-  post: async <T>(
+  post: async <D, T extends DataResponseTypes = 'data'>(
     endpoint: string,
     data?: unknown
-  ): Promise<DataResponse<T>> => {
+  ): Promise<DataResponse<D, T>> => {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'POST',
       credentials: 'include',
@@ -81,13 +88,13 @@ export const client = {
           })
         : undefined,
     });
-    return await handleResponse<T>(response);
+    return await handleResponse<D, T>(response);
   },
 
-  patch: async <T>(
+  patch: async <D, T extends DataResponseTypes = 'data'>(
     endpoint: string,
     data: unknown
-  ): Promise<DataResponse<T>> => {
+  ): Promise<DataResponse<D, T>> => {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'PATCH',
       credentials: 'include',
@@ -96,10 +103,12 @@ export const client = {
       },
       body: JSON.stringify(data),
     });
-    return await handleResponse<T>(response);
+    return await handleResponse<D, T>(response);
   },
 
-  delete: async <T>(endpoint: string): Promise<DataResponse<T>> => {
+  delete: async <D, T extends DataResponseTypes = 'data'>(
+    endpoint: string
+  ): Promise<DataResponse<D, T>> => {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'DELETE',
       credentials: 'include',
@@ -107,6 +116,6 @@ export const client = {
         ...defaultHeaders,
       },
     });
-    return await handleResponse<T>(response);
+    return await handleResponse<D, T>(response);
   },
 };

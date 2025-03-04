@@ -67,6 +67,13 @@ const processPeriodicTransactions = async (minDate: Date, maxDate: Date) => {
         );
       }
       const { actionType, amount } = periodic;
+      if (!actionType) {
+        throw new APIError(
+          HttpStatusCodes.BAD_REQUEST,
+          'Action type not found for periodic'
+        );
+      }
+
       if (actionType === 'ADD' && amount) {
         const newChildAccount = await prisma.childAccount.update({
           where: {
@@ -88,6 +95,13 @@ const processPeriodicTransactions = async (minDate: Date, maxDate: Date) => {
           },
         });
         console.log('newChildAccount ', newChildAccount);
+      }
+
+      if (!amount) {
+        throw new APIError(
+          HttpStatusCodes.BAD_REQUEST,
+          'Amount not found for periodic'
+        );
       }
 
       //TODO: This might have a problem if a periodic is executed multiple times in a day (it comes from the same periodic const above and will not change after each update)

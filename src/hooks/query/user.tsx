@@ -4,13 +4,17 @@ import {
   useMutation,
 } from '@tanstack/react-query';
 import { userService } from '@/APIService/users';
-import { User } from '@prisma/client';
+import { UserWithAllData, UserWithParentLock } from '@/types/dataTypes';
+import { User } from 'next-auth';
 
 export const useUserQuery = (
-  postQueryCallback?: (data: User) => void,
-  restQueryObjData?: Omit<UndefinedInitialDataOptions<User>, 'queryKey'>
+  postQueryCallback?: (data: UserWithAllData) => void,
+  restQueryObjData?: Omit<
+    UndefinedInitialDataOptions<UserWithAllData>,
+    'queryKey'
+  >
 ) => {
-  const query = useQuery<User>({
+  const query = useQuery<UserWithAllData>({
     queryKey: ['user'],
     queryFn: async () => {
       const response = await userService.getCurrentUser();
@@ -27,8 +31,10 @@ export const useUserQuery = (
 
 export const useUserMutation = () => {
   const { mutateAsync } = useMutation({
-    mutationFn: async (data: { id: string; newUserData: Partial<User> }) =>
-      await userService.updateProfile(data.id, data.newUserData),
+    mutationFn: async (data: {
+      id: string;
+      newUserData: Partial<UserWithParentLock>;
+    }) => await userService.updateProfile(data.id, data.newUserData),
   });
 
   return mutateAsync;

@@ -58,14 +58,14 @@ export const actionTypeOptions = [
 
 export const minEndDate = (form: FormType) =>
   !!form?.getValues()?.startsAt &&
-  isValid(new Date(form.getValues().startsAt as string))
-    ? { minDate: addDays(form.getValues().startsAt as string, 1) }
+  isValid(new Date(form.getValues().startsAt as unknown as string))
+    ? { minDate: addDays(form.getValues().startsAt as unknown as string, 1) }
     : {};
 
 export const endDatesDisabled = (date: Date, formValues: Partial<Periodic>) => {
   if (!!formValues?.startsAt) {
     const typeOfInterval = formValues.interval as IntervalValues;
-    const startsAt = new Date(formValues.startsAt as string);
+    const startsAt = new Date(formValues.startsAt as unknown as string);
     if (!!typeOfInterval && !!intervalToDisabledEndDates[typeOfInterval]) {
       return intervalToDisabledEndDates[typeOfInterval](date, startsAt);
     }
