@@ -3,7 +3,7 @@ import { useEditMode } from '@/store/useEditMode';
 import { useIsMobile } from '@/hooks/configHooks';
 import { useSelectedChildAccount } from '@/store/useCurrentChildAccount';
 import ChildAccountSelect from '@/components/ChildAccountSelect/ChildAccountSelect';
-// import AddTask from '@/components/AddTask/AddTask';
+import AddTask from '@/components/AddTask/AddTask';
 // import AddPeriodic from '@/components/AddPeriodic/AddPeriodic';
 import LockWithPin from '@/components/base/LockWithPin/LockWithPin';
 import AddPeriodic from '@/components/AddPeriodic/AddPeriodic';
@@ -58,7 +58,7 @@ const Navbar = (props: NavbarProps) => {
           <ChildAccountSelect />
           {editMode && (
             <>
-              {/* <AddTask selectedChildAccount={selectedChildAccount} /> */}
+              <AddTask selectedChildAccount={selectedChildAccount} />
               <AddPeriodic selectedChildAccount={selectedChildAccount} />
             </>
           )}

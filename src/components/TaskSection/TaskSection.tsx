@@ -22,7 +22,7 @@ function TaskSection(props: TaskSectionProps) {
 
   return childAccount.tasks.length > 0 ? (
     <Grid p="lg" gutter={isMobile ? 'md' : 'lg'} className={style.task_wrapper}>
-      {childAccount.tasks.map((task: Task, i) => (
+      {childAccount.tasks.map((task: Task) => (
         <Grid.Col span={isMobile ? 12 : 4} key={task.id}>
           <DoableCard
             key={task.id}
