@@ -38,6 +38,8 @@ const ChildAccount = (props: ChildAccountProps) => {
     refetchOnMount: false,
   });
 
+  console.log('in ChildAccount.tsx, childAccount: ', childAccount);
+
   return childAccountLoading ? (
     <NothingHere>
       <Flex justify="center" align="center" style={{ height: '100%' }}>
@@ -61,7 +63,6 @@ const ChildAccount = (props: ChildAccountProps) => {
           <Grid.Col className={style.gridColPeriodics}>
             <PeriodicsSection childAccount={childAccount} />
           </Grid.Col>
-
           <Grid.Col className={style.gridColTasks}>
             <TaskSection childAccount={childAccount} />
           </Grid.Col>
