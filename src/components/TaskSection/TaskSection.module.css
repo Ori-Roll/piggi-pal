@@ -1,2 +1,6 @@
 .task_wrapper {
 }
+
+.task_column {
+  min-width: fit-content;
+}

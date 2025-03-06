@@ -1,10 +1,16 @@
 import { PropsWithChildren } from 'react';
-import { Box, Button, useMantineTheme } from '@mantine/core';
+import { Box, Button, Flex } from '@mantine/core';
 import { IconCheck, IconEdit } from '@tabler/icons-react';
+import chroma from 'chroma-js';
 import { useIsMobile } from '@/hooks/configHooks';
 import style from './DoableCard.module.css';
+import { getTextColorForBackground } from '@/utils/colors';
 
-type EditableDeletableProps = {
+type DoableCardGeneralProps = {
+  cardStyle?: DefaultStyle;
+};
+
+type EditableProps = {
   editableDeletable: true;
   checkable?: boolean;
   onEdit?: () => void;
@@ -18,9 +24,21 @@ type CheckableProps = {
   checking?: boolean;
 };
 
-type DoableCardProps = PropsWithChildren<
-  EditableDeletableProps | CheckableProps
->;
+type DoableCardProps<T extends boolean = false> = DoableCardGeneralProps &
+  PropsWithChildren<T extends true ? EditableProps : CheckableProps>;
+
+type DefaultStyle = {
+  primaryColors: string;
+  secondaryColors: string;
+  accentColor?: string;
+  icon?: string;
+};
+
+const defaultStyle: DefaultStyle = {
+  primaryColors: '#289ffa',
+  secondaryColors: '#3b6fff',
+  accentColor: '#ffb43b',
+};
 
 const DoableCard = (props: DoableCardProps) => {
   // const { children, checkable, editable, deletable, checking } = props;
@@ -29,14 +47,35 @@ const DoableCard = (props: DoableCardProps) => {
   // const onEdit = editable ? onEdit : undefined;
   // const onDelete = deletable ? onDelete : undefined;
 
-  const { children } = props;
+  const { children, cardStyle = defaultStyle } = props;
+
+  const {
+    primaryColors = defaultStyle.primaryColors,
+    secondaryColors = defaultStyle.secondaryColors,
+    accentColor = defaultStyle.accentColor,
+  } = cardStyle;
+
+  const wrapperStyle = chroma(primaryColors).hex();
 
   const isMobile = useIsMobile();
 
+  // const backgroundColor = chroma(primaryColors)
+  //   .brighten(1.8)
+  //   .desaturate(1.3)
+  //   .hex();
+
+  const backgroundColor = chroma('white').hex();
+
   return (
-    <Box className={style.card_wrapper} w={isMobile ? '100%' : '20rem'}>
-      <EditButton onEdit={() => {}} />
-      {children}
+    <Box
+      className={style.card_wrapper}
+      w={isMobile ? '100%' : '20rem'}
+      style={{ borderColor: wrapperStyle, backgroundColor }}
+    >
+      <Flex direction="column">
+        <EditButton onEdit={() => {}} backgroundColor={backgroundColor} />
+        <Box className={style.card_content}>{children}</Box>
+      </Flex>
       <CheckMarkCircle />
     </Box>
   );
@@ -45,19 +84,29 @@ const DoableCard = (props: DoableCardProps) => {
 type CheckMarkCircleProps = {
   checking?: boolean;
   onCheck?: () => void;
+  color?: string;
 };
 
-const CheckMarkCircle = (props: CheckMarkCircleProps) => {
-  const { checking, onCheck } = props;
+const greenButtonColor = '#10d14d';
 
-  const theme = useMantineTheme();
+const CheckMarkCircle = (props: CheckMarkCircleProps) => {
+  const { checking, onCheck, color = defaultStyle.primaryColors } = props;
+
+  const foregroundColor = getTextColorForBackground(color);
+  const backgroundColor = checking ? chroma(color).desaturate(3).hex() : color; //chroma.scale([color, greenButtonColor]).mode('lch').colors(6)[3];
 
   return (
-    <Button onClick={onCheck} className={style.checkmark_circle}>
+    <Button
+      onClick={onCheck}
+      className={style.checkmark_circle}
+      style={{ backgroundColor }}
+    >
       <IconCheck
-        size="2rem"
+        size="1.6rem"
+        height={50}
         className={style.in_icon}
-        color={checking ? theme.colors.gray[5] : theme.colors.green[5]}
+        color={foregroundColor}
+        style={{ strokeWidth: '4px' }}
       />
     </Button>
   );
@@ -65,18 +114,20 @@ const CheckMarkCircle = (props: CheckMarkCircleProps) => {
 
 type EditButtonProps = {
   onEdit: () => void;
+  backgroundColor?: string;
 };
 
 const EditButton = (props: EditButtonProps) => {
-  const { onEdit } = props;
+  const { onEdit, backgroundColor = 'black' } = props;
 
-  const theme = useMantineTheme();
+  const foregroundColor = getTextColorForBackground(backgroundColor);
+
   return (
     <Button onClick={onEdit} className={style.edit_button}>
       <IconEdit
         className={style.in_icon}
         size="1.5rem"
-        color={theme.colors.gray[7]}
+        color={foregroundColor}
       />
     </Button>
   );

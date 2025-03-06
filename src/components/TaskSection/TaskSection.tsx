@@ -22,10 +22,14 @@ function TaskSection(props: TaskSectionProps) {
   }
 
   return childAccount.tasks.length > 0 ? (
-    <Grid p="lg" gutter={isMobile ? 'md' : 'lg'} className={style.task_wrapper}>
+    <Grid gutter={isMobile ? 'md' : 'lg'} className={style.task_wrapper}>
       {childAccount.tasks.map((task: Task) =>
         task.amount ? (
-          <Grid.Col span={isMobile ? 12 : 4} key={task.id}>
+          <Grid.Col
+            key={task.id}
+            span={isMobile ? 12 : 3}
+            className={style.task_column}
+          >
             <DoableCard
               key={task.id}
               editableDeletable

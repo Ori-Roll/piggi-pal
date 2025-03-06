@@ -46,7 +46,7 @@ const LockWithPin = (props: LockWithPinProps) => {
   return (
     <>
       <ModalsWrapper
-        title="LOCK APP"
+        title="UNLOCK APP"
         opened={modalOpened}
         onClose={toggleModalOpened}
       >
