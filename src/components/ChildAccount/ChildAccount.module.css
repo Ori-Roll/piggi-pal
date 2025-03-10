@@ -13,6 +13,7 @@
     ' current   current  '
     ' periodics tasks ';
   grid-gap: 20px;
+  padding: 1rem;
 }
 
 .gridColCurrent {

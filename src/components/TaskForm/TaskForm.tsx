@@ -1,13 +1,15 @@
 import { useForm } from '@mantine/form';
 import { Button, NumberInput, Space, TextInput } from '@mantine/core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Task, ChildAccount } from '@prisma/client';
+import { Task } from '@prisma/client';
 import tasksService from '@/APIService/tasks';
+import { ChildAccountWithAllData } from '@/types/dataTypes';
+import { TEMPORARY } from '@/common/consts';
 
 type periodicFormProps = {
   task?: Partial<Task>;
   onSubmitCallback?: (data: Partial<Task>) => void;
-  selectedChildAccount: null | Partial<ChildAccount>;
+  selectedChildAccount: null | Partial<ChildAccountWithAllData>;
 };
 
 const PeriodicForm = (props: periodicFormProps) => {
@@ -18,13 +20,23 @@ const PeriodicForm = (props: periodicFormProps) => {
   const { mutateAsync } = useMutation({
     mutationFn: (taskData: Partial<Task>) => tasksService.createTask(taskData),
     onMutate: async (newTask: Partial<Task>) => {
-      await queryClient.cancelQueries({ queryKey: ['currentChildAccount'] });
+      await queryClient.cancelQueries({
+        queryKey: ['currentChildAccount', selectedChildAccount?.id],
+      });
       const previousChildAccountData = queryClient.getQueryData([
         'currentChildAccount',
+        selectedChildAccount?.id,
       ]);
+
       queryClient.setQueryData(
-        ['currentChildAccount'],
-        (old: Partial<ChildAccount>) => ({ ...old, newTask })
+        ['currentChildAccount', selectedChildAccount?.id],
+        (old: Partial<ChildAccountWithAllData>) => {
+          console.log('old  ', old);
+          return {
+            ...old,
+            tasks: [...(old.tasks || []), { id: TEMPORARY, ...newTask }],
+          };
+        }
       );
 
       return { previousChildAccountData };

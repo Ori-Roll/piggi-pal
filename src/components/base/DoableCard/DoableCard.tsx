@@ -8,6 +8,7 @@ import { getTextColorForBackground } from '@/utils/colors';
 
 type DoableCardGeneralProps = {
   cardStyle?: DefaultStyle;
+  loading?: boolean;
 };
 
 type EditableProps = {
@@ -22,6 +23,7 @@ type CheckableProps = {
   checkable: true;
   onCheck?: () => void;
   checking?: boolean;
+  checked?: boolean;
 };
 
 type DoableCardProps<T extends boolean = false> = DoableCardGeneralProps &
@@ -41,13 +43,14 @@ const defaultStyle: DefaultStyle = {
 };
 
 const DoableCard = (props: DoableCardProps) => {
-  // const { children, checkable, editable, deletable, checking } = props;
-
-  // const onCheck = checkable ? onCheck : undefined;
-  // const onEdit = editable ? onEdit : undefined;
-  // const onDelete = deletable ? onDelete : undefined;
-
-  const { children, cardStyle = defaultStyle } = props;
+  const {
+    children,
+    cardStyle = defaultStyle,
+    onCheck,
+    checked,
+    checking,
+    loading,
+  } = props;
 
   const {
     primaryColors = defaultStyle.primaryColors,
@@ -57,57 +60,74 @@ const DoableCard = (props: DoableCardProps) => {
 
   const wrapperStyle = chroma(primaryColors).hex();
 
-  const isMobile = useIsMobile();
-
-  // const backgroundColor = chroma(primaryColors)
-  //   .brighten(1.8)
-  //   .desaturate(1.3)
-  //   .hex();
-
   const backgroundColor = chroma('white').hex();
 
   return (
     <Box
       className={style.card_wrapper}
-      w={isMobile ? '100%' : '20rem'}
-      style={{ borderColor: wrapperStyle, backgroundColor }}
+      style={{
+        borderColor: wrapperStyle,
+        backgroundColor,
+        opacity: loading ? 0.5 : 1,
+        pointerEvents: loading ? 'none' : 'auto',
+      }}
     >
       <Flex direction="column">
         <EditButton onEdit={() => {}} backgroundColor={backgroundColor} />
         <Box className={style.card_content}>{children}</Box>
       </Flex>
-      <CheckMarkCircle />
+      <CheckMarkCircle
+        onCheck={onCheck}
+        checked={checked}
+        checking={checking}
+      />
     </Box>
   );
 };
 
 type CheckMarkCircleProps = {
   checking?: boolean;
+  checked?: boolean;
   onCheck?: () => void;
   color?: string;
+  disabled?: boolean;
 };
 
-const greenButtonColor = '#10d14d';
-
 const CheckMarkCircle = (props: CheckMarkCircleProps) => {
-  const { checking, onCheck, color = defaultStyle.primaryColors } = props;
+  const {
+    checking,
+    checked,
+    onCheck,
+    color = defaultStyle.primaryColors,
+    disabled,
+  } = props;
 
   const foregroundColor = getTextColorForBackground(color);
-  const backgroundColor = checking ? chroma(color).desaturate(3).hex() : color; //chroma.scale([color, greenButtonColor]).mode('lch').colors(6)[3];
+  const foregroundColorChecking = chroma(color).desaturate(3).hex();
+  const backgroundColor = checking
+    ? chroma(color).desaturate(1).hex()
+    : chroma('white').hex(); //chroma.scale([color, greenButtonColor]).mode('lch').colors(6)[3];
+  const backgroundColorChecked = color;
 
   return (
     <Button
       onClick={onCheck}
       className={style.checkmark_circle}
-      style={{ backgroundColor }}
+      style={{
+        backgroundColor: checked ? backgroundColorChecked : backgroundColor,
+        borderColor: color,
+      }}
+      disabled={disabled}
     >
-      <IconCheck
-        size="1.6rem"
-        height={50}
-        className={style.in_icon}
-        color={foregroundColor}
-        style={{ strokeWidth: '4px' }}
-      />
+      {(checked || checking) && (
+        <IconCheck
+          size="1.6rem"
+          height={50}
+          className={style.in_icon}
+          color={checking ? foregroundColorChecking : foregroundColor}
+          style={{ strokeWidth: '4px' }}
+        />
+      )}
     </Button>
   );
 };

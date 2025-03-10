@@ -1,9 +1,11 @@
 .card_wrapper {
   position: relative;
-  border: 0.6rem solid;
-  border-radius: 2rem;
-  padding: 1rem;
+  border: 0.4rem solid;
+  border-radius: 1.6rem;
+  padding: 0.2rem;
   height: 100%;
+  width: 100%;
+  padding: 1rem;
 }
 
 .card_content {
@@ -13,12 +15,12 @@
 .checkmark_circle {
   position: absolute;
   bottom: -1.5rem;
-  right: 1.5rem;
+  right: 2rem;
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 0.2rem #ffffff;
-  border: none;
+  border: 0.4rem solid;
+  box-shadow: 0 0 0 0.2rem white;
   cursor: pointer;
   transition: background-color 0.3s;
   display: flex;
@@ -29,13 +31,13 @@
 
 .edit_button {
   width: fit-content;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  height: fit-content;
   display: flex;
+  justify-content: center;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
   background: none;
   padding: 0;
 }
