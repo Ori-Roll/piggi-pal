@@ -75,7 +75,7 @@ const add = async (userId: string, data: Omit<Task, 'id'>): Promise<Task> => {
 const update = async (
   id: string,
   userId: string,
-  data: Omit<Task, 'id'>
+  data: Partial<Omit<Task, 'id'>> & { childAccountId: string }
 ): Promise<Task> => {
   const { childAccountId, periodicId, ...restData } = data;
 

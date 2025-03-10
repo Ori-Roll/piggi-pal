@@ -1,6 +1,7 @@
 import type { User } from '@prisma/client';
 import { db } from '@/server/db';
 import { prismaDisconnect } from '@/server/disconnect';
+import { UserWithAllData } from '@/types/dataTypes';
 
 // **** Functions **** //
 
@@ -20,7 +21,7 @@ async function persists(id: string): Promise<boolean> {
 /**
  * Get one user.
  */
-async function getOne(id: string): Promise<User | null> {
+async function getOne(id: string): Promise<UserWithAllData | null> {
   const user = await db.user.findUnique({
     where: { id },
     include: {

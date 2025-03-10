@@ -15,8 +15,6 @@ const userWithParentLock = Prisma.validator<Prisma.UserDefaultArgs>()({
 
 const userWithAllData = Prisma.validator<Prisma.UserDefaultArgs>()({
   include: {
-    accounts: true,
-    sessions: true,
     childAccounts: true,
     parentLock: true,
   },

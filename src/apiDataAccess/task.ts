@@ -38,7 +38,7 @@ const addTask = async (
 
 const updateTask = async (
   id: string,
-  data: Omit<Task, 'id' | 'childAccountId' | 'periodicId'>
+  data: Partial<Omit<Task, 'id' | 'childAccountId' | 'periodicId'>>
 ): Promise<Task> => {
   return await db.task.update({
     where: { id },
