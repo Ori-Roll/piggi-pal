@@ -1,4 +1,4 @@
-import { Flex, Burger } from '@mantine/core';
+import { Flex, Burger, Button } from '@mantine/core';
 import { useEditMode } from '@/store/useEditMode';
 import { useIsMobile } from '@/hooks/configHooks';
 import { useSelectedChildAccount } from '@/store/useCurrentChildAccount';
@@ -7,6 +7,7 @@ import AddTask from '@/components/AddTask/AddTask';
 // import AddPeriodic from '@/components/AddPeriodic/AddPeriodic';
 import LockWithPin from '@/components/base/LockWithPin/LockWithPin';
 import AddPeriodic from '@/components/AddPeriodic/AddPeriodic';
+import { signOut } from 'next-auth/react';
 
 type NavbarProps = {
   navBarOpened: boolean;
@@ -71,6 +72,7 @@ const Navbar = (props: NavbarProps) => {
         >
           <LockWithPin />
         </Flex>
+        <Button onClick={() => signOut()}>Sign Out</Button>
       </Flex>
     </Flex>
   );
