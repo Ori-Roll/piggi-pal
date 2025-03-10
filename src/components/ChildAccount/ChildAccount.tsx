@@ -23,9 +23,8 @@ const ChildAccount = (props: ChildAccountProps) => {
 
   const {
     data: childAccount,
-    isLoading: childAccountLoading,
+    isPending: childAccountPending,
     error: childAccountError,
-    isFetching: childAccountFetching,
   } = useQuery<ChildAccountWithAllData | null>({
     queryKey: ['currentChildAccount', selectedChildAccount?.id],
     queryFn: async () => {
@@ -39,9 +38,7 @@ const ChildAccount = (props: ChildAccountProps) => {
     refetchOnMount: false,
   });
 
-  console.log('in ChildAccount.tsx, childAccount: ', childAccount);
-
-  return childAccountLoading ? (
+  return childAccountPending ? (
     <NothingHere>
       <Flex justify="center" align="center" style={{ height: '100%' }}>
         Loading your child&apos;s account
@@ -55,7 +52,6 @@ const ChildAccount = (props: ChildAccountProps) => {
           className={
             isMobile ? style.gridWrapperMobile : style.gridWrapperDesktop
           }
-          p="2rem"
           pt={0}
         >
           <Grid.Col className={style.gridColCurrent}>
