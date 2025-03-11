@@ -5,42 +5,32 @@ import { Task } from '@prisma/client';
 import tasksService from '@/APIService/tasks';
 import { ChildAccountWithAllData } from '@/types/dataTypes';
 import { TEMPORARY } from '@/common/consts';
+import { useUpdateOnMutationCallback } from '@/hooks/utilHooks';
 
-type periodicFormProps = {
+type TaskFormProps = {
   task?: Partial<Task>;
   onSubmitCallback?: (data: Partial<Task>) => void;
-  selectedChildAccount: null | Partial<ChildAccountWithAllData>;
+  selectedChildAccount: ChildAccountWithAllData;
 };
 
-const PeriodicForm = (props: periodicFormProps) => {
+const TaskForm = (props: TaskFormProps) => {
   const { task, onSubmitCallback, selectedChildAccount } = props;
 
   const queryClient = useQueryClient();
 
+  const updateChildAccountOnTaskMutation = useUpdateOnMutationCallback(
+    ['currentChildAccount', selectedChildAccount.id],
+    (newTask: Partial<Task>) => (old: ChildAccountWithAllData) => {
+      return {
+        ...old,
+        tasks: [...(old.tasks || []), { id: TEMPORARY, ...newTask }],
+      };
+    }
+  );
+
   const { mutateAsync } = useMutation({
     mutationFn: (taskData: Partial<Task>) => tasksService.createTask(taskData),
-    onMutate: async (newTask: Partial<Task>) => {
-      await queryClient.cancelQueries({
-        queryKey: ['currentChildAccount', selectedChildAccount?.id],
-      });
-      const previousChildAccountData = queryClient.getQueryData([
-        'currentChildAccount',
-        selectedChildAccount?.id,
-      ]);
-
-      queryClient.setQueryData(
-        ['currentChildAccount', selectedChildAccount?.id],
-        (old: Partial<ChildAccountWithAllData>) => {
-          console.log('old  ', old);
-          return {
-            ...old,
-            tasks: [...(old.tasks || []), { id: TEMPORARY, ...newTask }],
-          };
-        }
-      );
-
-      return { previousChildAccountData };
-    },
+    onMutate: updateChildAccountOnTaskMutation,
     onError: (err, newTaskData, context) => {
       queryClient.setQueryData(
         ['currentChildAccount'],
@@ -52,7 +42,7 @@ const PeriodicForm = (props: periodicFormProps) => {
     },
   });
 
-  const handleAddPeriodic = async (task: Partial<Task>) => {
+  const handleAddTask = async (task: Partial<Task>) => {
     await mutateAsync(task);
     onSubmitCallback?.(task);
   };
@@ -77,7 +67,7 @@ const PeriodicForm = (props: periodicFormProps) => {
   }
 
   return (
-    <form onSubmit={form.onSubmit(handleAddPeriodic)}>
+    <form onSubmit={form.onSubmit(handleAddTask)}>
       <TextInput
         label={'Task name?'}
         key={form.key('title')}
@@ -109,4 +99,4 @@ const PeriodicForm = (props: periodicFormProps) => {
   );
 };
 
-export default PeriodicForm;
+export default TaskForm;

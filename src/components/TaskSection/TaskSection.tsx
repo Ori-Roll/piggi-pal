@@ -1,14 +1,18 @@
 import { Text } from '@mantine/core';
 import { Task } from '@prisma/client';
-import { ChildAccountWithTasks } from '@/types/dataTypes';
+import {
+  ChildAccountWithAllData,
+  ChildAccountWithTasks,
+} from '@/types/dataTypes';
 import AmountWithSign from '@/components/base/AmountWithSign/AmountWithSign';
 import DoableCard from '@/components/base/DoableCard/DoableCard';
 import CardsGrid from '@/components/base/CardsGrid/CardsGrid';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import tasksService from '@/APIService/tasks';
-import { useEffect } from 'react';
 import { TEMPORARY } from '@/common/consts';
-// import style from './TaskSection.module.css';
+import { useUpdateOnMutationCallback } from '@/hooks/utilHooks';
+import style from './TaskSection.module.css';
+import complete from '@/pages/api/tasks/complete';
 
 type TaskSectionProps = {
   childAccount: ChildAccountWithTasks;
@@ -17,18 +21,42 @@ type TaskSectionProps = {
 function TaskSection(props: TaskSectionProps) {
   const { childAccount } = props;
 
+  const queryClient = useQueryClient();
+
+  const updateChildAccountOnTaskCheck = useUpdateOnMutationCallback(
+    ['currentChildAccount', childAccount.id],
+    (newTaskId: Partial<Task>) => (old: ChildAccountWithAllData) => {
+      const newTasks = old.tasks.map((task) => {
+        if (task.id === newTaskId) {
+          return { ...task, completed: true };
+        }
+        return task;
+      });
+
+      return {
+        ...old,
+        tasks: newTasks || [],
+      };
+    }
+  );
+
   const {
-    mutateAsync: updateTask,
-    isPending: updateTaskIsPending,
+    mutateAsync: updateTaskCheck,
+    isPending: updateTaskCheckIsPending,
+
     variables: mutatingTaskVariables,
   } = useMutation({
     mutationFn: async (taskId: string) => {
       await tasksService.completeTask(taskId, childAccount.id);
     },
+    onMutate: updateChildAccountOnTaskCheck,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['currentChildAccount'] });
+    },
   });
 
   const onCheck = (taskId: string) => {
-    updateTask(taskId);
+    updateTaskCheck(taskId);
   };
 
   return childAccount.tasks.length > 0 ? (
@@ -50,7 +78,9 @@ function TaskSection(props: TaskSectionProps) {
             loading={task.id === TEMPORARY}
             // onEdit={() => {}}
             // onDelete={() => {}}
-            checking={updateTaskIsPending && mutatingTaskVariables === task.id}
+            checking={
+              updateTaskCheckIsPending && mutatingTaskVariables === task.id
+            }
           >
             <Text fw={700}>{task.title}</Text>
             <Text c="dimmed">{task.description}</Text>

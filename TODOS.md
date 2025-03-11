@@ -1,7 +1,6 @@
 ### Todo next:
 
 1. Clean ui
-   - <ip> tasks circles thing
    - <ip> overall layout grid changes
    - reintroduce piggi image
    - <ip> make submits on forms work better (close and then loader in data)
@@ -32,3 +31,4 @@
 # DOME
 
 V nothing here appears on loading
+V loader for v's in tasks

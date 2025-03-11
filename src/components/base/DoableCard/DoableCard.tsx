@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { Box, Button, Flex } from '@mantine/core';
+import { Box, Button, Flex, Loader } from '@mantine/core';
 import { IconCheck, IconEdit } from '@tabler/icons-react';
 import chroma from 'chroma-js';
 import { useIsMobile } from '@/hooks/configHooks';
@@ -103,10 +103,7 @@ const CheckMarkCircle = (props: CheckMarkCircleProps) => {
   } = props;
 
   const foregroundColor = getTextColorForBackground(color);
-  const foregroundColorChecking = chroma(color).desaturate(3).hex();
-  const backgroundColor = checking
-    ? chroma(color).desaturate(1).hex()
-    : chroma('white').hex(); //chroma.scale([color, greenButtonColor]).mode('lch').colors(6)[3];
+  const backgroundColor = chroma('white').hex(); //chroma.scale([color, greenButtonColor]).mode('lch').colors(6)[3];
   const backgroundColorChecked = color;
 
   return (
@@ -119,14 +116,18 @@ const CheckMarkCircle = (props: CheckMarkCircleProps) => {
       }}
       disabled={disabled}
     >
-      {(checked || checking) && (
-        <IconCheck
-          size="1.6rem"
-          height={50}
-          className={style.in_icon}
-          color={checking ? foregroundColorChecking : foregroundColor}
-          style={{ strokeWidth: '4px' }}
-        />
+      {checking ? (
+        <Loader color={foregroundColor} />
+      ) : (
+        checked && (
+          <IconCheck
+            size="1.6rem"
+            height={50}
+            className={style.in_icon}
+            color={foregroundColor}
+            style={{ strokeWidth: '4px' }}
+          />
+        )
       )}
     </Button>
   );
