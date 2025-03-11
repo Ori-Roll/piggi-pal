@@ -1,17 +1,17 @@
 ### Todo next:
 
 1. Clean ui
-   - nothing here appears on loading
-   - tasks circles thing
-   - overall layout grid changes
+   - <ip> tasks circles thing
+   - <ip> overall layout grid changes
    - reintroduce piggi image
-   - make submits on forms work better (close and then loader in data)
+   - <ip> make submits on forms work better (close and then loader in data)
    - Black mode - remove (looks wrong on mobile)
-2. Add logout
+2. <ip> Add logout
 3. Add login with credentials
 4. Make crons work
 5. Add Tasks mechanism
-6. Add Investments?
+6. Add Tasks delete ? and edit ?
+7. Add Investments?
 
 ## Todos after deploy is somewhat ready
 
@@ -28,3 +28,7 @@
 # maybe later
 
 - improve headers?
+
+# DOME
+
+V nothing here appears on loading

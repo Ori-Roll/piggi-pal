@@ -1,4 +1,4 @@
-.gridWrapperMobile {
+.account_grid_mobile {
   grid-template-columns: 1fr;
   grid-template-areas:
     ' current  '
@@ -7,13 +7,18 @@
   grid-gap: 20px;
 }
 
-.gridWrapperDesktop {
+.account_grid_desktop {
   grid-template-columns: 1fr 1fr;
   grid-template-areas:
     ' current   current  '
     ' periodics tasks ';
   grid-gap: 20px;
-  padding: 1rem;
+}
+
+.wrapper_mobile {
+}
+.wrapper_desktop {
+  padding: 0 1rem;
 }
 
 .gridColCurrent {
