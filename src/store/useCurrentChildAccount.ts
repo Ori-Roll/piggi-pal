@@ -1,9 +1,11 @@
-import { ChildAccount } from '@prisma/client';
+import { ChildAccountWithAllData } from '@/types/dataTypes';
 import { create } from 'zustand';
 
 type ChangeSelectedChildAccount = {
-  selectedChildAccount: Partial<ChildAccount> | null;
-  setSelectedChildAccount: (childAccount: Partial<ChildAccount>) => void;
+  selectedChildAccount: Partial<ChildAccountWithAllData> | null;
+  setSelectedChildAccount: (
+    childAccount: Partial<ChildAccountWithAllData>
+  ) => void;
 };
 
 export const useSelectedChildAccount =

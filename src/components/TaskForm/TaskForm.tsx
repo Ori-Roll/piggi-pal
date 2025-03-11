@@ -43,8 +43,8 @@ const TaskForm = (props: TaskFormProps) => {
   });
 
   const handleAddTask = async (task: Partial<Task>) => {
-    await mutateAsync(task);
     onSubmitCallback?.(task);
+    await mutateAsync(task);
   };
 
   const initialValues: Partial<Task> | null = selectedChildAccount?.id
