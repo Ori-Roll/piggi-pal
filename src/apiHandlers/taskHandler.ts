@@ -1,8 +1,9 @@
-import { Task } from '@prisma/client';
+import { ChildAccount, Task } from '@prisma/client';
 import taskAccess from '@/apiDataAccess/task';
 import childAccountHandler from './childAccountHandler';
 import { APIError } from '@/common/apiUtils';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
+import { ChildAccountWithTasks } from '@/types/dataTypes';
 
 /**
  * Get all tasks.
@@ -94,6 +95,29 @@ const update = async (
 };
 
 /**
+ * Complete one task.
+ */
+
+const complete = async (
+  id: string,
+  childAccount: ChildAccountWithTasks
+): Promise<Task> => {
+  const previousTask = childAccount.tasks.find((task: Task) => task.id === id);
+  if (!previousTask) {
+    throw new APIError(HttpStatusCodes.NOT_FOUND, 'Task not found');
+  }
+  if (previousTask.completed) {
+    throw new APIError(HttpStatusCodes.BAD_REQUEST, 'Task already completed');
+  }
+
+  const task = await taskAccess.completeTask(
+    id,
+    childAccount.id,
+    previousTask.amount
+  );
+  return task;
+};
+/**
  * Delete one task.
  */
 
@@ -123,5 +147,6 @@ export default {
   getOne,
   add,
   update,
+  complete,
   deleteOne,
 };

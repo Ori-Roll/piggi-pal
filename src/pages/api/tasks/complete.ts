@@ -6,7 +6,7 @@ import { auth } from '@/config/auth';
 import { RouteFunction } from '@/types/apiTypes';
 import { Task } from '@prisma/client';
 
-const updateTask: RouteFunction<Task> = async (req, res) => {
+const completeTask: RouteFunction<Task> = async (req, res) => {
   const session = await auth(req, res);
   const user = session?.user;
   const userId = user?.id;
@@ -54,14 +54,8 @@ const updateTask: RouteFunction<Task> = async (req, res) => {
     );
   }
 
-  const updatedData = {
-    childAccountId,
-    completed: true,
-    completedAt: new Date(),
-  };
-
-  const task = await taskHandler.update(id, userId, updatedData);
+  const task = await taskHandler.complete(id, childAccount);
   res.status(HttpStatusCodes.OK).json({ data: task });
 };
 
-export default apiErrorMiddleware(updateTask);
+export default apiErrorMiddleware(completeTask);

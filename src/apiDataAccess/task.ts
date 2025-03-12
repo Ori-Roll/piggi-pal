@@ -1,4 +1,4 @@
-import { Task } from '@prisma/client';
+import { ChildAccount, Task } from '@prisma/client';
 import { db } from '@/server/db';
 
 //TODO: Add prismDisconnect to all functions
@@ -46,6 +46,33 @@ const updateTask = async (
   });
 };
 
+const completeTask = async (
+  id: string,
+  childAccountId: string,
+  amount: number
+): Promise<Task> => {
+  return await db.$transaction(async (prisma) => {
+    await prisma.childAccount.update({
+      where: { id: childAccountId },
+      data: {
+        current: {
+          increment: amount,
+        },
+      },
+    });
+
+    const task = await prisma.task.update({
+      where: { id },
+      data: {
+        completed: true,
+        completedAt: new Date(),
+      },
+    });
+
+    return task;
+  });
+};
+
 const deleteTask = async (id: string): Promise<Task> => {
   return await db.task.delete({
     where: { id },
@@ -57,5 +84,6 @@ export default {
   getAllTasksForChildAccount,
   addTask,
   updateTask,
+  completeTask,
   deleteTask,
 };

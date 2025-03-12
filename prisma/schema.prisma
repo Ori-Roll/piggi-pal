@@ -161,7 +161,7 @@ model Task {
   childAccountId      String
   completed           Boolean  @default(false)
   completedAt         DateTime?
-  amount              Int?
+  amount              Int
   requiredTimes       Int?
   accomplishedTimes   Int?
   periodic            Periodic?   @relation(fields: [periodicId], references: [id], onDelete: Cascade)
