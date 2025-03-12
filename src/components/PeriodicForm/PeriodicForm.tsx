@@ -11,10 +11,13 @@ import {
   intervalOptions,
   minEndDate,
 } from './util';
+import { ChildAccountWithAllData } from '@/types/dataTypes';
+import { TEMPORARY } from '@/common/consts';
+import { useUpdateOnMutationCallback } from '@/hooks/utilHooks';
 
 type periodicFormProps = {
   periodic?: Partial<Periodic>;
-  selectedChildAccount: Partial<ChildAccount>;
+  selectedChildAccount: ChildAccountWithAllData;
   onSubmitCallback: (data: Partial<Periodic>) => void;
 };
 
@@ -23,49 +26,37 @@ const PeriodicForm = (props: periodicFormProps) => {
 
   const queryClient = useQueryClient();
 
+  const updateChildAccountOnTaskMutation = useUpdateOnMutationCallback(
+    ['currentChildAccount', selectedChildAccount.id],
+    (newPeriodic: Partial<Periodic>) => (old: ChildAccountWithAllData) => {
+      return {
+        ...old,
+        periodics: [
+          ...(old.periodics || []),
+          { id: TEMPORARY, ...newPeriodic },
+        ],
+      };
+    }
+  );
+
   const { mutateAsync } = useMutation({
     mutationFn: (periodicData: Partial<Periodic>) =>
       periodicsService.createPeriodic(periodicData),
-    // When mutate is called:
-    onMutate: async (newPeriodic: Partial<Periodic>) => {
-      // Cancel any outgoing refetches
-      // (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries({ queryKey: ['currentChildAccount'] });
-
-      // Snapshot the previous value
-      const previousChildAccountData = queryClient.getQueryData([
-        'currentChildAccount',
-      ]);
-
-      // Optimistically update to the new value
-      queryClient.setQueryData(
-        ['currentChildAccount'],
-        (old: Partial<ChildAccount>) => ({
-          ...old,
-          newPeriodic,
-        })
-      );
-
-      // Return a context object with the snapshotted value
-      return { previousChildAccountData };
-    },
-    // If the mutation fails,
-    // use the context returned from onMutate to roll back
+    onMutate: updateChildAccountOnTaskMutation,
     onError: (err, newPeriodicData, context) => {
       queryClient.setQueryData(
-        ['currentChildAccount'],
-        context?.previousChildAccountData
+        ['currentChildAccount', selectedChildAccount.id],
+        context?.previousQueriesData
       );
     },
-    // Always refetch after error or success:
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['currentChildAccount'] });
     },
   });
 
   const handleAddPeriodic = async (periodic: Partial<Periodic>) => {
-    await mutateAsync(periodic);
     onSubmitCallback(periodic);
+    await mutateAsync(periodic);
   };
 
   const initialValues = {
@@ -127,7 +118,7 @@ const PeriodicForm = (props: periodicFormProps) => {
       />
       <Space h="20px" />
       <Button w="100%" type="submit">
-        Add{' '}
+        Add
       </Button>
     </form>
   );

@@ -11,10 +11,10 @@ export const useUpdateOnMutationCallback = <T, OT>(
     await queryClient.cancelQueries({
       queryKey: queries,
     });
-    const previousChildAccountData = queryClient.getQueryData(queries);
+    const previousQueriesData = queryClient.getQueryData(queries);
 
     queryClient.setQueryData(queries, setOptimisticSetCallback(newItem));
 
-    return { previousChildAccountData };
+    return { previousQueriesData };
   };
 };

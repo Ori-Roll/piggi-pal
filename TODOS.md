@@ -2,11 +2,12 @@
 
 1. Clean ui
    - <ip> overall layout grid changes
+     - add headers to sections (and space)
    - reintroduce piggi image
-   - <ip> make submits on forms work better (close and then loader in data)
    - Black mode - remove (looks wrong on mobile)
-2. <ip> Add logout
-3. Add login with credentials
+   - improve logout location and appearance
+2. Add login with credentials
+3. Add basic validations to forms (task amount!)
 4. Make crons work
 5. Add Tasks mechanism
 6. Add Tasks delete ? and edit ?
@@ -32,3 +33,5 @@
 
 V nothing here appears on loading
 V loader for v's in tasks
+V make submits on forms work better (close and then loader in data)
+v add logout

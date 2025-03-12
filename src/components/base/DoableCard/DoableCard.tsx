@@ -11,23 +11,24 @@ type DoableCardGeneralProps = {
   loading?: boolean;
 };
 
-type EditableProps = {
+type EditableProps<T> = {
   editableDeletable: true;
-  checkable?: boolean;
+  checkable?: T;
   onEdit?: () => void;
   onDelete?: () => void;
 };
 
-type CheckableProps = {
+type CheckableProps<T> = {
   editableDeletable?: boolean;
-  checkable: true;
+  checkable: T;
   onCheck?: () => void;
   checking?: boolean;
   checked?: boolean;
 };
 
-type DoableCardProps<T extends boolean = false> = DoableCardGeneralProps &
-  PropsWithChildren<T extends true ? EditableProps : CheckableProps>;
+type DoableCardProps<T extends boolean> = T extends true
+  ? EditableProps<T>
+  : CheckableProps<T>;
 
 type DefaultStyle = {
   primaryColors: string;
@@ -42,15 +43,18 @@ const defaultStyle: DefaultStyle = {
   accentColor: '#ffb43b',
 };
 
-const DoableCard = (props: DoableCardProps) => {
-  const {
-    children,
-    cardStyle = defaultStyle,
-    onCheck,
-    checked,
-    checking,
-    loading,
-  } = props;
+const DoableCard = <T extends boolean>(
+  props: PropsWithChildren<DoableCardGeneralProps & DoableCardProps<T>>
+) => {
+  const { children, cardStyle = defaultStyle, loading } = props;
+
+  const { editableDeletable } = props as PropsWithChildren<
+    DoableCardGeneralProps & EditableProps<T>
+  >;
+
+  const { onCheck, checked, checking, checkable } = props as PropsWithChildren<
+    DoableCardGeneralProps & CheckableProps<T>
+  >;
 
   const {
     primaryColors = defaultStyle.primaryColors,
@@ -73,7 +77,9 @@ const DoableCard = (props: DoableCardProps) => {
       }}
     >
       <Flex direction="column">
-        <EditButton onEdit={() => {}} backgroundColor={backgroundColor} />
+        {editableDeletable && (
+          <EditButton onEdit={() => {}} backgroundColor={backgroundColor} />
+        )}
         <Box className={style.card_content}>{children}</Box>
       </Flex>
       <CheckMarkCircle
@@ -113,8 +119,9 @@ const CheckMarkCircle = (props: CheckMarkCircleProps) => {
       style={{
         backgroundColor: checked ? backgroundColorChecked : backgroundColor,
         borderColor: color,
+        pointer: checked || disabled ? 'none' : 'cursor',
       }}
-      disabled={disabled}
+      disabled={checked || disabled}
     >
       {checking ? (
         <Loader color={foregroundColor} />

@@ -34,7 +34,7 @@ const TaskForm = (props: TaskFormProps) => {
     onError: (err, newTaskData, context) => {
       queryClient.setQueryData(
         ['currentChildAccount'],
-        context?.previousChildAccountData
+        context?.previousQueriesData
       );
     },
     onSettled: () => {

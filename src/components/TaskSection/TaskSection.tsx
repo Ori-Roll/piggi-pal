@@ -11,8 +11,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import tasksService from '@/APIService/tasks';
 import { TEMPORARY } from '@/common/consts';
 import { useUpdateOnMutationCallback } from '@/hooks/utilHooks';
+import { useEditMode } from '@/store/useEditMode';
 import style from './TaskSection.module.css';
-import complete from '@/pages/api/tasks/complete';
 
 type TaskSectionProps = {
   childAccount: ChildAccountWithTasks;
@@ -22,6 +22,7 @@ function TaskSection(props: TaskSectionProps) {
   const { childAccount } = props;
 
   const queryClient = useQueryClient();
+  const editMode = useEditMode((state) => state.edit);
 
   const updateChildAccountOnTaskCheck = useUpdateOnMutationCallback(
     ['currentChildAccount', childAccount.id],
@@ -67,16 +68,17 @@ function TaskSection(props: TaskSectionProps) {
     >
       {childAccount.tasks.map((task: Task) =>
         task.amount ? (
-          <DoableCard
+          <DoableCard<any> //TODO: Fix this any
             key={task.id}
             // editableDeletablep
-            checkable
             onCheck={() => {
               onCheck(task.id);
             }}
             checked={task.completed}
             loading={task.id === TEMPORARY}
-            // onEdit={() => {}}
+            checkable={!editMode}
+            editableDeletable={editMode}
+            onEdit={editMode ? () => {} : undefined}
             // onDelete={() => {}}
             checking={
               updateTaskCheckIsPending && mutatingTaskVariables === task.id

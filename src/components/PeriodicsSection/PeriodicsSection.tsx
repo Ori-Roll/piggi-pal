@@ -3,6 +3,7 @@ import PeriodicCard from '@/components/base/PeriodicCard/PeriodicCard';
 import NothingHere from '@/components/base/NothingHere/NothingHere';
 import { ChildAccountWithPeriodics } from '@/types/dataTypes';
 import CardsGrid from '@/components/base/CardsGrid/CardsGrid';
+import { TEMPORARY } from '@/common/consts';
 // import style from './PeriodicsSection.module.css';
 
 type PeriodicsSectionProps = {
@@ -71,6 +72,7 @@ const PeriodicCardItem = (props: PeriodicCardItemProps) => {
       currencySign={'$'}
       intervalName={intervalToMessageMap[periodic.interval]}
       nextOccurrence={periodic.nextOccurrence ? periodic.nextOccurrence : null}
+      loading={periodic.id === TEMPORARY}
       imageUrl="https://source.unsplash.com/random"
     />
   );
