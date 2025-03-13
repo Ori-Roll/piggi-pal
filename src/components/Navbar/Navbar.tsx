@@ -57,7 +57,7 @@ const Navbar = (props: NavbarProps) => {
           gap={10}
         >
           <ChildAccountSelect />
-          {editMode && (
+          {editMode && selectedChildAccount && (
             <>
               <AddTask selectedChildAccount={selectedChildAccount} />
               <AddPeriodic selectedChildAccount={selectedChildAccount} />

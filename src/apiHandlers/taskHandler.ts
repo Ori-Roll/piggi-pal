@@ -1,9 +1,10 @@
-import { ChildAccount, Task } from '@prisma/client';
+import { Task } from '@prisma/client';
 import taskAccess from '@/apiDataAccess/task';
 import childAccountHandler from './childAccountHandler';
 import { APIError } from '@/common/apiUtils';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
-import { ChildAccountWithTasks } from '@/types/dataTypes';
+import { ChildAccountWithTasks, TaskWithCardStyle } from '@/types/dataTypes';
+import { createDefaultCardStyle } from '@/utils/dataManipulation';
 
 /**
  * Get all tasks.
@@ -53,8 +54,11 @@ const getOne = async (id: string, userId: string): Promise<Task | null> => {
  * Add one task.
  */
 
-const add = async (userId: string, data: Omit<Task, 'id'>): Promise<Task> => {
-  const { childAccountId, periodicId, ...restData } = data;
+const add = async (
+  userId: string,
+  data: Omit<TaskWithCardStyle, 'id'>
+): Promise<Task> => {
+  const { childAccountId, periodicId, cardStyle, ...restTask } = data;
 
   const childAccount = await childAccountHandler.getOneChildAccount(
     childAccountId,
@@ -66,7 +70,15 @@ const add = async (userId: string, data: Omit<Task, 'id'>): Promise<Task> => {
       'User not authorized to access this childAccount'
     );
   }
-  return await taskAccess.addTask(restData, childAccountId, periodicId);
+
+  const cardStyleOrDefault = cardStyle || createDefaultCardStyle();
+
+  return await taskAccess.addTask(
+    restTask,
+    childAccountId,
+    periodicId,
+    cardStyleOrDefault
+  );
 };
 
 /**

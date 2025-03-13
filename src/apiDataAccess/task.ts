@@ -1,4 +1,4 @@
-import { ChildAccount, Task } from '@prisma/client';
+import { CardStyle, ChildAccount, Task } from '@prisma/client';
 import { db } from '@/server/db';
 
 //TODO: Add prismDisconnect to all functions
@@ -19,9 +19,10 @@ const getAllTasksForChildAccount = async (
 };
 
 const addTask = async (
-  data: Omit<Task, 'id' | 'childAccountId' | 'periodicId'>,
+  data: Omit<Task, 'id' | 'childAccountId' | 'periodicId' | 'cardStyleId'>,
   childAccountId: string,
-  periodicId: string | null
+  periodicId: string | null,
+  cardStyle: Omit<CardStyle, 'id' | 'taskId' | 'icon'>
 ): Promise<Task> => {
   return await db.task.create({
     data: {
@@ -31,6 +32,9 @@ const addTask = async (
         connect: {
           id: childAccountId,
         },
+      },
+      cardStyle: {
+        create: cardStyle,
       },
     },
   });

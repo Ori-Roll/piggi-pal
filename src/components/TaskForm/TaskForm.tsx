@@ -1,7 +1,7 @@
 import { useForm } from '@mantine/form';
 import { Button, NumberInput, Space, TextInput } from '@mantine/core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Task } from '@prisma/client';
+import { ChildAccount, Task } from '@prisma/client';
 import tasksService from '@/APIService/tasks';
 import { ChildAccountWithAllData } from '@/types/dataTypes';
 import { TEMPORARY } from '@/common/consts';
@@ -10,7 +10,7 @@ import { useUpdateOnMutationCallback } from '@/hooks/utilHooks';
 type TaskFormProps = {
   task?: Partial<Task>;
   onSubmitCallback?: (data: Partial<Task>) => void;
-  selectedChildAccount: ChildAccountWithAllData;
+  selectedChildAccount: ChildAccount;
 };
 
 const TaskForm = (props: TaskFormProps) => {

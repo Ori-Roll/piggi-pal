@@ -1,7 +1,8 @@
-import { ChildAccount, User } from '@prisma/client';
+import { UserWithAllData } from '@/types/dataTypes';
+import { ChildAccount } from '@prisma/client';
 
 export const selectCurrentChildAccount = (
-  user: User,
+  user: UserWithAllData,
   childAccounts: ChildAccount[]
 ) => {
   if (!childAccounts?.length) {

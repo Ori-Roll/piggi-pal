@@ -17,7 +17,7 @@ import { useUpdateOnMutationCallback } from '@/hooks/utilHooks';
 
 type periodicFormProps = {
   periodic?: Partial<Periodic>;
-  selectedChildAccount: ChildAccountWithAllData;
+  selectedChildAccount: ChildAccount;
   onSubmitCallback: (data: Partial<Periodic>) => void;
 };
 

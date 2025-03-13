@@ -6,7 +6,9 @@ import { ChildAccount } from '@prisma/client';
 import { IconCalendarDollar as ButtonIcon } from '@tabler/icons-react';
 import ActionButton from '@/components/base/ActionButton/ActionButton';
 
-type AddPeriodicProps = { selectedChildAccount?: null | Partial<ChildAccount> };
+type AddPeriodicProps = {
+  selectedChildAccount?: null | ChildAccount;
+};
 
 const AddPeriodic = (props: AddPeriodicProps) => {
   const { selectedChildAccount } = props;

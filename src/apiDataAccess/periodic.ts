@@ -1,5 +1,6 @@
 import { Periodic } from '@prisma/client';
 import { db } from '@/server/db';
+import { PeriodicWithCardStyleToCreate } from '@/types/dataTypes';
 
 //TODO: Add prismDisconnect to all functions
 
@@ -19,16 +20,21 @@ const getAllPeriodicsForChildAccount = async (
   });
 };
 
-const addPeriodic = async (data: Omit<Periodic, 'id'>): Promise<Periodic> => {
-  const { childAccountId, ...modPeriodic } = data;
+const addPeriodic = async (
+  data: PeriodicWithCardStyleToCreate
+): Promise<Periodic> => {
+  const { childAccountId, cardStyleId, ...restPeriodic } = data;
 
   return await db.periodic.create({
     data: {
-      ...modPeriodic,
+      ...restPeriodic,
       childAccount: {
         connect: {
           id: childAccountId,
         },
+      },
+      cardStyle: {
+        create: restPeriodic.cardStyle,
       },
     },
   });

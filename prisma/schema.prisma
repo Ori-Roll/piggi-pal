@@ -172,8 +172,8 @@ model Task {
 
 model CardStyle {
   id              String   @id @default(cuid())
-  primaryColors   String[]
-  secondaryColors String[]
+  primaryColor    String
+  secondaryColor  String
   accentColor     String?
   icon            String?
   tasks           Task[]

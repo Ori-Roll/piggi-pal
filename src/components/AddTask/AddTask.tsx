@@ -4,10 +4,10 @@ import { IconAward } from '@tabler/icons-react';
 import ModalsWrapper from '@/components/Modals/ModalWrapper';
 import TaskForm from '@/components/TaskForm/TaskForm';
 import ActionButton from '@/components/base/ActionButton/ActionButton';
-import { ChildAccountWithAllData } from '@/types/dataTypes';
+import { ChildAccount } from '@prisma/client';
 
 type AddTaskProps = {
-  selectedChildAccount?: Partial<ChildAccountWithAllData>;
+  selectedChildAccount?: ChildAccount;
 };
 
 const AddTask = (props: AddTaskProps) => {

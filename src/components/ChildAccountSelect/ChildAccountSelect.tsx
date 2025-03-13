@@ -59,12 +59,6 @@ const ChildAccountSelect = (props: ChildAccountSelectProps) => {
         );
         if (selectedChildAccount) {
           setSelectedChildAccount?.(selectedChildAccount);
-          // mutateUserAsync({
-          //   id: user!.id,
-          //   newUserData: {
-          //     lastOpenedChildAccountId: selectedChildAccount?.id,
-          //   },
-          // });
         }
       }
       return resData.data;

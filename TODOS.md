@@ -7,11 +7,12 @@
    - reintroduce piggi image
    - Black mode - remove (looks wrong on mobile)
    - improve logout location and appearance
-2. Add login with credentials
-3. Add basic validations to forms (task amount!)
-4. Make crons work
-5. Add Tasks delete ? and edit ?
-6. Add Investments?
+2. Add + and - to current (on parent)
+3. Add login with credentials
+4. Add basic validations to forms (task amount!)
+5. Make crons work
+6. Add Tasks delete ? and edit ?
+7. Add Investments?
 
 ## Todos after deploy is somewhat ready
 
