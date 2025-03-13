@@ -4,23 +4,46 @@ import cronHandler from '@/apiHandlers/cronHandler';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { auth } from '@/config/auth';
 
+const authenticate = async (
+  req: NextApiRequest,
+  res: NextApiResponse<{ message: string }>
+) => {
+  const authorizationHeader = req.headers['authorization'];
+
+  if (!authorizationHeader) {
+    return res.status(400).json({ message: 'Authorization header missing' });
+  }
+
+  // Step 2: Extract the Bearer token from the Authorization header
+  const token = authorizationHeader.split(' ')[1]; // 'Bearer <token>'
+
+  if (!token) {
+    return res.status(400).json({ message: 'Bearer token missing' });
+  }
+
+  // Step 3: Use the token for your logic (e.g., authenticate the request or make another API call)
+  console.log('Received Bearer token:', token);
+
+  // Example: If you need to validate the token
+  if (token !== process.env.EXPECTED_API_KEY) {
+    return res.status(401).json({ message: 'Invalid API Key' });
+  }
+};
+
 const executeDailyAction = async (
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
 ) => {
-  const session = await auth(req, res);
-  const user = session?.user;
-  if (!user?.id) {
-    throw new APIError(HttpStatusCodes.UNAUTHORIZED, 'User not found');
-  }
+  console.log('----------------');
+  console.log('Cron Job Request');
+
+  console.log('Authenticating request');
+  await authenticate(req, res);
 
   console.log('----------------');
-  console.log('Running cron job');
-  console.log('Time:', new Date().toISOString());
-  console.log('----------------');
+  console.log('Executing cron job');
 
   //TODO: Authenticate cron job request
-
   await cronHandler.executePeriodicActions();
 
   console.log('------DONE------');
