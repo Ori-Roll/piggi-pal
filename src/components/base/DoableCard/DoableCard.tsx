@@ -5,6 +5,7 @@ import chroma from 'chroma-js';
 import { useIsMobile } from '@/hooks/configHooks';
 import style from './DoableCard.module.css';
 import { getTextColorForBackground } from '@/utils/colors';
+import IconButton from '../buttons/IconButton';
 
 type DoableCardGeneralProps = {
   cardStyle?: DefaultStyle;
@@ -151,13 +152,13 @@ const EditButton = (props: EditButtonProps) => {
   const foregroundColor = getTextColorForBackground(backgroundColor);
 
   return (
-    <Button onClick={onEdit} className={style.edit_button}>
+    <IconButton onClick={onEdit}>
       <IconEdit
         className={style.in_icon}
         size="1.5rem"
         color={foregroundColor}
       />
-    </Button>
+    </IconButton>
   );
 };
 

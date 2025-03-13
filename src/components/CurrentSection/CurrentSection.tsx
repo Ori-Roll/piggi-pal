@@ -5,6 +5,11 @@ import Current from '@/components/base/Current/Current';
 import { useEditMode } from '@/store/useEditMode';
 import style from './CurrentSection.module.css';
 import childAccountsService from '@/APIService/childAccounts';
+import IconButton from '@/components/base/buttons/IconButton';
+import { IconPencilDollar } from '@tabler/icons-react';
+import ModalsWrapper from '@/components/Modals/ModalWrapper';
+import { useState } from 'react';
+import { defaultColors, getTextColorForBackground } from '@/utils/colors';
 
 type CurrentSectionProps = {
   childAccount: ChildAccount;
@@ -16,6 +21,12 @@ export const CurrentSection = (props: CurrentSectionProps) => {
   const editMode = useEditMode((state) => state.edit);
 
   const queryClient = useQueryClient();
+
+  const [editCurrentModalOpened, setEditCurrentModalOpened] = useState(false);
+
+  const onEditCurrentClick = () => {
+    setEditCurrentModalOpened(true);
+  };
 
   const { mutateAsync } = useMutation({
     mutationFn: (childAccountData: Partial<ChildAccount>) =>
@@ -66,6 +77,9 @@ export const CurrentSection = (props: CurrentSectionProps) => {
 
   // TODO: This sign is hardcoded to '$' for now
 
+  const editCurrentBGColor = defaultColors.secondaryColor;
+  const editCurrentColor = getTextColorForBackground(editCurrentBGColor);
+
   return (
     <Flex
       direction="column"
@@ -81,6 +95,26 @@ export const CurrentSection = (props: CurrentSectionProps) => {
           handleChange={handleCurrentChange}
           edit={editMode}
         />
+        <IconButton
+          onClick={onEditCurrentClick}
+          backgroundColor={editCurrentBGColor}
+        >
+          <IconPencilDollar
+            className={style.in_icon}
+            size="1.5rem"
+            color={editCurrentColor}
+          />
+        </IconButton>
+        <ModalsWrapper
+          title="Edit Current"
+          opened={editCurrentModalOpened}
+          onClose={() => setEditCurrentModalOpened(false)}
+        >
+          <h1>
+            This is a modal that will be used to edit the current value of the
+            child account
+          </h1>
+        </ModalsWrapper>
       </Flex>
     </Flex>
   );

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMantineTheme, Text } from '@mantine/core';
-import ModalsWrapper from '../Modals/ModalWrapper';
+import ModalsWrapper from '@/components/Modals/ModalWrapper';
 import PeriodicForm from '@/components/PeriodicForm/PeriodicForm';
 import { ChildAccount } from '@prisma/client';
 import { IconCalendarDollar as ButtonIcon } from '@tabler/icons-react';

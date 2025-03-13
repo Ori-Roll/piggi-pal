@@ -1,12 +1,11 @@
 ### Todo next:
 
 1. Clean ui
-   - <ip> overall layout changes
-     - add headers to sections (and space)
+   - add headers to sections (and space)
    - change cards dollar placement and such
    - reintroduce piggi image
+     Mobile issues:
    - Black mode - remove (looks wrong on mobile)
-   - improve logout location and appearance
    - close navbar on every action
 2. Add + and - to current (on parent)
 3. Add login with credentials

@@ -1,4 +1,5 @@
 import { CardStyle, Periodic } from '@prisma/client';
+import { defaultColors } from '@/utils/colors';
 
 export const createPeriodicDataWithNextOccurrence = (
   data: Omit<Periodic, 'id'>
@@ -11,9 +12,5 @@ export const createPeriodicDataWithNextOccurrence = (
 };
 
 export const createDefaultCardStyle = (): Omit<CardStyle, 'id' | 'icon'> => {
-  return {
-    primaryColor: '#289ffa',
-    secondaryColor: '#3b6fff',
-    accentColor: '#ffb43b',
-  };
+  return defaultColors;
 };

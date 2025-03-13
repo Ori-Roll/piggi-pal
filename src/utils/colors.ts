@@ -6,3 +6,9 @@ export const getTextColorForBackground = (backgroundColor: string) => {
 
   return contrastWithBlack < contrastWithWhite * 5 ? 'white' : 'black';
 };
+
+export const defaultColors = {
+  primaryColor: '#289ffa',
+  secondaryColor: '#3b6fff',
+  accentColor: '#ffb43b',
+};
