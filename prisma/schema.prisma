@@ -146,7 +146,38 @@ model Periodic {
   endsAt              DateTime?
   transactions        Transaction[] 
   childAccount        ChildAccount?      @relation(fields: [childAccountId], references: [id], onDelete: Cascade)
-  childAccountId      String       
+  childAccountId      String
+  cardStyle           CardStyle?  @relation(fields: [cardStyleId], references: [id])
+  cardStyleId         String?   
+}
+
+model Task {
+  id                  String   @id @default(cuid())
+  availableAt         DateTime?
+  expiresAt           DateTime?
+  title               String
+  description         String?
+  childAccount        ChildAccount @relation(fields: [childAccountId], references: [id], onDelete: Cascade)
+  childAccountId      String
+  completed           Boolean  @default(false)
+  completedAt         DateTime?
+  amount              Int
+  requiredTimes       Int?
+  accomplishedTimes   Int?
+  periodic            Periodic?   @relation(fields: [periodicId], references: [id], onDelete: Cascade)
+  periodicId          String?     @unique
+  cardStyle           CardStyle?  @relation(fields: [cardStyleId], references: [id])
+  cardStyleId         String?
+}
+
+model CardStyle {
+  id              String   @id @default(cuid())
+  primaryColor    String
+  secondaryColor  String
+  accentColor     String?
+  icon            String?
+  tasks           Task[]
+  periodics       Periodic[]
 }
 
 model Transaction {
@@ -160,22 +191,4 @@ model Transaction {
   periodicId          String?
   childAccount        ChildAccount?   @relation(fields: [childAccountId], references: [id], onDelete: Cascade)
   childAccountId      String
-}
-
-
-model Task {
-  id                  String   @id @default(cuid())
-  availableAt         DateTime?
-  expiresAt           DateTime?
-  title               String
-  description         String?
-  childAccount        ChildAccount @relation(fields: [childAccountId], references: [id], onDelete: Cascade)
-  childAccountId      String
-  completed           Boolean  @default(false)
-  completedAt         DateTime?
-  amount              Int?
-  requiredTimes       Int?
-  accomplishedTimes   Int?
-  periodic            Periodic? @relation(fields: [periodicId], references: [id], onDelete: Cascade)
-  periodicId          String?    @unique
 }

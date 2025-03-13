@@ -1,11 +1,10 @@
-import { Grid } from '@mantine/core';
-// import { Carousel } from '@mantine/carousel';
 import { Periodic } from '@prisma/client';
-import { useIsMobile } from '@/hooks/configHooks';
 import PeriodicCard from '@/components/base/PeriodicCard/PeriodicCard';
 import NothingHere from '@/components/base/NothingHere/NothingHere';
-import style from './PeriodicsSection.module.css';
 import { ChildAccountWithPeriodics } from '@/types/dataTypes';
+import CardsGrid from '@/components/base/CardsGrid/CardsGrid';
+import { TEMPORARY } from '@/common/consts';
+// import style from './PeriodicsSection.module.css';
 
 type PeriodicsSectionProps = {
   childAccount: ChildAccountWithPeriodics;
@@ -30,8 +29,6 @@ const PeriodicsSection = (props: PeriodicsSectionProps) => {
     childAccount: { periodics },
   } = props;
 
-  const isMobile = useIsMobile();
-
   if (periodics.length === 0) {
     return (
       <NothingHere>
@@ -41,28 +38,17 @@ const PeriodicsSection = (props: PeriodicsSectionProps) => {
   }
 
   return (
-    <>
-      {isMobile ? (
-        // <Carousel align="start" loop>
-        periodics.map((periodic: Periodic) => (
-          // <Carousel.Slide className={style.cardWrapper} key={periodic.id}>
-          <PeriodicCardItem key={periodic.id} periodic={periodic} />
-          // </Carousel.Slide>
-        ))
-      ) : (
-        // </Carousel>
-        // <Flex p="0" m="0" align="flex-start" justify="flex-start" gap="lg">
-        <Grid>
-          {periodics.map((periodic: Periodic) => (
-            <Grid.Col span={isMobile ? 12 : 4} key={periodic.id}>
-              <PeriodicCardItem key={periodic.id} periodic={periodic} />
-            </Grid.Col>
-          ))}
-        </Grid>
-
-        // </Flex>
-      )}
-    </>
+    <CardsGrid
+      emptyMessage={
+        periodics.length === 0
+          ? 'You have no allowance or any other repeating action yet'
+          : undefined
+      }
+    >
+      {periodics.map((periodic: Periodic) => (
+        <PeriodicCardItem key={periodic.id} periodic={periodic} />
+      ))}
+    </CardsGrid>
   );
 };
 
@@ -86,6 +72,7 @@ const PeriodicCardItem = (props: PeriodicCardItemProps) => {
       currencySign={'$'}
       intervalName={intervalToMessageMap[periodic.interval]}
       nextOccurrence={periodic.nextOccurrence ? periodic.nextOccurrence : null}
+      loading={periodic.id === TEMPORARY}
       imageUrl="https://source.unsplash.com/random"
     />
   );

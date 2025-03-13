@@ -1,12 +1,18 @@
-import { Grid, Text } from '@mantine/core';
+import { Text } from '@mantine/core';
 import { Task } from '@prisma/client';
-import { useIsMobile } from '@/hooks/configHooks';
+import {
+  ChildAccountWithAllData,
+  ChildAccountWithTasks,
+} from '@/types/dataTypes';
 import AmountWithSign from '@/components/base/AmountWithSign/AmountWithSign';
-// import AnimatedShake from '@/components/base/Animated/AnimatedShake';
-import NothingHere from '@/components/base/NothingHere/NothingHere';
 import DoableCard from '@/components/base/DoableCard/DoableCard';
+import CardsGrid from '@/components/base/CardsGrid/CardsGrid';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import tasksService from '@/APIService/tasks';
+import { TEMPORARY } from '@/common/consts';
+import { useUpdateOnMutationCallback } from '@/hooks/utilHooks';
+import { useEditMode } from '@/store/useEditMode';
 import style from './TaskSection.module.css';
-import { ChildAccountWithTasks } from '@/types/dataTypes';
 
 type TaskSectionProps = {
   childAccount: ChildAccountWithTasks;
@@ -15,36 +21,78 @@ type TaskSectionProps = {
 function TaskSection(props: TaskSectionProps) {
   const { childAccount } = props;
 
-  const isMobile = useIsMobile();
+  const queryClient = useQueryClient();
+  const editMode = useEditMode((state) => state.edit);
 
-  if (childAccount.tasks.length === 0) {
-    return <NothingHere>You have no tasks yet</NothingHere>;
-  }
+  const updateChildAccountOnTaskCheck = useUpdateOnMutationCallback(
+    ['currentChildAccount', childAccount.id],
+    (newTaskId: Partial<Task>) => (old: ChildAccountWithAllData) => {
+      const newTasks = old.tasks.map((task) => {
+        if (task.id === newTaskId) {
+          return { ...task, completed: true };
+        }
+        return task;
+      });
+
+      return {
+        ...old,
+        tasks: newTasks || [],
+      };
+    }
+  );
+
+  const {
+    mutateAsync: updateTaskCheck,
+    isPending: updateTaskCheckIsPending,
+
+    variables: mutatingTaskVariables,
+  } = useMutation({
+    mutationFn: async (taskId: string) => {
+      await tasksService.completeTask(taskId, childAccount.id);
+    },
+    onMutate: updateChildAccountOnTaskCheck,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['currentChildAccount'] });
+    },
+  });
+
+  const onCheck = (taskId: string) => {
+    updateTaskCheck(taskId);
+  };
 
   return childAccount.tasks.length > 0 ? (
-    <Grid p="lg" gutter={isMobile ? 'md' : 'lg'} className={style.task_wrapper}>
+    <CardsGrid
+      emptyMessage={
+        childAccount.tasks.length === 0 ? 'You have no tasks yet' : undefined
+      }
+    >
       {childAccount.tasks.map((task: Task) =>
         task.amount ? (
-          <Grid.Col span={isMobile ? 12 : 4} key={task.id}>
-            <DoableCard
-              key={task.id}
-              editableDeletable
-              checkable
-              onCheck={() => {}}
-              onEdit={() => {}}
-              onDelete={() => {}}
-              checking={false}
-            >
-              <Text fw={700}>{task.title}</Text>
-              <Text c="dimmed">{task.description}</Text>
-              {/* <AnimatedShake delay={i * 100}> */}
-              <AmountWithSign amount={task.amount} />
-              {/* </AnimatedShake> */}
-            </DoableCard>
-          </Grid.Col>
+          <DoableCard<any> //TODO: Fix this any
+            key={task.id}
+            // editableDeletablep
+            onCheck={() => {
+              onCheck(task.id);
+            }}
+            checked={task.completed}
+            loading={task.id === TEMPORARY}
+            checkable={!editMode}
+            editableDeletable={editMode}
+            onEdit={editMode ? () => {} : undefined}
+            // onDelete={() => {}}
+            checking={
+              updateTaskCheckIsPending && mutatingTaskVariables === task.id
+            }
+          >
+            <Text fw={700}>{task.title}</Text>
+            <Text c="dimmed">{task.description}</Text>
+            {/* <AnimatedShake delay={i * 100}> */}
+            <AmountWithSign amount={task.amount} />
+            {/* </AnimatedShake> */}
+          </DoableCard>
         ) : null
       )}
-    </Grid>
+    </CardsGrid>
   ) : null;
 }
 

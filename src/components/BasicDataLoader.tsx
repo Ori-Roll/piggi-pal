@@ -6,7 +6,7 @@ import { useSelectedChildAccount } from '@/store/useCurrentChildAccount';
 import { User, ChildAccount } from '@prisma/client';
 import { useUserQuery } from '@/hooks/query/user';
 import { PropsWithChildren } from 'react';
-import { UserWithAllData } from '@/types/dataTypes';
+import { ChildAccountWithAllData, UserWithAllData } from '@/types/dataTypes';
 
 type PrivateRouteProps = PropsWithChildren<{}>;
 
@@ -21,7 +21,7 @@ const BasicDataLoader = (props: PrivateRouteProps) => {
   );
 
   const updateCurrentChildAccountData = (data: UserWithAllData) => {
-    data.childAccounts.forEach((childAccount: ChildAccount) => {
+    data.childAccounts.forEach((childAccount) => {
       queryClient.setQueryData(
         ['currentChildAccount', childAccount.id],
         childAccount

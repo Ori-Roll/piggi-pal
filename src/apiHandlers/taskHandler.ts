@@ -3,6 +3,8 @@ import taskAccess from '@/apiDataAccess/task';
 import childAccountHandler from './childAccountHandler';
 import { APIError } from '@/common/apiUtils';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
+import { ChildAccountWithTasks, TaskWithCardStyle } from '@/types/dataTypes';
+import { createDefaultCardStyle } from '@/utils/dataManipulation';
 
 /**
  * Get all tasks.
@@ -52,8 +54,11 @@ const getOne = async (id: string, userId: string): Promise<Task | null> => {
  * Add one task.
  */
 
-const add = async (userId: string, data: Omit<Task, 'id'>): Promise<Task> => {
-  const { childAccountId, periodicId, ...restData } = data;
+const add = async (
+  userId: string,
+  data: Omit<TaskWithCardStyle, 'id'>
+): Promise<Task> => {
+  const { childAccountId, periodicId, cardStyle, ...restTask } = data;
 
   const childAccount = await childAccountHandler.getOneChildAccount(
     childAccountId,
@@ -65,7 +70,15 @@ const add = async (userId: string, data: Omit<Task, 'id'>): Promise<Task> => {
       'User not authorized to access this childAccount'
     );
   }
-  return await taskAccess.addTask(restData, childAccountId, periodicId);
+
+  const cardStyleOrDefault = cardStyle || createDefaultCardStyle();
+
+  return await taskAccess.addTask(
+    restTask,
+    childAccountId,
+    periodicId,
+    cardStyleOrDefault
+  );
 };
 
 /**
@@ -75,7 +88,7 @@ const add = async (userId: string, data: Omit<Task, 'id'>): Promise<Task> => {
 const update = async (
   id: string,
   userId: string,
-  data: Omit<Task, 'id'>
+  data: Partial<Omit<Task, 'id'>> & { childAccountId: string }
 ): Promise<Task> => {
   const { childAccountId, periodicId, ...restData } = data;
 
@@ -93,6 +106,29 @@ const update = async (
   return await taskAccess.updateTask(id, restData);
 };
 
+/**
+ * Complete one task.
+ */
+
+const complete = async (
+  id: string,
+  childAccount: ChildAccountWithTasks
+): Promise<Task> => {
+  const previousTask = childAccount.tasks.find((task: Task) => task.id === id);
+  if (!previousTask) {
+    throw new APIError(HttpStatusCodes.NOT_FOUND, 'Task not found');
+  }
+  if (previousTask.completed) {
+    throw new APIError(HttpStatusCodes.BAD_REQUEST, 'Task already completed');
+  }
+
+  const task = await taskAccess.completeTask(
+    id,
+    childAccount.id,
+    previousTask.amount
+  );
+  return task;
+};
 /**
  * Delete one task.
  */
@@ -123,5 +159,6 @@ export default {
   getOne,
   add,
   update,
+  complete,
   deleteOne,
 };

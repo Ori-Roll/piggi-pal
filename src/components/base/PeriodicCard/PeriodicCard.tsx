@@ -14,12 +14,14 @@ type PeriodicCardProps = {
   nextOccurrence?: string | null | Date;
   imageUrl: string;
   componentIndex?: number;
+  loading?: boolean;
 };
 
 //TODO: This is not a base component, Maybe rename to SomethingElseCard and change it, or move to data
 
 const PeriodicCard = (props: PropsWithChildren<PeriodicCardProps>) => {
-  const { name, amount, currencySign, intervalName, nextOccurrence } = props;
+  const { name, amount, currencySign, intervalName, nextOccurrence, loading } =
+    props;
 
   const parsedNextOccurrence = nextOccurrence ? new Date(nextOccurrence) : null;
 
@@ -42,7 +44,15 @@ const PeriodicCard = (props: PropsWithChildren<PeriodicCardProps>) => {
   const delay = props.componentIndex ? props.componentIndex * 200 : 0;
 
   return (
-    <Flex align={'center'} justify={'center'} gap="lg" className={style.card}>
+    <Flex
+      align={'center'}
+      justify={'center'}
+      gap="lg"
+      className={style.card}
+      style={{
+        opacity: loading ? 0.5 : 1,
+      }}
+    >
       <div className={style.top_icon}>$</div>
       {/* <AnimatedShake delay={delay}> */}
       <AmountWithSign amount={amount} currencySign={currencySign} />

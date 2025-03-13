@@ -1,4 +1,4 @@
-import { Task } from '@prisma/client';
+import { CardStyle, ChildAccount, Task } from '@prisma/client';
 import { db } from '@/server/db';
 
 //TODO: Add prismDisconnect to all functions
@@ -19,9 +19,10 @@ const getAllTasksForChildAccount = async (
 };
 
 const addTask = async (
-  data: Omit<Task, 'id' | 'childAccountId' | 'periodicId'>,
+  data: Omit<Task, 'id' | 'childAccountId' | 'periodicId' | 'cardStyleId'>,
   childAccountId: string,
-  periodicId: string | null
+  periodicId: string | null,
+  cardStyle: Omit<CardStyle, 'id' | 'taskId' | 'icon'>
 ): Promise<Task> => {
   return await db.task.create({
     data: {
@@ -32,17 +33,47 @@ const addTask = async (
           id: childAccountId,
         },
       },
+      cardStyle: {
+        create: cardStyle,
+      },
     },
   });
 };
 
 const updateTask = async (
   id: string,
-  data: Omit<Task, 'id' | 'childAccountId' | 'periodicId'>
+  data: Partial<Omit<Task, 'id' | 'childAccountId' | 'periodicId'>>
 ): Promise<Task> => {
   return await db.task.update({
     where: { id },
     data: data,
+  });
+};
+
+const completeTask = async (
+  id: string,
+  childAccountId: string,
+  amount: number
+): Promise<Task> => {
+  return await db.$transaction(async (prisma) => {
+    await prisma.childAccount.update({
+      where: { id: childAccountId },
+      data: {
+        current: {
+          increment: amount,
+        },
+      },
+    });
+
+    const task = await prisma.task.update({
+      where: { id },
+      data: {
+        completed: true,
+        completedAt: new Date(),
+      },
+    });
+
+    return task;
   });
 };
 
@@ -57,5 +88,6 @@ export default {
   getAllTasksForChildAccount,
   addTask,
   updateTask,
+  completeTask,
   deleteTask,
 };

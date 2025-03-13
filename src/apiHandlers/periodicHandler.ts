@@ -1,9 +1,18 @@
-import { Periodic } from '@prisma/client';
+import { CardStyle, Periodic } from '@prisma/client';
 import periodicAccess from '@/apiDataAccess/periodic';
 import childAccountHandler from './childAccountHandler';
 import { startOfDay, endOfDay } from 'date-fns';
 import { APIError } from '@/common/apiUtils';
 import HttpStatusCodes from '@/common/HttpStatusCodes';
+import {
+  createDefaultCardStyle,
+  createPeriodicDataWithNextOccurrence,
+} from '@/utils/dataManipulation';
+import {
+  PeriodicWithCardStyle,
+  PeriodicWithCardStyleToCreate,
+} from '@/types/dataTypes';
+import { MakeOptional } from '@/types/utilTypes';
 
 /**
  * Get all periodics.
@@ -41,20 +50,10 @@ const getAll = async (
  * Add one periodic.
  */
 
-const createDataWithNextOccurrence = (data: Omit<Periodic, 'id'>) => {
-  const { startsAt, nextOccurrence } = data;
-
-  const newNextOccurrence = nextOccurrence ? nextOccurrence : startsAt;
-
-  return { ...data, nextOccurrence: newNextOccurrence };
-};
-
 const add = async (
   userId: string,
-  data: Omit<Periodic, 'id'>
+  data: PeriodicWithCardStyleToCreate
 ): Promise<Periodic> => {
-  console.log('userId ', userId);
-  console.log('data ', data);
   // TODO: check periodic user rules for the childAccount?
   const childAccounts = await childAccountHandler.getOneChildAccount(
     data.childAccountId,
@@ -67,9 +66,13 @@ const add = async (
     );
   }
 
-  const dataWithNextOccurrence = createDataWithNextOccurrence(data);
+  const dataWithNextOccurrence = createPeriodicDataWithNextOccurrence(data);
+  const dataWithCardStyle = {
+    ...dataWithNextOccurrence,
+    cardStyle: data.cardStyle || createDefaultCardStyle(),
+  };
 
-  return await periodicAccess.addPeriodic(dataWithNextOccurrence);
+  return await periodicAccess.addPeriodic(dataWithCardStyle);
 };
 
 const getAllWithTodayNextOccurrence = async () => {

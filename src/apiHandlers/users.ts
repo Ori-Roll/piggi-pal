@@ -2,6 +2,7 @@ import HttpStatusCodes from '@/common/HttpStatusCodes';
 import UsersAccess from '@/apiDataAccess/users';
 import { User } from '@prisma/client';
 import { APIError } from '@/common/apiUtils';
+import { UserWithAllData } from '@/types/dataTypes';
 
 // **** Variables **** //
 
@@ -18,7 +19,7 @@ function getAll(): Promise<User[]> {
   return UsersAccess.getAll();
 }
 
-function getOne(id: string): Promise<User | null> {
+function getOne(id: string): Promise<UserWithAllData | null> {
   console.log('getOne id', id);
   return UsersAccess.getOne(id);
 }

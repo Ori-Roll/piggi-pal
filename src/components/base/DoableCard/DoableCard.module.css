@@ -1,34 +1,44 @@
 .card_wrapper {
   position: relative;
-  overflow: visible;
+  border: 0.4rem solid;
+  border-radius: 1.6rem;
+  padding: 0.2rem;
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+}
+
+.card_content {
+  flex: 1;
 }
 
 .checkmark_circle {
   position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 15px;
+  bottom: -1.5rem;
+  right: 2rem;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
+  border: 0.4rem solid;
+  box-shadow: 0 0 0 0.2rem white;
   transition: background-color 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .edit_button {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 15px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  border: 1px solid #ccc;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
   cursor: pointer;
   transition: background-color 0.3s;
+  background: none;
+  padding: 0 5px 5px;
 }
 
 .in_icon {

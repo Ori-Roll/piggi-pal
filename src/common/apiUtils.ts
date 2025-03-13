@@ -1,3 +1,4 @@
+import { RouteFunction } from '@/types/apiTypes';
 import { HttpStatusCodesValues } from './HttpStatusCodes';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -27,9 +28,11 @@ type ErrorResponseBody = {
   };
 };
 
-type Function = (req: NextApiRequest, res: NextApiResponse) => Promise<void>;
+type Function<T> =
+  | ((req: NextApiRequest, res: NextApiResponse) => Promise<void>)
+  | RouteFunction<T>;
 
-export const apiErrorMiddleware = (handler: Function) => {
+export const apiErrorMiddleware = <T>(handler: Function<T>) => {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       // Call the handler for the API route

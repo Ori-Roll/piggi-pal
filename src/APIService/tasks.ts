@@ -6,8 +6,10 @@ const tasksService = {
   getTask: (id: string) => client.get<Task>(`/tasks?id=${id}`),
   createTask: (taskData: Partial<Task>) =>
     client.post<Task>('/tasks', taskData),
-  updateTask: (taskData: Partial<Task>, taskId: string) =>
+  updateTask: (taskId: string, taskData: Partial<Task>) =>
     client.patch<Task>(`/tasks?id=${taskId}`, taskData),
+  completeTask: (id: string, childAccountId: string) =>
+    client.patch<Partial<Task>>(`/tasks/complete?id=${id}`, { childAccountId }),
   deleteTask: (id: string) => client.delete<Task>(`/tasks?id=${id}`),
 };
 

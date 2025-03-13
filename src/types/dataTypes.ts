@@ -15,9 +15,13 @@ const userWithParentLock = Prisma.validator<Prisma.UserDefaultArgs>()({
 
 const userWithAllData = Prisma.validator<Prisma.UserDefaultArgs>()({
   include: {
-    accounts: true,
-    sessions: true,
-    childAccounts: true,
+    childAccounts: {
+      include: {
+        periodics: true,
+        tasks: true,
+        transactions: true,
+      },
+    },
     parentLock: true,
   },
 });
@@ -58,3 +62,32 @@ export type ChildAccountWithTasks = Prisma.ChildAccountGetPayload<
 export type ChildAccountWithAllData = Prisma.ChildAccountGetPayload<
   typeof childAccountWithAllData
 >;
+
+/**
+ * Periodic extra types
+ */
+
+const periodicWithCardStyle = Prisma.validator<Prisma.PeriodicDefaultArgs>()({
+  include: { cardStyle: true },
+});
+
+export type PeriodicWithCardStyle = Prisma.PeriodicGetPayload<
+  typeof periodicWithCardStyle
+>;
+
+export type PeriodicWithCardStyleToCreate = Omit<
+  PeriodicWithCardStyle,
+  'id' | 'cardStyle'
+> & {
+  cardStyle?: Prisma.CardStyleCreateInput;
+};
+
+/**
+ * Task extra types
+ */
+
+const taskWithCardStyle = Prisma.validator<Prisma.TaskDefaultArgs>()({
+  include: { cardStyle: true },
+});
+
+export type TaskWithCardStyle = Prisma.TaskGetPayload<typeof taskWithCardStyle>;

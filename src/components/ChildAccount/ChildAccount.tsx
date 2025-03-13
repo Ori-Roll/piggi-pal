@@ -1,16 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { ChildAccount as ChildAccountData } from '@prisma/client';
-import { Flex, Grid, Loader } from '@mantine/core';
+import { Box, Flex, Grid, Loader } from '@mantine/core';
 import { useSelectedChildAccount } from '@/store/useCurrentChildAccount';
 import childAccountsService from '@/APIService/childAccounts';
 import { useIsMobile } from '@/hooks/configHooks';
-import NothingHere from '@/components/base/NothingHere/NothingHere';
 import { CurrentSection } from '@/components/CurrentSection/CurrentSection';
 import PeriodicsSection from '@/components/PeriodicsSection/PeriodicsSection';
 import OopsPage from '@/components/base/OopsPage/Oops';
 import TaskSection from '@/components/TaskSection/TaskSection';
-import style from './ChildAccount.module.css';
 import { ChildAccountWithAllData } from '@/types/dataTypes';
+import style from './ChildAccount.module.css';
 
 type ChildAccountProps = {};
 
@@ -23,9 +21,8 @@ const ChildAccount = (props: ChildAccountProps) => {
 
   const {
     data: childAccount,
-    isLoading: childAccountLoading,
+    isPending: childAccountPending,
     error: childAccountError,
-    isFetching: childAccountFetching,
   } = useQuery<ChildAccountWithAllData | null>({
     queryKey: ['currentChildAccount', selectedChildAccount?.id],
     queryFn: async () => {
@@ -39,24 +36,32 @@ const ChildAccount = (props: ChildAccountProps) => {
     refetchOnMount: false,
   });
 
-  console.log('in ChildAccount.tsx, childAccount: ', childAccount);
+  if (childAccountError) return <OopsPage />;
 
-  return childAccountLoading ? (
-    <NothingHere>
-      <Flex justify="center" align="center" style={{ height: '100%' }}>
-        Loading your child&apos;s account
-        <Loader />
-      </Flex>
-    </NothingHere>
-  ) : (
-    <>
+  if (childAccountPending)
+    return (
+      <Box className={isMobile ? style.wrapper_mobile : style.wrapper_desktop}>
+        <Flex
+          direction="column"
+          justify="center"
+          align="center"
+          style={{ height: '100%' }}
+        >
+          <Flex justify="center" align="center" style={{ height: '100%' }}>
+            Loading your child&apos;s account
+          </Flex>
+          <Loader />
+        </Flex>
+      </Box>
+    );
+
+  return (
+    <Box className={isMobile ? style.wrapper_mobile : style.wrapper_desktop}>
       {childAccount ? (
         <Grid
           className={
-            isMobile ? style.gridWrapperMobile : style.gridWrapperDesktop
+            isMobile ? style.account_grid_mobile : style.account_grid_desktop
           }
-          p="2rem"
-          pt={0}
         >
           <Grid.Col className={style.gridColCurrent}>
             <CurrentSection childAccount={childAccount} />
@@ -71,7 +76,7 @@ const ChildAccount = (props: ChildAccountProps) => {
       ) : (
         <h1>Nothing here</h1>
       )}
-    </>
+    </Box>
   );
 };
 

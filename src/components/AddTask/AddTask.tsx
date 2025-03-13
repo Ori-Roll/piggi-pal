@@ -3,11 +3,11 @@ import { Text, useMantineTheme } from '@mantine/core';
 import { IconAward } from '@tabler/icons-react';
 import ModalsWrapper from '@/components/Modals/ModalWrapper';
 import TaskForm from '@/components/TaskForm/TaskForm';
-import { ChildAccount } from '@prisma/client';
 import ActionButton from '@/components/base/ActionButton/ActionButton';
+import { ChildAccount } from '@prisma/client';
 
 type AddTaskProps = {
-  selectedChildAccount?: Partial<ChildAccount> | null;
+  selectedChildAccount?: ChildAccount;
 };
 
 const AddTask = (props: AddTaskProps) => {

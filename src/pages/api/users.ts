@@ -5,8 +5,9 @@ import HttpStatusCodes from '@/common/HttpStatusCodes';
 import userHandler from '@/apiHandlers/users';
 import { APIError, apiErrorMiddleware } from '@/common/apiUtils';
 import { ResponseFormat, RouteFunction } from '@/types/apiTypes';
+import { UserWithAllData } from '@/types/dataTypes';
 
-const getMe: RouteFunction<User> = async (req, res) => {
+const getMe: RouteFunction<UserWithAllData> = async (req, res) => {
   const session = await auth(req, res);
   const user = session?.user;
   if (!user || !user.id) {
@@ -17,8 +18,6 @@ const getMe: RouteFunction<User> = async (req, res) => {
   }
 
   const userData = await userHandler.getOne(user.id);
-
-  console.log('userData', userData);
 
   if (!userData || !userData.id) {
     res.status(HttpStatusCodes.UNAUTHORIZED).json({
