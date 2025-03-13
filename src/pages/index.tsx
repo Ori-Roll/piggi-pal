@@ -5,8 +5,6 @@ import styles from '@/styles/Home.module.css';
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Loader } from '@mantine/core';
-import { userService } from '@/APIService/users';
-import childAccountsService from '@/APIService/childAccounts';
 import BasicDataLoader from '@/components/BasicDataLoader';
 import DashboardLayout from '@/components/Dashboard/Dashboard';
 

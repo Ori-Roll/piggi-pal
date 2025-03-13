@@ -1,12 +1,12 @@
 .formattedAmountNum {
-  font-family: 'Titan One', serif;
+  font-family: 'Poppins', serif;
   font-size: 4rem;
   line-height: normal;
   color: rgb(28, 55, 207);
 }
 
 .formattedAmountSign {
-  font-family: 'Titan One', serif;
+  font-family: 'Poppins', serif;
   font-size: 2rem;
   color: #4f7ccf;
   width: 4rem;

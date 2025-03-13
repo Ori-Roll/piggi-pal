@@ -1,8 +1,9 @@
-import { Titan_One } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 
-const font = Titan_One({
+const font = Poppins({
   subsets: ['latin', 'latin-ext'],
-  weight: ['400'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  display: 'swap',
 });
 
 type FontProviderProps = {

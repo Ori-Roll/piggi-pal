@@ -1,0 +1,9 @@
+.card_wrapper {
+  position: relative;
+  border: 0.4rem solid;
+  border-radius: 1.6rem;
+  padding: 0.2rem;
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+}

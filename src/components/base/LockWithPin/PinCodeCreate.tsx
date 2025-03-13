@@ -58,7 +58,7 @@ const PinCodeCreate = (props: PinCodeCreateProps) => {
           />
         </Flex>
       </Center>
-      <Space h={30} />
+      <Space h="2rem" />
       {isPending && <Loader />}
       {isError && <Text c={theme.colors.red[4]}>Invalid pin code!</Text>}
       <Text fw={600} size="md">

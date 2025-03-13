@@ -11,7 +11,7 @@
 }
 
 .top_icon {
-  font-family: 'Titan One', serif;
+  font-family: 'Poppins', serif;
   font-size: 2rem;
   position: absolute;
   top: -2rem;
@@ -27,7 +27,7 @@
 }
 
 .name {
-  font-family: 'Titan One', serif;
+  font-family: 'Poppins', serif;
   font-size: 1rem;
   color: #525252;
 }

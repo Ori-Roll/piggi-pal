@@ -55,7 +55,15 @@ const BasicDataLoader = (props: PrivateRouteProps) => {
   return (
     <>
       {isFetching && (
-        <Loader style={{ position: 'absolute', top: '50px', right: '50px' }} />
+        <Loader
+          style={{
+            position: 'absolute',
+            top: '2rem',
+            right: '2rem',
+            zIndex: 2,
+          }}
+          size="1rem"
+        />
       )}
       {isLoading && !isFetching ? (
         <Center>

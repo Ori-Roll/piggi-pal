@@ -2,10 +2,10 @@ import { PropsWithChildren } from 'react';
 import { Box, Button, Flex, Loader } from '@mantine/core';
 import { IconCheck, IconEdit } from '@tabler/icons-react';
 import chroma from 'chroma-js';
-import { useIsMobile } from '@/hooks/configHooks';
 import style from './DoableCard.module.css';
 import { getTextColorForBackground } from '@/utils/colors';
-import IconButton from '../buttons/IconButton';
+import IconButton from '@/components/base/buttons/IconButton';
+import LayoutCard from '@/components/base/LayoutCard/LayoutCard';
 
 type DoableCardGeneralProps = {
   cardStyle?: DefaultStyle;
@@ -68,15 +68,7 @@ const DoableCard = <T extends boolean>(
   const backgroundColor = chroma('white').hex();
 
   return (
-    <Box
-      className={style.card_wrapper}
-      style={{
-        borderColor: wrapperStyle,
-        backgroundColor,
-        opacity: loading ? 0.5 : 1,
-        pointerEvents: loading ? 'none' : 'auto',
-      }}
-    >
+    <LayoutCard>
       <Flex direction="column">
         {editableDeletable && (
           <EditButton onEdit={() => {}} backgroundColor={backgroundColor} />
@@ -88,7 +80,7 @@ const DoableCard = <T extends boolean>(
         checked={checked}
         checking={checking}
       />
-    </Box>
+    </LayoutCard>
   );
 };
 

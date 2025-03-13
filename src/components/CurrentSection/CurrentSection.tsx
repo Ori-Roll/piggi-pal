@@ -10,6 +10,7 @@ import { IconPencilDollar } from '@tabler/icons-react';
 import ModalsWrapper from '@/components/Modals/ModalWrapper';
 import { useState } from 'react';
 import { defaultColors, getTextColorForBackground } from '@/utils/colors';
+import LayoutCard from '@/components/base/LayoutCard/LayoutCard';
 
 type CurrentSectionProps = {
   childAccount: ChildAccount;
@@ -81,41 +82,56 @@ export const CurrentSection = (props: CurrentSectionProps) => {
   const editCurrentColor = getTextColorForBackground(editCurrentBGColor);
 
   return (
-    <Flex
-      direction="column"
-      align="flex-start"
-      className={style.currentSection}
+    <LayoutCard
+      boxProps={{
+        style: {
+          borderWidth: '1px',
+          borderColor: defaultColors.primaryColor,
+          borderStyle: 'dashed',
+        },
+      }}
     >
-      <Text size="xl">You have</Text>
+      <Flex
+        direction="column"
+        align="flex-start"
+        className={style.currentSection}
+        p="1rem"
+      >
+        <Text size="xl">You have</Text>
 
-      <Flex>
-        <Current
-          current={childAccount.current}
-          sign={'$'}
-          handleChange={handleCurrentChange}
-          edit={editMode}
-        />
-        <IconButton
-          onClick={onEditCurrentClick}
-          backgroundColor={editCurrentBGColor}
-        >
-          <IconPencilDollar
-            className={style.in_icon}
-            size="1.5rem"
-            color={editCurrentColor}
+        <Flex>
+          <Current
+            current={childAccount.current}
+            sign={'$'}
+            handleChange={handleCurrentChange}
+            edit={editMode}
           />
-        </IconButton>
-        <ModalsWrapper
-          title="Edit Current"
-          opened={editCurrentModalOpened}
-          onClose={() => setEditCurrentModalOpened(false)}
-        >
-          <h1>
-            This is a modal that will be used to edit the current value of the
-            child account
-          </h1>
-        </ModalsWrapper>
+          {editMode && (
+            <>
+              <IconButton
+                onClick={onEditCurrentClick}
+                backgroundColor={editCurrentBGColor}
+              >
+                <IconPencilDollar
+                  className={style.in_icon}
+                  size="1.5rem"
+                  color={editCurrentColor}
+                />
+              </IconButton>
+              <ModalsWrapper
+                title="Edit Current"
+                opened={editCurrentModalOpened}
+                onClose={() => setEditCurrentModalOpened(false)}
+              >
+                <h1>
+                  This is a modal that will be used to edit the current value of
+                  the child account
+                </h1>
+              </ModalsWrapper>
+            </>
+          )}
+        </Flex>
       </Flex>
-    </Flex>
+    </LayoutCard>
   );
 };
