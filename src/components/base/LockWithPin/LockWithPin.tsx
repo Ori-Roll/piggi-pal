@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Text, useMantineTheme } from '@mantine/core';
+import { Button, Flex, Text, useMantineTheme } from '@mantine/core';
 import { IconLock } from '@tabler/icons-react';
 import { useEditMode } from '@/store/useEditMode';
 import ModalsWrapper from '@/components/Modals/ModalWrapper';
@@ -57,20 +57,19 @@ const LockWithPin = (props: LockWithPinProps) => {
         )}
       </ModalsWrapper>
       <Button
-        size="6rem"
+        size="4.5rem"
         radius="6rem"
-        h="5rem"
         p="1.2rem"
         onClick={editMode ? lockEditMode : handleUnlockEditMode}
-        variant="outline"
       >
-        <>
-          <IconLock
-            size="2.5rem"
-            color={editMode ? theme.colors.red[4] : theme.colors.blue[7]}
-          />
-          <Text>{editMode ? `LOCK` : ``}</Text>
-        </>
+        {editMode ? (
+          <Flex align="center" gap="0.5rem" p="0 0.5rem 0 0.4rem">
+            <IconLock size="2rem" color={theme.colors.gray[1]} />
+            <Text>LOCK</Text>
+          </Flex>
+        ) : (
+          <IconLock size="2rem" color={theme.colors.gray[1]} />
+        )}
       </Button>
     </>
   );

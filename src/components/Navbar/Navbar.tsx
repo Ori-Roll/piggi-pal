@@ -1,13 +1,14 @@
-import { Flex, Burger, Button } from '@mantine/core';
+import { Flex, Burger, Text } from '@mantine/core';
+import { signOut } from 'next-auth/react';
 import { useEditMode } from '@/store/useEditMode';
 import { useIsMobile } from '@/hooks/configHooks';
 import { useSelectedChildAccount } from '@/store/useCurrentChildAccount';
 import ChildAccountSelect from '@/components/ChildAccountSelect/ChildAccountSelect';
 import AddTask from '@/components/AddTask/AddTask';
-// import AddPeriodic from '@/components/AddPeriodic/AddPeriodic';
 import LockWithPin from '@/components/base/LockWithPin/LockWithPin';
 import AddPeriodic from '@/components/AddPeriodic/AddPeriodic';
-import { signOut } from 'next-auth/react';
+import ActionButton from '@/components/base/ActionButton/ActionButton';
+import { IconPower } from '@tabler/icons-react';
 
 type NavbarProps = {
   navBarOpened: boolean;
@@ -39,7 +40,6 @@ const Navbar = (props: NavbarProps) => {
         justify="flex-start"
         gap="50px"
         align="center"
-        px={5}
       >
         <Burger
           opened={navBarOpened}
@@ -64,16 +64,16 @@ const Navbar = (props: NavbarProps) => {
             </>
           )}
         </Flex>
-        <Flex
-          direction="row"
-          justify="center"
-          align="center"
-          h={editMode ? 'auto' : '100%'}
-        >
-          <LockWithPin />
-        </Flex>
-        <Button onClick={() => signOut()}>Sign Out</Button>
       </Flex>
+      <Flex direction="row" justify="center" align="center" h={'100%'}>
+        <LockWithPin />
+      </Flex>
+      <ActionButton
+        onClick={() => signOut()}
+        rightSection={<IconPower size="2rem" />}
+      >
+        <Text>Sign Out</Text>
+      </ActionButton>
     </Flex>
   );
 };
