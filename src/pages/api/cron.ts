@@ -8,7 +8,11 @@ const authenticate = async (
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
 ) => {
+  console.log('in authenticate, headers are ` ', req.headers);
+
   const authorizationHeader = req.headers['authorization'];
+
+  console.log('Authorization header:', authorizationHeader);
 
   if (!authorizationHeader) {
     return res.status(400).json({ message: 'Authorization header missing' });
@@ -17,15 +21,17 @@ const authenticate = async (
   // Step 2: Extract the Bearer token from the Authorization header
   const token = authorizationHeader.split(' ')[1]; // 'Bearer <token>'
 
+  console.log('Extracted Bearer token:', token);
+
   if (!token) {
     return res.status(400).json({ message: 'Bearer token missing' });
   }
 
   // Step 3: Use the token for your logic (e.g., authenticate the request or make another API call)
   console.log('Received Bearer token:', token);
-
+  console.log('Expected (process.env.CRON_API_KEY):', process.env.CRON_API_KEY);
   // Example: If you need to validate the token
-  if (token !== process.env.EXPECTED_API_KEY) {
+  if (token !== process.env.CRON_API_KEY) {
     return res.status(401).json({ message: 'Invalid API Key' });
   }
 };
