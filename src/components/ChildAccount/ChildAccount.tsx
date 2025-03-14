@@ -8,6 +8,7 @@ import PeriodicsSection from '@/components/PeriodicsSection/PeriodicsSection';
 import OopsPage from '@/components/base/OopsPage/Oops';
 import TaskSection from '@/components/TaskSection/TaskSection';
 import { ChildAccountWithAllData } from '@/types/dataTypes';
+import NameAndAvatarLine from '@/components/base/NameAndAvatarLine/NameAndAvatarLine';
 import style from './ChildAccount.module.css';
 
 type ChildAccountProps = {};
@@ -63,6 +64,9 @@ const ChildAccount = (props: ChildAccountProps) => {
             isMobile ? style.account_grid_mobile : style.account_grid_desktop
           }
         >
+          <Grid.Col className={style.grid_col_header}>
+            <NameAndAvatarLine name={childAccount.kidName} />
+          </Grid.Col>
           <Grid.Col className={style.gridColCurrent}>
             <CurrentSection childAccount={childAccount} />
           </Grid.Col>

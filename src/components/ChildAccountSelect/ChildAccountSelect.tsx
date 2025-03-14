@@ -9,6 +9,7 @@ import { selectCurrentChildAccount } from '@/utils/generalDataUtils';
 import childAccountsService from '@/APIService/childAccounts';
 import { useUserDataState, useUserMutation } from '@/hooks/query/user';
 import ActionButton from '@/components/base/ActionButton/ActionButton';
+import { defaultColors } from '@/utils/colors';
 
 type ChildAccountSelectProps = {};
 
@@ -74,10 +75,21 @@ const ChildAccountSelect = (props: ChildAccountSelectProps) => {
     >
       <Menu.Target>
         <ActionButton
+          colorAccent={defaultColors.secondaryColor}
           rightSection={<IconChevronDown size={18} stroke={1.5} />}
           disabled={!editMode}
+          style={
+            editMode
+              ? {
+                  border: 'solid',
+                  borderWidth: '0.2rem',
+                  borderRadius: '2rem',
+                  borderColor: defaultColors.primaryColor,
+                }
+              : { border: 'none', background: 'none' }
+          }
         >
-          {selectedChildAccount?.kidName || 'Select childAccount'}
+          {selectedChildAccount?.kidName || 'Select child account'}
         </ActionButton>
       </Menu.Target>
 

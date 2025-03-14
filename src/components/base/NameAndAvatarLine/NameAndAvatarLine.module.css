@@ -1,0 +1,7 @@
+.custom_wrapper {
+  border-radius: 1.5rem;
+  border: 4px solid;
+  position: relative;
+  min-height: fit-content;
+  padding: 1rem;
+}
