@@ -4,6 +4,8 @@ import { Text, Flex } from '@mantine/core';
 // import AnimatedShake from '@/components/base/Animated/AnimatedShake';
 import AmountWithSign from '@/components/base/AmountWithSign/AmountWithSign';
 import style from './PeriodicCard.module.css';
+import { defaultColors, getTextColorForBackground } from '@/utils/colors';
+import chroma from 'chroma-js';
 
 type PeriodicCardProps = {
   name: string;
@@ -27,15 +29,17 @@ const PeriodicCard = (props: PropsWithChildren<PeriodicCardProps>) => {
 
   const readableNextOccurrence = () => {
     if (!parsedNextOccurrence) {
-      return '(Not gonna happen)';
+      return '(dot gonna happen)';
     }
     switch (true) {
+      case loading:
+        return '(loading...)';
       case parsedNextOccurrence < endOfDay(new Date()):
-        return '(Due today)';
+        return '(due today)';
       case endOfDay(addDays(parsedNextOccurrence, 1)) < new Date():
-        return '(Due tomorrow)';
+        return '(due tomorrow)';
       default:
-        return `(Due in ${formatDistanceToNow(parsedNextOccurrence, {
+        return `(due in ${formatDistanceToNow(parsedNextOccurrence, {
           addSuffix: false,
         })})`;
     }
@@ -43,28 +47,48 @@ const PeriodicCard = (props: PropsWithChildren<PeriodicCardProps>) => {
 
   const delay = props.componentIndex ? props.componentIndex * 200 : 0;
 
+  const backgroundColor = chroma(defaultColors.primaryColor).desaturate().hex();
+  const frontColor = getTextColorForBackground(backgroundColor);
+
   return (
     <Flex
       align={'center'}
-      justify={'center'}
-      gap="lg"
+      justify={'flex-start'}
       className={style.card}
       style={{
         opacity: loading ? 0.5 : 1,
+        backgroundColor,
       }}
     >
-      <div className={style.top_icon}>$</div>
+      <div
+        className={style.top_icon}
+        style={{
+          borderColor: backgroundColor,
+        }}
+      >
+        $
+      </div>
       {/* <AnimatedShake delay={delay}> */}
-      <AmountWithSign amount={amount} currencySign={currencySign} />
-      {/* </AnimatedShake> */}
-      <Flex direction="column">
-        <Text className={style.name}>{name}</Text>
-        <Text size="sm" className={style.nextTimeDescription}>
-          {intervalName}
+      <Flex direction={'column'}>
+        <Text className={style.name} c={frontColor}>
+          {name}
         </Text>
-        <Text size="xs" className={style.nextTimeDescription}>
-          {readableNextOccurrence()}
-        </Text>
+        <AmountWithSign
+          amount={amount}
+          currencySign={currencySign}
+          fontSize={2.6}
+          color={frontColor}
+        />
+        {/* </AnimatedShake> */}
+
+        <Flex direction="row" align="center" gap="sm">
+          <Text size="sm" className={style.nextTimeDescription} c={frontColor}>
+            {`${intervalName} ${readableNextOccurrence()}`}
+          </Text>
+          {/* <Text size="xs" className={style.nextTimeDescription} c={frontColor}>
+            {readableNextOccurrence()}
+          </Text> */}
+        </Flex>
       </Flex>
     </Flex>
   );
