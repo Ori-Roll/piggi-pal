@@ -1,4 +1,4 @@
-import { Flex, Burger, Text } from '@mantine/core';
+import { Flex, Burger, Text, Space } from '@mantine/core';
 import { signOut } from 'next-auth/react';
 import { useEditMode } from '@/store/useEditMode';
 import { useIsMobile } from '@/hooks/configHooks';
@@ -31,7 +31,7 @@ const Navbar = (props: NavbarProps) => {
       direction="column"
       justify="space-between"
       align="center"
-      p="2rem"
+      p="0 1.6rem 1.6rem"
     >
       <Flex
         h="100%"
@@ -55,8 +55,10 @@ const Navbar = (props: NavbarProps) => {
           align="center"
           w="100%"
           gap={10}
+          pt="4rem"
         >
           <ChildAccountSelect />
+          <Space h="0.1rem" />
           {editMode && selectedChildAccount && (
             <>
               <AddTask selectedChildAccount={selectedChildAccount} />

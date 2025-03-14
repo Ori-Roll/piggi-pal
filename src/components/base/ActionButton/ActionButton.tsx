@@ -12,6 +12,8 @@ type ActionButtonProps = ButtonProps &
 const ActionButton = (props: ActionButtonProps) => {
   const { children, colorAccent, ref, ...restProps } = props;
 
+  const { style: propsStyle, ...restPropsWithoutStyle } = restProps;
+
   return (
     <Button
       size="lg"
@@ -23,11 +25,12 @@ const ActionButton = (props: ActionButtonProps) => {
         ...(colorAccent
           ? {
               borderColor: colorAccent,
+              ...propsStyle,
             }
-          : {}),
+          : { ...propsStyle }),
       }}
       ref={ref}
-      {...restProps}
+      {...restPropsWithoutStyle}
     >
       {children}
     </Button>

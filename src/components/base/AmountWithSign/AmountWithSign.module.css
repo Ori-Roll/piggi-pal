@@ -1,18 +1,17 @@
-.formattedAmountNum {
+.amount {
+  margin-block-start: auto;
   font-family: 'Poppins', serif;
-  font-size: 4rem;
-  line-height: normal;
-  color: rgb(28, 55, 207);
+  font-weight: 800;
+  font-style: normal;
+  font-size: 5rem;
+  line-height: 3rem;
 }
 
-.formattedAmountSign {
+.currency {
+  margin-block-start: auto;
   font-family: 'Poppins', serif;
-  font-size: 2rem;
-  color: #4f7ccf;
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
-  text-align: center;
-  padding-top: 0.5rem;
-  display: inline-block;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 5rem;
+  line-height: 3rem;
 }

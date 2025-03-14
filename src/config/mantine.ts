@@ -1,5 +1,5 @@
 import { defaultColors } from '@/utils/colors';
-import { createTheme, MantineTheme } from '@mantine/core';
+import { createTheme, MantineTheme, MenuDropdown } from '@mantine/core';
 
 import { MantineThemeOverride } from '@mantine/core';
 
@@ -26,6 +26,20 @@ const mantineTheme: MantineThemeOverride = createTheme({
     },
     DatePickerInput: {
       styles: inputsDefaults,
+    },
+    MenuDropdown: {
+      styles: (theme: MantineTheme) => ({
+        ...inputsDefaults(theme),
+        dropdown: {
+          border: `1px solid ${theme.colors.gray[4]}`,
+          boxShadow: theme.shadows.md,
+        },
+        item: {
+          '&:hover': {
+            backgroundColor: theme.colors.gray[0],
+          },
+        },
+      }),
     },
     Modal: {
       styles: (theme: MantineTheme) => ({

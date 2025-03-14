@@ -87,7 +87,7 @@ function TaskSection(props: TaskSectionProps) {
             <Text fw={700}>{task.title}</Text>
             <Text c="dimmed">{task.description}</Text>
             {/* <AnimatedShake delay={i * 100}> */}
-            <AmountWithSign amount={task.amount} />
+            <AmountWithSign amount={task.amount} fontSize={2.2} />
             {/* </AnimatedShake> */}
           </DoableCard>
         ) : null

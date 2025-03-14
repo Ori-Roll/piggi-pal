@@ -1,7 +1,7 @@
 .card {
   border-radius: 1.5rem;
   background-color: #abc6ed;
-  padding: 2rem 1.5rem;
+  padding: 2.2rem 2rem 1.6rem;
   min-height: 10rem;
   margin-top: 2rem;
   position: relative;
@@ -12,17 +12,19 @@
 
 .top_icon {
   font-family: 'Poppins', serif;
-  font-size: 2rem;
+  font-size: 1.9rem;
+  font-weight: 800;
   position: absolute;
-  top: -2rem;
+  top: -1.6rem;
+  left: 1.6rem;
   color: #4f7ccf;
   background-color: #ffffff;
-  width: 4rem;
-  height: 4rem;
-  border: 3px solid #abc6ed;
+  width: 3.4rem;
+  height: 3.4rem;
+  border: 0.3rem solid;
   border-radius: 50%;
   text-align: center;
-  padding-top: 0.3rem;
+  padding-top: -0.2rem;
   display: inline-block;
 }
 

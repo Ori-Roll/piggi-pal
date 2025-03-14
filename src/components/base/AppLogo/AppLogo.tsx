@@ -1,9 +1,16 @@
+import { useUserQuery } from '@/hooks/query/user';
+import { useSelectedChildAccount } from '@/store/useCurrentChildAccount';
 import { Text, Title } from '@mantine/core';
 
 type AppLogoProps = {};
 
 const AppLogo = (props: AppLogoProps) => {
   const {} = props;
+
+  const { data: user } = useUserQuery();
+  const selectedChildAccount = useSelectedChildAccount(
+    (state) => state?.selectedChildAccount
+  );
 
   return (
     <Title>
@@ -14,7 +21,7 @@ const AppLogo = (props: AppLogoProps) => {
         w="100%"
         ta="center"
       >
-        BananaBank
+        Hi {selectedChildAccount?.kidName || ''}!
       </Text>
     </Title>
   );

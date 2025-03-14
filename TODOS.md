@@ -11,7 +11,11 @@
 3. Add login with credentials
 4. Add basic validations to forms (task amount!)
 5. Add Tasks delete ? and edit ?
-6. Add Investments?
+
+### Issues
+
+- parent lock sometimes acts as create instead of existing lock
+  (maybe happens when using immediately on app load)
 
 ## Todos after deploy is somewhat ready
 
@@ -21,6 +25,7 @@
 4. add account options with:
    - choose sign ($/star) and other options
    - choose child user icon
+5. Add Investments
 
 # later
 

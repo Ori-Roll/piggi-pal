@@ -1,10 +1,16 @@
 import { PropsWithChildren } from 'react';
-import { Box, Button, Flex, Loader } from '@mantine/core';
-import { IconCheck, IconEdit } from '@tabler/icons-react';
+import {
+  Box,
+  Button,
+  Flex,
+  Loader,
+  Space,
+  UnstyledButton,
+} from '@mantine/core';
+import { IconCheck, IconPencil } from '@tabler/icons-react';
 import chroma from 'chroma-js';
 import style from './DoableCard.module.css';
 import { getTextColorForBackground } from '@/utils/colors';
-import IconButton from '@/components/base/buttons/IconButton';
 import LayoutCard from '@/components/base/LayoutCard/LayoutCard';
 
 type DoableCardGeneralProps = {
@@ -71,7 +77,10 @@ const DoableCard = <T extends boolean>(
     <LayoutCard>
       <Flex direction="column">
         {editableDeletable && (
-          <EditButton onEdit={() => {}} backgroundColor={backgroundColor} />
+          <>
+            <EditButton onEdit={() => {}} backgroundColor={backgroundColor} />
+            <Space h="0.4rem" />
+          </>
         )}
         <Box className={style.card_content}>{children}</Box>
       </Flex>
@@ -144,13 +153,13 @@ const EditButton = (props: EditButtonProps) => {
   const foregroundColor = getTextColorForBackground(backgroundColor);
 
   return (
-    <IconButton onClick={onEdit}>
-      <IconEdit
+    <UnstyledButton className={style.edit_button} onClick={onEdit}>
+      <IconPencil
         className={style.in_icon}
         size="1.5rem"
         color={foregroundColor}
       />
-    </IconButton>
+    </UnstyledButton>
   );
 };
 
