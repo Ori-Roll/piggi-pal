@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Flex, Text } from '@mantine/core';
+import { Flex, Text, UnstyledButton } from '@mantine/core';
 import { ChildAccount } from '@prisma/client';
 import Current from '@/components/base/Current/Current';
 import { useEditMode } from '@/store/useEditMode';
@@ -11,6 +11,7 @@ import ModalsWrapper from '@/components/Modals/ModalWrapper';
 import { useState } from 'react';
 import { defaultColors, getTextColorForBackground } from '@/utils/colors';
 import LayoutCard from '@/components/base/LayoutCard/LayoutCard';
+import ActionButton from '@/components/base/ActionButton/ActionButton';
 
 type CurrentSectionProps = {
   childAccount: ChildAccount;
@@ -99,7 +100,7 @@ export const CurrentSection = (props: CurrentSectionProps) => {
       >
         <Text size="xl">You have</Text>
 
-        <Flex>
+        <Flex align="center">
           <Current
             current={childAccount.current}
             sign={'$'}
@@ -108,16 +109,20 @@ export const CurrentSection = (props: CurrentSectionProps) => {
           />
           {editMode && (
             <>
-              <IconButton
+              <ActionButton
                 onClick={onEditCurrentClick}
-                backgroundColor={editCurrentBGColor}
+                colorAccent={editCurrentColor}
+                style={{
+                  minHeight: '2rem',
+                }}
               >
+                <Text>Withdraw/Deposit</Text>
                 <IconPencilDollar
                   className={style.in_icon}
                   size="1.5rem"
-                  color={editCurrentColor}
+                  color={editCurrentBGColor}
                 />
-              </IconButton>
+              </ActionButton>
               <ModalsWrapper
                 title="Edit Current"
                 opened={editCurrentModalOpened}
