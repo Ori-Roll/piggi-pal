@@ -63,11 +63,12 @@ export default function LoginPage() {
         onClose={onDisclaimerRead}
         withCloseButton={false}
         size="lg"
+        padding={0}
       >
-        <Box h="80vh">
+        <Box p="0.5rem" h="80vh" style={{ overflow: 'auto' }}>
           <Disclaimer />
           <br />
-          <Flex justify="space-between">
+          <Flex justify="center" gap="1rem">
             <Button onClick={onDisclaimerRead}>Agree</Button>
             <Button onClick={() => router.push('https://www.google.com')}>
               Disagree

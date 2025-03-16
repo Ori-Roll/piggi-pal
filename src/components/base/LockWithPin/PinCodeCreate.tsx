@@ -10,6 +10,7 @@ import {
 import { useFocusTrap } from '@mantine/hooks';
 import { useMutation } from '@tanstack/react-query';
 import parentLock from '../../../APIService/parentLock';
+import { defaultColors } from '@/utils/colors';
 
 type PinCodeCreateProps = {
   onCreated: () => void;
@@ -55,6 +56,13 @@ const PinCodeCreate = (props: PinCodeCreateProps) => {
             inputMode="numeric"
             onComplete={handlePinComplete}
             disabled={isPending}
+            radius="50%"
+            styles={{
+              input: {
+                borderColor: defaultColors.primaryColor,
+                borderWidth: '0.2rem',
+              },
+            }}
           />
         </Flex>
       </Center>

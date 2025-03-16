@@ -9,6 +9,8 @@ import {
 import { useFocusTrap } from '@mantine/hooks';
 import { useMutation } from '@tanstack/react-query';
 import parentLock from '../../../APIService/parentLock';
+import style from './PinCode.module.css';
+import { defaultColors } from '@/utils/colors';
 
 type PinCodeValidateProps = {
   onValidated: () => void;
@@ -56,6 +58,13 @@ const PinCodeValidate = (props: PinCodeValidateProps) => {
           onComplete={handlePinComplete}
           error={isError}
           disabled={isPending}
+          radius="50%"
+          styles={{
+            input: {
+              borderColor: defaultColors.primaryColor,
+              borderWidth: '0.2rem',
+            },
+          }}
         />
       </Flex>
       {isPending && <Loader />}
