@@ -17,7 +17,7 @@ const DashboardLayout = () => {
 
   return (
     <AppShell
-      {...(isMobile ? { header: { height: 60 } } : {})}
+      {...(isMobile && burgered ? { header: { height: 60 } } : {})}
       navbar={{
         width: 300,
         breakpoint: 'sm',

@@ -24,6 +24,11 @@ const Navbar = (props: NavbarProps) => {
     (state) => state?.selectedChildAccount
   );
 
+  const onSubmitCallback = () => {
+    toggleNavBarOpened();
+    console.log('onSubmitCallback');
+  };
+
   return (
     <Flex
       h="100%"
@@ -61,8 +66,14 @@ const Navbar = (props: NavbarProps) => {
           <Space h="0.1rem" />
           {editMode && selectedChildAccount && (
             <>
-              <AddTask selectedChildAccount={selectedChildAccount} />
-              <AddPeriodic selectedChildAccount={selectedChildAccount} />
+              <AddTask
+                selectedChildAccount={selectedChildAccount}
+                onSubmitCallback={onSubmitCallback}
+              />
+              <AddPeriodic
+                selectedChildAccount={selectedChildAccount}
+                onSubmitCallback={onSubmitCallback}
+              />
             </>
           )}
         </Flex>
