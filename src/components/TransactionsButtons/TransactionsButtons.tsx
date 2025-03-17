@@ -12,12 +12,14 @@ import childAccountsService from '@/APIService/childAccounts';
 
 type TransactionsButtonsProps = {
   selectedChildAccount: ChildAccount;
+  childAccountMutationFn: (childAccountData: Partial<ChildAccount>) => void;
+  disabled?: boolean;
 };
 
 type CurrentType = 'deposit' | 'withdraw';
 
 const TransactionsButtons = (props: TransactionsButtonsProps) => {
-  const { selectedChildAccount } = props;
+  const { selectedChildAccount, childAccountMutationFn, disabled } = props;
 
   const [editCurrentModalOpened, setEditCurrentModalOpened] =
     useState<CurrentType | null>(null);
@@ -32,21 +34,15 @@ const TransactionsButtons = (props: TransactionsButtonsProps) => {
   };
 
   const depositMutationFn = async (amount: number) => {
-    await childAccountsService.updateChildAccount(
-      {
-        current: selectedChildAccount.current + amount,
-      },
-      selectedChildAccount.id
-    );
+    childAccountMutationFn({
+      current: selectedChildAccount.current + amount,
+    });
   };
 
   const withdrawMutationFn = async (amount: number) => {
-    await childAccountsService.updateChildAccount(
-      {
-        current: selectedChildAccount.current - amount,
-      },
-      selectedChildAccount.id
-    );
+    childAccountMutationFn({
+      current: selectedChildAccount.current - amount,
+    });
   };
 
   return (
@@ -69,6 +65,7 @@ const TransactionsButtons = (props: TransactionsButtonsProps) => {
             width: '100%',
           }}
           size="sm"
+          disabled={disabled}
         >
           <IconPencilPlus size="1.2rem" color={editCurrentBGColor} />
           <Text size="sm" lh="sm">
@@ -85,26 +82,16 @@ const TransactionsButtons = (props: TransactionsButtonsProps) => {
             width: '100%',
           }}
           size="sm"
+          disabled={disabled}
         >
           <IconPencilMinus size="1.2rem" color={editCurrentBGColor} />
           <Text size="sm" lh="sm">
             Withdraw
           </Text>
         </ActionButton>
-        {/* <ActionButton
-          onClick={onEditCurrentClick}
-          colorAccent={editCurrentColor}
-          style={{
-            minHeight: '2rem',
-            minWidth: 'fit-content',
-          }}
-        >
-          <Text size="sm">Withdraw</Text>
-          <IconPencilMinus size="1.2rem" color={editCurrentBGColor} />
-        </ActionButton> */}
       </Flex>
       <ModalsWrapper
-        title="Edit Current"
+        title={editCurrentModalOpened === 'deposit' ? 'Deposit' : 'Withdraw'}
         opened={!!editCurrentModalOpened}
         onClose={() => setEditCurrentModalOpened(null)}
       >
@@ -112,14 +99,14 @@ const TransactionsButtons = (props: TransactionsButtonsProps) => {
           <TransactionModal
             submitTitle="Deposit"
             selectedChildAccount={selectedChildAccount}
-            mutationFn={depositMutationFn}
+            updateFn={depositMutationFn}
             onSubmitCallback={() => setEditCurrentModalOpened(null)}
           />
         ) : (
           <TransactionModal
             submitTitle="Withdraw"
             selectedChildAccount={selectedChildAccount}
-            mutationFn={withdrawMutationFn}
+            updateFn={withdrawMutationFn}
             onSubmitCallback={() => setEditCurrentModalOpened(null)}
           />
         )}

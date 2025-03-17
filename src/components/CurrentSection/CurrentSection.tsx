@@ -1,4 +1,4 @@
-import { Flex, Text } from '@mantine/core';
+import { Flex, Loader, Text } from '@mantine/core';
 import { ChildAccount } from '@prisma/client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEditMode } from '@/store/useEditMode';
@@ -22,7 +22,7 @@ export const CurrentSection = (props: CurrentSectionProps) => {
 
   const queryClient = useQueryClient();
 
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: (childAccountData: Partial<ChildAccount>) =>
       childAccountsService.updateChildAccount(
         childAccountData,
@@ -83,7 +83,7 @@ export const CurrentSection = (props: CurrentSectionProps) => {
     >
       <Flex
         direction="column"
-        align="flex-start"
+        align={isMobile ? 'center' : 'flex-start'}
         className={style.currentSection}
         p="1rem"
         gap="1.5rem"
@@ -95,6 +95,7 @@ export const CurrentSection = (props: CurrentSectionProps) => {
           <Text size="sm" lh="1.3rem">
             (what you have)
           </Text>
+          {isPending && <Loader size="sm" />}
         </Flex>
         <Flex
           direction={isMobile ? 'column' : 'row'}
@@ -109,7 +110,11 @@ export const CurrentSection = (props: CurrentSectionProps) => {
             edit={editMode}
           />
           {editMode && (
-            <TransactionsButtons selectedChildAccount={childAccount} />
+            <TransactionsButtons
+              disabled={isPending}
+              selectedChildAccount={childAccount}
+              childAccountMutationFn={mutateAsync}
+            />
           )}
         </Flex>
       </Flex>
