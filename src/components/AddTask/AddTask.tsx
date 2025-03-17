@@ -8,10 +8,11 @@ import { ChildAccount } from '@prisma/client';
 
 type AddTaskProps = {
   selectedChildAccount?: ChildAccount;
+  onSubmitCallback?: () => void;
 };
 
 const AddTask = (props: AddTaskProps) => {
-  const { selectedChildAccount } = props;
+  const { selectedChildAccount, onSubmitCallback } = props;
 
   const [modalOpened, setModalOpened] = useState(false);
 
@@ -22,6 +23,7 @@ const AddTask = (props: AddTaskProps) => {
   };
   const handleAddTaskSubmit = () => {
     setModalOpened(false);
+    onSubmitCallback?.();
   };
 
   return (

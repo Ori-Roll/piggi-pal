@@ -8,10 +8,11 @@ import ActionButton from '@/components/base/ActionButton/ActionButton';
 
 type AddPeriodicProps = {
   selectedChildAccount?: null | ChildAccount;
+  onSubmitCallback?: () => void;
 };
 
 const AddPeriodic = (props: AddPeriodicProps) => {
-  const { selectedChildAccount } = props;
+  const { selectedChildAccount, onSubmitCallback } = props;
 
   const theme = useMantineTheme();
 
@@ -23,6 +24,7 @@ const AddPeriodic = (props: AddPeriodicProps) => {
 
   const handleAddPeriodicSubmit = () => {
     setModalOpened(false);
+    onSubmitCallback?.();
   };
 
   return (

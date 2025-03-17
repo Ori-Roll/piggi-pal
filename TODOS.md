@@ -6,6 +6,7 @@
      Mobile issues:
    - close navbar on every action
 2. Add basic validations to forms (task amount!)
+3. fix "component is changing an uncontrolled input to be controlled" (periodic changes and maybe account?)
 
 ### Issues
 
