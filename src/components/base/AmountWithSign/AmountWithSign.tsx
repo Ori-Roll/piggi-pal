@@ -14,11 +14,9 @@ const AmountWithSign = (props: AmountWithSignProps) => {
   //TODO: The sign should be a prop, not hardcoded. Or maybe come from a context or config.
 
   const fontSizeWithMultiplier = `${fontSize}rem`;
-  const lineHeightWithMultiplier = `${fontSize * 1.2}rem`;
 
   const defaultFontSizes = {
     fontSize: fontSizeWithMultiplier,
-    lineHeight: lineHeightWithMultiplier,
   };
 
   return (

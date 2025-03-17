@@ -1,17 +1,14 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Flex, Text, UnstyledButton } from '@mantine/core';
+import { Flex, Text } from '@mantine/core';
 import { ChildAccount } from '@prisma/client';
-import Current from '@/components/base/Current/Current';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEditMode } from '@/store/useEditMode';
-import style from './CurrentSection.module.css';
 import childAccountsService from '@/APIService/childAccounts';
-import IconButton from '@/components/base/buttons/IconButton';
-import { IconPencilDollar } from '@tabler/icons-react';
-import ModalsWrapper from '@/components/Modals/ModalWrapper';
-import { useState } from 'react';
-import { defaultColors, getTextColorForBackground } from '@/utils/colors';
+import { defaultColors } from '@/utils/colors';
+import Current from '@/components/base/Current/Current';
 import LayoutCard from '@/components/base/LayoutCard/LayoutCard';
-import ActionButton from '@/components/base/ActionButton/ActionButton';
+import TransactionsButtons from '@/components/TransactionsButtons/TransactionsButtons';
+import style from './CurrentSection.module.css';
+import { useIsMobile } from '@/hooks/configHooks';
 
 type CurrentSectionProps = {
   childAccount: ChildAccount;
@@ -21,14 +18,9 @@ export const CurrentSection = (props: CurrentSectionProps) => {
   const { childAccount } = props;
 
   const editMode = useEditMode((state) => state.edit);
+  const isMobile = useIsMobile();
 
   const queryClient = useQueryClient();
-
-  const [editCurrentModalOpened, setEditCurrentModalOpened] = useState(false);
-
-  const onEditCurrentClick = () => {
-    setEditCurrentModalOpened(true);
-  };
 
   const { mutateAsync } = useMutation({
     mutationFn: (childAccountData: Partial<ChildAccount>) =>
@@ -79,9 +71,6 @@ export const CurrentSection = (props: CurrentSectionProps) => {
 
   // TODO: This sign is hardcoded to '$' for now
 
-  const editCurrentBGColor = defaultColors.secondaryColor;
-  const editCurrentColor = getTextColorForBackground(editCurrentBGColor);
-
   return (
     <LayoutCard
       boxProps={{
@@ -97,10 +86,22 @@ export const CurrentSection = (props: CurrentSectionProps) => {
         align="flex-start"
         className={style.currentSection}
         p="1rem"
+        gap="1.5rem"
       >
-        <Text size="xl">You have</Text>
-
-        <Flex align="center">
+        <Flex align="flex-end" justify="flex-end" gap="0.4rem">
+          <Text size="xl" lh="1.5rem">
+            Balance
+          </Text>
+          <Text size="sm" lh="1.3rem">
+            (what you have)
+          </Text>
+        </Flex>
+        <Flex
+          direction={isMobile ? 'column' : 'row'}
+          align="center"
+          gap="2rem"
+          w="100%"
+        >
           <Current
             current={childAccount.current}
             sign={'$'}
@@ -108,32 +109,7 @@ export const CurrentSection = (props: CurrentSectionProps) => {
             edit={editMode}
           />
           {editMode && (
-            <>
-              <ActionButton
-                onClick={onEditCurrentClick}
-                colorAccent={editCurrentColor}
-                style={{
-                  minHeight: '2rem',
-                }}
-              >
-                <Text>Withdraw/Deposit</Text>
-                <IconPencilDollar
-                  className={style.in_icon}
-                  size="1.5rem"
-                  color={editCurrentBGColor}
-                />
-              </ActionButton>
-              <ModalsWrapper
-                title="Edit Current"
-                opened={editCurrentModalOpened}
-                onClose={() => setEditCurrentModalOpened(false)}
-              >
-                <h1>
-                  This is a modal that will be used to edit the current value of
-                  the child account
-                </h1>
-              </ModalsWrapper>
-            </>
+            <TransactionsButtons selectedChildAccount={childAccount} />
           )}
         </Flex>
       </Flex>

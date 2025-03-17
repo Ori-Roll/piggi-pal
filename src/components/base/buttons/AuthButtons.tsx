@@ -1,5 +1,8 @@
 import { signIn, signOut } from 'next-auth/react';
 import { redirect } from 'next/navigation';
+import ActionButton from '@/components/base/ActionButton/ActionButton';
+import { IconBrandGoogle } from '@tabler/icons-react';
+import { Flex, Text } from '@mantine/core';
 
 export const LoginButton = () => {
   return (
@@ -27,12 +30,15 @@ export const LogoutButton = () => {
 
 export const GoogleButton = () => {
   return (
-    <button
+    <ActionButton
       onClick={() => {
         signIn('google');
       }}
     >
-      Sign in with Google
-    </button>
+      <Flex w="100%" gap="0.5rem">
+        <IconBrandGoogle />
+        <Text>Sign in with Google</Text>
+      </Flex>
+    </ActionButton>
   );
 };

@@ -25,9 +25,18 @@ const ActionButton = (props: ActionButtonProps) => {
         ...(colorAccent
           ? {
               borderColor: colorAccent,
+              minHeight: '3.2rem',
               ...propsStyle,
             }
-          : { ...propsStyle }),
+          : {
+              minHeight: '3.2rem',
+              ...propsStyle,
+            }),
+      }}
+      styles={{
+        label: {
+          width: '100%',
+        },
       }}
       ref={ref}
       {...restPropsWithoutStyle}

@@ -15,12 +15,7 @@ const Home = () => {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-around p-8 lg:p-24">
-      <h1>Welcome to piggi-pal!</h1>
-      <h2>This is your kid&apos;s bank thing!</h2>
-      {sessionData ? <LogoutButton /> : <LoginButton />}
       <Login />
-      {/*<DiscordButton />
-        <Auth0Button /> */}
     </main>
   );
 };

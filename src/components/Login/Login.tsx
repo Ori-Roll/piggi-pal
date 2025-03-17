@@ -79,9 +79,9 @@ export default function LoginPage() {
       <Flex {...layoutStyle}>
         <Paper w="100%">
           <Title ta="center" order={2} pt={40} pb={20}>
-            BananaBank
+            Piggi pal
           </Title>
-          <form onSubmit={handleSubmit}>
+          {/* <form onSubmit={handleSubmit}>
             <Stack mt="xl">
               <TextInput
                 label="Email"
@@ -103,7 +103,8 @@ export default function LoginPage() {
                 Sign in
               </Button>
             </Stack>
-          </form>
+          </form> */}
+          <p>Sign in with password temporarily unavailable</p>
 
           <Divider label="Or continue with" labelPosition="center" my="lg" />
 
