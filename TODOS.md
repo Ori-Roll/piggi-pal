@@ -3,6 +3,8 @@
 1. Clean ui
    - add headers to sections (and space)
    - reintroduce piggi image
+   - loader at the begginning - center
+   - account dropdown looks bad
      Mobile issues:
    - close navbar on every action
 2. Add basic validations to forms (task amount!)

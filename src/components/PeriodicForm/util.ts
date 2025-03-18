@@ -52,7 +52,7 @@ export const intervalToDisabledEndDates: IntervalToDisabledEndDates = {
 
 export const actionTypeOptions = [
   { value: ActionType.ADD, label: 'Added' },
-  { value: ActionType.SUBTRACT, label: 'Subtracted' },
+  { value: ActionType.SUBTRACT, label: 'Subtracted ):' },
   { value: ActionType.ADDRATE, label: 'Be added a rate of' },
 ] as const;
 

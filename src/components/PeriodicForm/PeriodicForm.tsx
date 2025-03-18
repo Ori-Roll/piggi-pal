@@ -1,4 +1,4 @@
-import { useForm } from '@mantine/form';
+import { useForm, zodResolver } from '@mantine/form';
 import { Button, NumberInput, Select, Space, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { IconCalendar } from '@tabler/icons-react';
@@ -14,6 +14,7 @@ import {
 import { ChildAccountWithAllData } from '@/types/dataTypes';
 import { TEMPORARY } from '@/common/consts';
 import { useUpdateOnMutationCallback } from '@/hooks/utilHooks';
+import { allowanceSchema } from '@/validations/periodics';
 
 type periodicFormProps = {
   periodic?: Partial<Periodic>;
@@ -62,15 +63,17 @@ const PeriodicForm = (props: periodicFormProps) => {
   const initialValues = {
     ...(periodic ? periodic : {}),
     childAccountId: selectedChildAccount.id,
-    interval: intervalOptions[0].value,
+    interval: intervalOptions[1].value,
     actionType: actionTypeOptions[0].value,
-    title: 'Allowance', //TODO: This is now fixed - think what is it for
+    name: 'Allowance', //TODO: This is now fixed - think what is it for
     startsAt: new Date(),
+    amount: 5,
   };
 
   // TODO: Fix this type
   const form = useForm<Partial<Periodic>>({
     initialValues,
+    validate: zodResolver(allowanceSchema),
   });
 
   return (
