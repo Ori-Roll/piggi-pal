@@ -85,15 +85,30 @@ const getManyChildAccountsByIds = async (ids: string[]) => {
 };
 
 const addChildAccount = async (data: ChildAccount) => {
-  console.log('GOT DATA', data);
+  console.log('ADDING NEW CHILD ACCOUNT - GOT DATA', data);
 
   try {
-    const childAccount = await db.childAccount.create({
-      data,
-      include: {
-        periodics: true,
-      },
+    const childAccount = await db.$transaction(async (prisma) => {
+      const childAccount = await prisma.childAccount.create({
+        data,
+        include: {
+          periodics: true,
+        },
+      });
+      await prisma.user.update({
+        where: { id: data.userId },
+        data: {
+          lastOpenedChildAccountId: childAccount.id,
+        },
+      });
+      return childAccount;
     });
+    // .childAccount.create({
+    //   data,
+    //   include: {
+    //     periodics: true,
+    //   },
+    // });
     console.log('returning childAccount', childAccount);
     return childAccount;
   } catch (error) {
