@@ -1,19 +1,17 @@
 ### Todo next:
 
 1. Clean ui
-   - add headers to sections (and space)
    - reintroduce piggi image
    - loader at the begginning - center
    - account dropdown looks bad
      Mobile issues:
-   - close navbar on every action
-2. Add basic validations to forms (task amount!)
-3. fix "component is changing an uncontrolled input to be controlled" (periodic changes and maybe account?)
+2. fix "component is changing an uncontrolled input to be controlled" (periodic changes and maybe account?)
 
 ### Issues
 
 - parent lock sometimes acts as create instead of existing lock
   (maybe happens when using immediately on app load)
+- card styles prisma schema might not have cascade
 
 ## Todos after deploy is somewhat ready
 
@@ -46,3 +44,4 @@ v add logout
 v added task amount functionality
 v cron works!
 v Add Transactions to current (on parent)
+v Add basic validations to forms (task amount!)
