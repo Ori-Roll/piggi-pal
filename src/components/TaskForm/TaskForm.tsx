@@ -1,4 +1,4 @@
-import { useForm } from '@mantine/form';
+import { useForm, zodResolver } from '@mantine/form';
 import { Button, NumberInput, Space, TextInput } from '@mantine/core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ChildAccount, Task } from '@prisma/client';
@@ -6,6 +6,7 @@ import tasksService from '@/APIService/tasks';
 import { ChildAccountWithAllData } from '@/types/dataTypes';
 import { TEMPORARY } from '@/common/consts';
 import { useUpdateOnMutationCallback } from '@/hooks/utilHooks';
+import { createTaskSchema } from '@/validations/tasks';
 
 type TaskFormProps = {
   task?: Partial<Task>;
@@ -51,7 +52,7 @@ const TaskForm = (props: TaskFormProps) => {
     ? {
         ...(task ? task : {}),
         title: '',
-        amount: 0,
+        amount: 1,
         childAccountId: selectedChildAccount?.id,
         availableAt: new Date(),
         requiredTimes: 1,
@@ -60,6 +61,7 @@ const TaskForm = (props: TaskFormProps) => {
 
   const form = useForm<Partial<Task>>({
     ...(initialValues ? { initialValues } : {}),
+    validate: zodResolver(createTaskSchema),
   });
 
   if (!selectedChildAccount) {
