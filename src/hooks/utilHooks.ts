@@ -7,7 +7,6 @@ export const useUpdateOnMutationCallback = <T, OT>(
 ) => {
   const queryClient = useQueryClient();
   return async (newItem: any) => {
-    console.log('updateOnMutationCallback', queries);
     await queryClient.cancelQueries({
       queryKey: queries,
     });

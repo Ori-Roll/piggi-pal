@@ -14,7 +14,6 @@ const redirectPath = '/login'; //TODO: Move this to a config file or envs or som
 
 const BasicDataLoader = (props: PrivateRouteProps) => {
   const { children } = props;
-
   const queryClient = useQueryClient(); // To update the query cache
   const setSelectedChildAccount = useSelectedChildAccount(
     (state) => state?.setSelectedChildAccount
@@ -66,7 +65,7 @@ const BasicDataLoader = (props: PrivateRouteProps) => {
         />
       )}
       {isLoading && !isFetching ? (
-        <Center>
+        <Center w="100%" h="100%">
           <Loader />
         </Center>
       ) : null}

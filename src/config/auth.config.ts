@@ -1,8 +1,6 @@
 import { NextAuthConfig } from '../../node_modules/next-auth';
 import Google from 'next-auth/providers/google';
 
-console.log(process.env.AUTH_SECRET);
-
 export default {
   providers: [
     Google({

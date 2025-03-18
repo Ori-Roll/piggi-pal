@@ -1,8 +1,11 @@
 import { PropsWithChildren } from 'react';
-import { Button, ButtonProps } from '@mantine/core';
+import { Button, ButtonProps, PolymorphicComponentProps } from '@mantine/core';
 import style from './ActionButton.module.css';
 
-type ActionButtonProps = ButtonProps &
+type ActionButtonProps<C = 'button'> = PolymorphicComponentProps<
+  C,
+  ButtonProps
+> &
   PropsWithChildren<{
     onClick?: () => void;
     colorAccent?: string;

@@ -18,8 +18,6 @@ function PinCodeInput(props: PinCodeInputProps) {
   const handleOnComplete = (pin: string) => {
     onPinComplete(pin);
   };
-  console.log('error', error);
-  console.log('isPending', isPending);
 
   useEffect(() => {
     if (error) {

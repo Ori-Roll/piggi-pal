@@ -1,10 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { useForm, zodResolver } from '@mantine/form';
-import { NumberInput, TextInput, Button, Space } from '@mantine/core';
+import { NumberInput, TextInput, Space } from '@mantine/core';
 import { z } from 'zod';
 import { ChildAccount } from '@prisma/client';
 import queryClient from '@/config/queryClient';
 import childAccountsService from '@/APIService/childAccounts';
+import ActionButton from '@/components/base/ActionButton/ActionButton';
 
 type AddNewChildAccountModalProps = {
   onSubmitCallback: () => void;
@@ -88,9 +89,9 @@ const AddNewChildAccountModal = (props: AddNewChildAccountModalProps) => {
         {...childAccountForm.getInputProps('initialBalance')}
       />
       <Space h="md" />
-      <Button disabled={isPending} type="submit" color="blue">
+      <ActionButton disabled={isPending} type="submit" color="blue">
         Add Child Account
-      </Button>
+      </ActionButton>
     </form>
   );
 };

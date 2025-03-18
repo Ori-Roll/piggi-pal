@@ -1,4 +1,3 @@
-import { useUserQuery } from '@/hooks/query/user';
 import { useSelectedChildAccount } from '@/store/useCurrentChildAccount';
 import { Text, Title } from '@mantine/core';
 
@@ -7,7 +6,6 @@ type AppLogoProps = {};
 const AppLogo = (props: AppLogoProps) => {
   const {} = props;
 
-  const { data: user } = useUserQuery();
   const selectedChildAccount = useSelectedChildAccount(
     (state) => state?.selectedChildAccount
   );

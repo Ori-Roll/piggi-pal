@@ -87,8 +87,6 @@ const useUsersHandlers = async (
       break;
   }
 
-  console.log('IN useUsersH routeFunction', routeFunction);
-
   if (!method || !routeFunction) {
     throw new APIError(
       HttpStatusCodes.METHOD_NOT_ALLOWED,

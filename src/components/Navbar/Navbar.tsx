@@ -26,7 +26,6 @@ const Navbar = (props: NavbarProps) => {
 
   const onSubmitCallback = () => {
     toggleNavBarOpened();
-    console.log('onSubmitCallback');
   };
 
   return (

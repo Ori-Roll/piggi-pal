@@ -22,11 +22,10 @@ const PinCodeCreate = (props: PinCodeCreateProps) => {
   const { mutateAsync, isPending, isError } = useMutation({
     mutationFn: async (pin: string) => {
       const data = await parentLock.createParentLock({ pin: Number(pin) });
-      console.log(data);
       onCreated();
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
     },
   });
 

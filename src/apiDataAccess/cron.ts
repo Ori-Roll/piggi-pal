@@ -83,7 +83,6 @@ const processPeriodicTransactions = async (minDate: Date, maxDate: Date) => {
             current: { increment: amount },
           },
         });
-        console.log('newChildAccount ', newChildAccount);
       }
       if (actionType === 'SUBTRACT' && amount) {
         const newChildAccount = await prisma.childAccount.update({
@@ -94,7 +93,6 @@ const processPeriodicTransactions = async (minDate: Date, maxDate: Date) => {
             current: { decrement: amount },
           },
         });
-        console.log('newChildAccount ', newChildAccount);
       }
 
       if (!amount) {
@@ -134,7 +132,6 @@ const processPeriodicTransactions = async (minDate: Date, maxDate: Date) => {
           ),
         },
       });
-      console.log('resolvedPeriodic ', updatedPeriodic);
     }
 
     return;

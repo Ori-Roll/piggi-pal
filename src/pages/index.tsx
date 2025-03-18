@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import styles from '@/styles/Home.module.css';
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { Loader } from '@mantine/core';
+import { Center, Loader } from '@mantine/core';
 import BasicDataLoader from '@/components/BasicDataLoader';
 import DashboardLayout from '@/components/Dashboard/Dashboard';
 
@@ -29,7 +29,11 @@ export default function Home() {
   }, [session.data, session.status, router]);
 
   if (session.status === 'loading' || !session.data) {
-    return <Loader />;
+    return (
+      <Center h="60vh">
+        <Loader />
+      </Center>
+    );
   }
 
   return (

@@ -20,7 +20,6 @@ function getAll(): Promise<User[]> {
 }
 
 function getOne(id: string): Promise<UserWithAllData | null> {
-  console.log('getOne id', id);
   return UsersAccess.getOne(id);
 }
 
