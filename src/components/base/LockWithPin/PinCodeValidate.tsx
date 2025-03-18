@@ -1,16 +1,8 @@
-import {
-  Space,
-  Text,
-  Flex,
-  PinInput,
-  Loader,
-  useMantineTheme,
-} from '@mantine/core';
-import { useFocusTrap } from '@mantine/hooks';
+import { Space, Text, Flex, Loader, useMantineTheme } from '@mantine/core';
 import { useMutation } from '@tanstack/react-query';
 import parentLock from '../../../APIService/parentLock';
+import PinCodeInput from './PinCodeInput';
 import style from './PinCode.module.css';
-import { defaultColors } from '@/utils/colors';
 
 type PinCodeValidateProps = {
   onValidated: () => void;
@@ -19,9 +11,7 @@ type PinCodeValidateProps = {
 const PinCodeValidate = (props: PinCodeValidateProps) => {
   const { onValidated } = props;
 
-  const focusTrapRef = useFocusTrap();
-
-  const { mutateAsync, isPending, isError } = useMutation({
+  const { mutateAsync, isPending, isError, error } = useMutation({
     mutationFn: async (pin: string) => {
       const data = await parentLock.validate(pin);
       // TODO: Fix this hack
@@ -50,23 +40,12 @@ const PinCodeValidate = (props: PinCodeValidateProps) => {
         account.
       </Text>
       <Space h={30} />
-      <Flex direction="row" justify="center" align="center" gap={30}>
-        <PinInput
-          ref={focusTrapRef}
-          size="md"
-          inputMode="numeric"
-          onComplete={handlePinComplete}
-          error={isError}
-          disabled={isPending}
-          radius="50%"
-          styles={{
-            input: {
-              borderColor: defaultColors.primaryColor,
-              borderWidth: '0.2rem',
-            },
-          }}
-        />
-      </Flex>
+      <PinCodeInput
+        onPinComplete={handlePinComplete}
+        isPending={isPending}
+        error={isError}
+      />
+      <Space h={30} />
       {isPending && <Loader />}
       {isError && <Text c={theme.colors.red[4]}>Invalid pin code!</Text>}
 

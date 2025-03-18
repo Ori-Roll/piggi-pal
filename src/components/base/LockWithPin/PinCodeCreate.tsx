@@ -3,14 +3,12 @@ import {
   Text,
   Flex,
   Center,
-  PinInput,
   Loader,
   useMantineTheme,
 } from '@mantine/core';
-import { useFocusTrap } from '@mantine/hooks';
 import { useMutation } from '@tanstack/react-query';
 import parentLock from '../../../APIService/parentLock';
-import { defaultColors } from '@/utils/colors';
+import PinCodeInput from './PinCodeInput';
 
 type PinCodeCreateProps = {
   onCreated: () => void;
@@ -20,8 +18,6 @@ const PinCodeCreate = (props: PinCodeCreateProps) => {
   const { onCreated } = props;
 
   const theme = useMantineTheme();
-
-  const focusTrapRef = useFocusTrap();
 
   const { mutateAsync, isPending, isError } = useMutation({
     mutationFn: async (pin: string) => {
@@ -49,22 +45,11 @@ const PinCodeCreate = (props: PinCodeCreateProps) => {
       </Text>
       <Space h={30} />
       <Center>
-        <Flex direction="row" justify="center" align="center" gap={30}>
-          <PinInput
-            ref={focusTrapRef}
-            size="md"
-            inputMode="numeric"
-            onComplete={handlePinComplete}
-            disabled={isPending}
-            radius="50%"
-            styles={{
-              input: {
-                borderColor: defaultColors.primaryColor,
-                borderWidth: '0.2rem',
-              },
-            }}
-          />
-        </Flex>
+        <PinCodeInput
+          onPinComplete={handlePinComplete}
+          isPending={isPending}
+          error={isError}
+        />
       </Center>
       <Space h="2rem" />
       {isPending && <Loader />}
