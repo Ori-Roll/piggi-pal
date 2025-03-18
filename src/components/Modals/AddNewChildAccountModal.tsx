@@ -10,6 +10,8 @@ type AddNewChildAccountModalProps = {
   onSubmitCallback: () => void;
 };
 
+//TODO: Clean this up and move validation to validations folder
+
 const schema = z.object({
   name: z.string().min(2, { message: 'Name should have at least 2 letters' }),
   // allowance: z.object({
