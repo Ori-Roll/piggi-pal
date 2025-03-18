@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { Box, Flex, Grid, Loader } from '@mantine/core';
+import { Box, Flex, Loader, SimpleGrid } from '@mantine/core';
+import { IconCalendarStats, IconClipboardCheck } from '@tabler/icons-react';
 import { useSelectedChildAccount } from '@/store/useCurrentChildAccount';
 import childAccountsService from '@/APIService/childAccounts';
 import { useIsMobile } from '@/hooks/configHooks';
@@ -9,7 +10,9 @@ import OopsPage from '@/components/base/OopsPage/Oops';
 import TaskSection from '@/components/TaskSection/TaskSection';
 import { ChildAccountWithAllData } from '@/types/dataTypes';
 import NameAndAvatarLine from '@/components/base/NameAndAvatarLine/NameAndAvatarLine';
+import SectionHeader from '@/components/base/SectionHeader/SectionHeader';
 import style from './ChildAccount.module.css';
+import { defaultColors } from '@/utils/colors';
 
 type ChildAccountProps = {};
 
@@ -59,24 +62,34 @@ const ChildAccount = (props: ChildAccountProps) => {
   return (
     <Box className={isMobile ? style.wrapper_mobile : style.wrapper_desktop}>
       {childAccount ? (
-        <Grid
+        <SimpleGrid
           className={
             isMobile ? style.account_grid_mobile : style.account_grid_desktop
           }
         >
-          <Grid.Col className={style.grid_col_header}>
+          <Flex direction="column" className={style.grid_col_header}>
             <NameAndAvatarLine name={childAccount.kidName} />
-          </Grid.Col>
-          <Grid.Col className={style.gridColCurrent}>
+          </Flex>
+          <Flex direction="column" className={style.gridColCurrent}>
             <CurrentSection childAccount={childAccount} />
-          </Grid.Col>
-          <Grid.Col className={style.gridColPeriodics}>
+          </Flex>
+          <Flex direction="column" className={style.gridColPeriodics}>
+            <SectionHeader
+              title="Repeating things"
+              center={isMobile}
+              icon={<IconCalendarStats color={defaultColors.accentColor} />}
+            />
             <PeriodicsSection childAccount={childAccount} />
-          </Grid.Col>
-          <Grid.Col className={style.gridColTasks}>
+          </Flex>
+          <Flex direction="column" className={style.gridColTasks}>
+            <SectionHeader
+              title="Tasks you can do"
+              center={isMobile}
+              icon={<IconClipboardCheck color={defaultColors.accentColor} />}
+            />
             <TaskSection childAccount={childAccount} />
-          </Grid.Col>
-        </Grid>
+          </Flex>
+        </SimpleGrid>
       ) : (
         <h1>Nothing here</h1>
       )}

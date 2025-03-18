@@ -10,5 +10,5 @@ export const getTextColorForBackground = (backgroundColor: string) => {
 export const defaultColors = {
   primaryColor: '#289ffa',
   secondaryColor: '#3b6fff',
-  accentColor: '#ffb43b',
+  accentColor: '#ed1a4f',
 };
