@@ -15,6 +15,7 @@ import { ChildAccountWithAllData } from '@/types/dataTypes';
 import { TEMPORARY } from '@/common/consts';
 import { useUpdateOnMutationCallback } from '@/hooks/utilHooks';
 import { allowanceSchema } from '@/validations/periodics';
+import ActionButton from '@/components/base/ActionButton/ActionButton';
 
 type periodicFormProps = {
   periodic?: Partial<Periodic>;
@@ -120,9 +121,18 @@ const PeriodicForm = (props: periodicFormProps) => {
         {...form.getInputProps('endsAt')}
       />
       <Space h="20px" />
-      <Button w="100%" type="submit">
-        Add
-      </Button>
+      <ActionButton
+        w="100%"
+        type="submit"
+        styles={{
+          label: {
+            justifyContent: 'center',
+            width: '100%',
+          },
+        }}
+      >
+        Add repeating job
+      </ActionButton>
     </form>
   );
 };

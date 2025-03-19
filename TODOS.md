@@ -2,10 +2,10 @@
 
 1. Clean ui
    - reintroduce piggi image
-   - loader at the begginning - center
    - account dropdown looks bad
-     Mobile issues:
 2. fix "component is changing an uncontrolled input to be controlled" (periodic changes and maybe account?)
+3. Add facebook?
+4. Race conditions when V'in task?
 
 ### Issues
 
@@ -45,3 +45,4 @@ v added task amount functionality
 v cron works!
 v Add Transactions to current (on parent)
 v Add basic validations to forms (task amount!)
+c Adding child account changes selected to new account

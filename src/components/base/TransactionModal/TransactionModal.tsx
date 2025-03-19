@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Flex, NumberInput, Text } from '@mantine/core';
 import { ChildAccount } from '@prisma/client';
 import ActionButton from '@/components/base/ActionButton/ActionButton';
+import AmountWithSign from '../AmountWithSign/AmountWithSign';
+import { defaultColors } from '@/utils/colors';
+import chroma from 'chroma-js';
 
 type TransactionModalProps = {
   submitTitle: string;
@@ -30,15 +33,12 @@ const TransactionModal = (props: TransactionModalProps) => {
     setAmount(Number(value));
   };
 
+  const afterTransactionColor = chroma(defaultColors.primaryColor)
+    .desaturate(1)
+    .hex();
+
   return (
     <Flex direction="column" gap="1rem">
-      <Flex direction="column" gap="1rem">
-        <Text>Current amount: {selectedChildAccount.current}</Text>
-        <Text>{`New amount: ${calculateNewAmount(
-          amount,
-          selectedChildAccount.current
-        )}`}</Text>
-      </Flex>
       <NumberInput
         defaultValue={0}
         min={0}
@@ -57,6 +57,17 @@ const TransactionModal = (props: TransactionModalProps) => {
       >
         {submitTitle}
       </ActionButton>
+      <Flex direction="column" align="center" gap="0.4rem">
+        <Text c={afterTransactionColor}>{`Balance after transaction: `}</Text>
+        <AmountWithSign
+          textStyle={{
+            fontSize: '2.5rem',
+            lineHeight: '2.5rem',
+            color: afterTransactionColor,
+          }}
+          amount={calculateNewAmount(amount, selectedChildAccount.current)}
+        />
+      </Flex>
     </Flex>
   );
 };

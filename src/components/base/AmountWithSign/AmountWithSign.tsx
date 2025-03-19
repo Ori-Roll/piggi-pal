@@ -6,10 +6,11 @@ type AmountWithSignProps = {
   currencySign?: string;
   fontSize?: number;
   color?: string;
+  textStyle?: React.CSSProperties;
 };
 
 const AmountWithSign = (props: AmountWithSignProps) => {
-  const { amount, currencySign = '$', fontSize = 4, color } = props;
+  const { amount, currencySign = '$', fontSize = 4, color, textStyle } = props;
 
   //TODO: The sign should be a prop, not hardcoded. Or maybe come from a context or config.
 
@@ -23,11 +24,19 @@ const AmountWithSign = (props: AmountWithSignProps) => {
     <Flex align="center" gap={10}>
       <Flex align={'end'}>
         {/* <img style={{ height: '100px' }} src={PigiSvg} /> */}
-        <Text className={style.currency} c={color} style={defaultFontSizes}>
+        <Text
+          className={style.currency}
+          c={color}
+          style={{ ...defaultFontSizes, ...textStyle }}
+        >
           {currencySign}
         </Text>
         <Space w={5} />
-        <Text c={color} className={style.amount} style={defaultFontSizes}>
+        <Text
+          c={color}
+          className={style.amount}
+          style={{ ...defaultFontSizes, ...textStyle }}
+        >
           {amount}
         </Text>
       </Flex>

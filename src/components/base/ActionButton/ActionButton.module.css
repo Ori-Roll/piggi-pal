@@ -1,7 +1,19 @@
 .custom_action_button {
   border-radius: 1.5rem;
-  border: 4px solid #abc6ed;
+  border: 4px solid;
   position: relative;
+  transition: border-color 0.1s ease;
+  transition: background-color 0.1s ease;
+}
+
+.custom_action_button:not([disabled]) {
+  border-color: #abc6ed;
+}
+
+.custom_action_button:hover:not([disabled]) {
+  color: 'red';
+  border-color: #4f7ccf;
+  background-color: #e5e9f0;
 }
 
 .circle_icon {

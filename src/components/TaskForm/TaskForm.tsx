@@ -7,6 +7,7 @@ import { ChildAccountWithAllData } from '@/types/dataTypes';
 import { TEMPORARY } from '@/common/consts';
 import { useUpdateOnMutationCallback } from '@/hooks/utilHooks';
 import { createTaskSchema } from '@/validations/tasks';
+import ActionButton from '@/components/base/ActionButton/ActionButton';
 
 type TaskFormProps = {
   task?: Partial<Task>;
@@ -94,9 +95,18 @@ const TaskForm = (props: TaskFormProps) => {
         {...form.getInputProps('amount')}
       />
       <Space h="20px" />
-      <Button w="100%" type="submit">
-        Add
-      </Button>
+      <ActionButton
+        w="100%"
+        type="submit"
+        styles={{
+          label: {
+            justifyContent: 'center',
+            width: '100%',
+          },
+        }}
+      >
+        Add task
+      </ActionButton>
     </form>
   );
 };

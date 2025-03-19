@@ -41,6 +41,11 @@ export const useUserMutation = () => {
 };
 
 export const useUserDataState = () => {
-  const query = useUserQuery(() => {}, { enabled: false, queryFn: undefined });
+  const query = useUserQuery(
+    () => {
+      console.log('Mock callback');
+    },
+    { enabled: false, queryFn: undefined }
+  );
   return query;
 };

@@ -93,8 +93,9 @@ const ChildAccountSelect = (props: ChildAccountSelectProps) => {
         opened={selectOpened}
         onChange={setSelectOpened}
         transitionProps={{ transition: 'pop-top-right' }}
-        position="top-start"
+        position="bottom"
         withinPortal
+        width="target"
       >
         <Menu.Target>
           <ActionButton
@@ -137,10 +138,10 @@ const ChildAccountSelect = (props: ChildAccountSelectProps) => {
               </Menu.Item>
             ))
           )}
-          <Button w="100%" onClick={addNewChildAccount}>
+          <ActionButton w="100%" onClick={addNewChildAccount}>
             <IconPlus />
             Add child account
-          </Button>
+          </ActionButton>
         </Menu.Dropdown>
       </Menu>
     </>
