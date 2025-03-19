@@ -1,8 +1,7 @@
-import { Button, Center, Group, Text, Menu, Loader } from '@mantine/core';
+import { Button, Center, Text, Menu, Loader, Modal } from '@mantine/core';
 import { IconChevronDown, IconPlus } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ChildAccount } from '@prisma/client';
-import { useAddChildAccountModalToggle } from '@/store/useModalActive';
 import { useSelectedChildAccount } from '@/store/useCurrentChildAccount';
 import { useEditMode } from '@/store/useEditMode';
 import { selectCurrentChildAccount } from '@/utils/generalDataUtils';
@@ -10,27 +9,36 @@ import childAccountsService from '@/APIService/childAccounts';
 import { useUserDataState, useUserMutation } from '@/hooks/query/user';
 import ActionButton from '@/components/base/ActionButton/ActionButton';
 import { defaultColors } from '@/utils/colors';
+import { useState } from 'react';
+import AddNewChildAccountModal from '../Modals/AddNewChildAccountModal';
 
 type ChildAccountSelectProps = {};
 
 const ChildAccountSelect = (props: ChildAccountSelectProps) => {
   const {} = props;
+
+  const [addChildModalOpened, setAddChildModalOpened] = useState(false);
+  const [selectOpened, setSelectOpened] = useState(false);
+
+  const { data: user } = useUserDataState();
+  const editMode = useEditMode((state) => state.edit);
+  const queryClient = useQueryClient();
+
   const selectedChildAccount = useSelectedChildAccount(
     (state) => state?.selectedChildAccount
   );
-  const editMode = useEditMode((state) => state.edit);
-  const { data: user } = useUserDataState();
 
   const setSelectedChildAccount = useSelectedChildAccount(
     (state) => state?.setSelectedChildAccount
   );
 
-  const activateAddChildAccountModal = useAddChildAccountModalToggle(
-    (state) => state.setTrue
-  );
+  // const activateAddChildAccountModal = useAddChildAccountModalToggle(
+  //   (state) => state.setTrue
+  // );
 
   const addNewChildAccount = async () => {
-    activateAddChildAccountModal();
+    setAddChildModalOpened(true);
+    setSelectOpened(false);
   };
 
   const mutateUserAsync = useUserMutation();
@@ -67,34 +75,48 @@ const ChildAccountSelect = (props: ChildAccountSelectProps) => {
     refetchOnMount: true,
   });
 
-  return (
-    <Menu
-      transitionProps={{ transition: 'pop-top-right' }}
-      position="top-start"
-      withinPortal
-    >
-      <Menu.Target>
-        <ActionButton
-          colorAccent={defaultColors.secondaryColor}
-          rightSection={<IconChevronDown size={18} stroke={1.5} />}
-          disabled={!editMode}
-          style={
-            editMode
-              ? {
-                  border: 'solid',
-                  borderWidth: '0.2rem',
-                  borderRadius: '2rem',
-                  borderColor: defaultColors.primaryColor,
-                }
-              : { border: 'none', background: 'none' }
-          }
-        >
-          {selectedChildAccount?.kidName || 'Select child account'}
-        </ActionButton>
-      </Menu.Target>
+  const onNewAccountCreated = async () => {
+    await queryClient.invalidateQueries({ queryKey: ['user'] });
+    setAddChildModalOpened(false);
+  };
 
-      <Menu.Dropdown>
-        <Group>
+  return (
+    <>
+      <Modal
+        title={'Create a new child account'}
+        opened={addChildModalOpened}
+        onClose={() => setAddChildModalOpened(false)}
+      >
+        <AddNewChildAccountModal onSubmitCallback={onNewAccountCreated} />
+      </Modal>
+      <Menu
+        opened={selectOpened}
+        onChange={setSelectOpened}
+        transitionProps={{ transition: 'pop-top-right' }}
+        position="top-start"
+        withinPortal
+      >
+        <Menu.Target>
+          <ActionButton
+            colorAccent={defaultColors.secondaryColor}
+            rightSection={<IconChevronDown size={18} stroke={1.5} />}
+            disabled={!editMode}
+            style={
+              editMode
+                ? {
+                    border: 'solid',
+                    borderWidth: '0.2rem',
+                    borderRadius: '2rem',
+                    borderColor: defaultColors.primaryColor,
+                  }
+                : { border: 'none', background: 'none' }
+            }
+          >
+            {selectedChildAccount?.kidName || 'Select child account'}
+          </ActionButton>
+        </Menu.Target>
+
+        <Menu.Dropdown>
           {childAccountsLoading ? (
             <Center w="100%" h={70}>
               <Loader />
@@ -119,9 +141,9 @@ const ChildAccountSelect = (props: ChildAccountSelectProps) => {
             <IconPlus />
             Add child account
           </Button>
-        </Group>
-      </Menu.Dropdown>
-    </Menu>
+        </Menu.Dropdown>
+      </Menu>
+    </>
   );
 };
 

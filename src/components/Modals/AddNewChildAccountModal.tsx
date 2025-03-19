@@ -1,14 +1,15 @@
 import { useMutation } from '@tanstack/react-query';
 import { useForm, zodResolver } from '@mantine/form';
-import { NumberInput, TextInput, Space } from '@mantine/core';
+import { NumberInput, TextInput, Space, Loader } from '@mantine/core';
 import { z } from 'zod';
 import { ChildAccount } from '@prisma/client';
 import queryClient from '@/config/queryClient';
 import childAccountsService from '@/APIService/childAccounts';
 import ActionButton from '@/components/base/ActionButton/ActionButton';
+import { defaultColors } from '@/utils/colors';
 
 type AddNewChildAccountModalProps = {
-  onSubmitCallback: () => void;
+  onSubmitCallback: () => Promise<void> | void;
 };
 
 //TODO: Clean this up and move validation to validations folder
@@ -48,7 +49,10 @@ const AddNewChildAccountModal = (props: AddNewChildAccountModalProps) => {
   });
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: childAccountsService.createChildAccount,
+    mutationFn: async (newAccountData: Partial<ChildAccount>) => {
+      await childAccountsService.createChildAccount(newAccountData);
+      await onSubmitCallback();
+    },
   });
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
@@ -61,7 +65,6 @@ const AddNewChildAccountModal = (props: AddNewChildAccountModalProps) => {
       queryClient.invalidateQueries({
         queryKey: ['userChildAccounts'],
       });
-      onSubmitCallback();
     } catch (error) {
       console.error('Error adding child account', error);
       alert('Error adding child account');
@@ -89,8 +92,19 @@ const AddNewChildAccountModal = (props: AddNewChildAccountModalProps) => {
         {...childAccountForm.getInputProps('initialBalance')}
       />
       <Space h="md" />
-      <ActionButton disabled={isPending} type="submit" color="blue">
-        Add Child Account
+      <ActionButton
+        disabled={isPending}
+        type="submit"
+        color={defaultColors.primaryColor}
+        colorAccent={defaultColors.primaryColor}
+        styles={{
+          label: {
+            justifyContent: 'center',
+            width: '100%',
+          },
+        }}
+      >
+        {isPending ? <Loader /> : 'Add Child Account'}
       </ActionButton>
     </form>
   );

@@ -12,6 +12,7 @@ import tasksService from '@/APIService/tasks';
 import { TEMPORARY } from '@/common/consts';
 import { useUpdateOnMutationCallback } from '@/hooks/utilHooks';
 import { useEditMode } from '@/store/useEditMode';
+import NothingHere from '@/components/base/NothingHere/NothingHere';
 import style from './TaskSection.module.css';
 
 type TaskSectionProps = {
@@ -59,6 +60,16 @@ function TaskSection(props: TaskSectionProps) {
   const onCheck = (taskId: string) => {
     updateTaskCheck(taskId);
   };
+
+  if (childAccount.tasks.length === 0) {
+    return (
+      <NothingHere>
+        {editMode
+          ? `Your child has no tasks to perform`
+          : `You have no tasks you can do`}
+      </NothingHere>
+    );
+  }
 
   return childAccount.tasks.length > 0 ? (
     <CardsGrid

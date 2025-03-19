@@ -1,27 +1,44 @@
-import { useQuery } from '@tanstack/react-query';
-import { Box, Flex, Loader, SimpleGrid } from '@mantine/core';
+import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  Box,
+  Center,
+  Flex,
+  Loader,
+  Modal,
+  SimpleGrid,
+  Text,
+} from '@mantine/core';
 import { IconCalendarStats, IconClipboardCheck } from '@tabler/icons-react';
 import { useSelectedChildAccount } from '@/store/useCurrentChildAccount';
 import childAccountsService from '@/APIService/childAccounts';
 import { useIsMobile } from '@/hooks/configHooks';
-import { CurrentSection } from '@/components/CurrentSection/CurrentSection';
+import { ChildAccountWithAllData } from '@/types/dataTypes';
+import { defaultColors } from '@/utils/colors';
+import { useUserDataState } from '@/hooks/query/user';
 import PeriodicsSection from '@/components/PeriodicsSection/PeriodicsSection';
+import { CurrentSection } from '@/components/CurrentSection/CurrentSection';
 import OopsPage from '@/components/base/OopsPage/Oops';
 import TaskSection from '@/components/TaskSection/TaskSection';
-import { ChildAccountWithAllData } from '@/types/dataTypes';
 import NameAndAvatarLine from '@/components/base/NameAndAvatarLine/NameAndAvatarLine';
 import SectionHeader from '@/components/base/SectionHeader/SectionHeader';
+import AddNewChildAccountModal from '@/components/Modals/AddNewChildAccountModal';
 import style from './ChildAccount.module.css';
-import { defaultColors } from '@/utils/colors';
+import ActionButton from '../base/ActionButton/ActionButton';
 
 type ChildAccountProps = {};
 
 const ChildAccount = (props: ChildAccountProps) => {
   const {} = props;
+
+  const [addChildModalOpened, setAddChildModalOpened] = useState(false);
+
   const selectedChildAccount = useSelectedChildAccount(
     (state) => state?.selectedChildAccount
   );
   const isMobile = useIsMobile();
+
+  const { data: user } = useUserDataState();
 
   const {
     data: childAccount,
@@ -39,6 +56,42 @@ const ChildAccount = (props: ChildAccountProps) => {
     enabled: !!selectedChildAccount?.id,
     refetchOnMount: false,
   });
+
+  const queryClient = useQueryClient();
+
+  const onNewAccountCreated = async () => {
+    await queryClient.invalidateQueries({ queryKey: ['user'] });
+    setAddChildModalOpened(false);
+  };
+
+  if (user && !user?.childAccounts?.length)
+    return (
+      <Center h="30vh">
+        <Modal
+          title={'Create a new child account'}
+          opened={addChildModalOpened}
+          onClose={() => setAddChildModalOpened(false)}
+        >
+          <AddNewChildAccountModal onSubmitCallback={onNewAccountCreated} />
+        </Modal>
+        <Flex direction="column" align="center" gap="lg">
+          <Text>No child account yet. Please create one</Text>
+          <ActionButton
+            size="md"
+            onClick={() => setAddChildModalOpened(true)}
+            styles={{
+              label: {
+                justifyContent: 'center',
+                color: defaultColors.accentColor,
+                width: '100%',
+              },
+            }}
+          >
+            Create new account
+          </ActionButton>
+        </Flex>
+      </Center>
+    );
 
   if (childAccountError) return <OopsPage />;
 

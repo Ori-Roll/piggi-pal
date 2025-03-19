@@ -15,7 +15,11 @@ type ActionButtonProps<C = 'button'> = PolymorphicComponentProps<
 const ActionButton = (props: ActionButtonProps) => {
   const { children, colorAccent, ref, ...restProps } = props;
 
-  const { style: propsStyle, ...restPropsWithoutStyle } = restProps;
+  const {
+    style: propsStyle,
+    styles: propStyles,
+    ...restPropsWithoutStyle
+  } = restProps;
 
   return (
     <Button
@@ -40,6 +44,7 @@ const ActionButton = (props: ActionButtonProps) => {
         label: {
           width: '100%',
         },
+        ...propStyles,
       }}
       ref={ref}
       {...restPropsWithoutStyle}

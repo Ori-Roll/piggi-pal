@@ -4,6 +4,7 @@ import NothingHere from '@/components/base/NothingHere/NothingHere';
 import { ChildAccountWithPeriodics } from '@/types/dataTypes';
 import CardsGrid from '@/components/base/CardsGrid/CardsGrid';
 import { TEMPORARY } from '@/common/consts';
+import { useEditMode } from '@/store/useEditMode';
 // import style from './PeriodicsSection.module.css';
 
 type PeriodicsSectionProps = {
@@ -29,10 +30,14 @@ const PeriodicsSection = (props: PeriodicsSectionProps) => {
     childAccount: { periodics },
   } = props;
 
+  const editMode = useEditMode((state) => state.edit);
+
   if (periodics.length === 0) {
     return (
       <NothingHere>
-        You have no allowance or any other repeating action yet
+        {editMode
+          ? `Your child does not have an allowance or any other repeating actions yet`
+          : `You have no allowance or any other repeating action yet`}
       </NothingHere>
     );
   }
