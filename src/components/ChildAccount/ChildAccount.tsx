@@ -102,11 +102,12 @@ const ChildAccount = (props: ChildAccountProps) => {
           direction="column"
           justify="center"
           align="center"
-          style={{ height: '100%' }}
+          style={{ height: '40vh' }}
+          gap="2rem"
         >
-          <Flex justify="center" align="center" style={{ height: '100%' }}>
+          <Text size="lg" c={defaultColors.primaryColor}>
             Loading your child&apos;s account
-          </Flex>
+          </Text>
           <Loader />
         </Flex>
       </Box>

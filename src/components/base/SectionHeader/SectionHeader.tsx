@@ -32,10 +32,10 @@ function SectionHeader(props: SectionHeaderProps) {
 
   return (
     <Flex
-      justify="flex-start"
-      align={center ? 'center' : 'flex-start'}
+      justify={center ? 'center' : 'flex-start'}
+      align="center"
       w="100%"
-      gap="0.8rem"
+      gap="0.7rem"
       className={style.wrapper}
       p="1rem 0.2rem"
     >
