@@ -67,6 +67,7 @@ const PeriodicForm = (props: periodicFormProps) => {
     interval: intervalOptions[1].value,
     actionType: actionTypeOptions[0].value,
     name: 'Allowance', //TODO: This is now fixed - think what is it for
+    title: 'Allowance',
     startsAt: new Date(),
     amount: 5,
   };
