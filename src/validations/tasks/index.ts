@@ -6,7 +6,6 @@ export const createTaskSchema = z.object({
     .string()
     .min(2, { message: messages.name.min(2) })
     .max(15, { message: messages.name.max(15) }),
-  description: z.string(),
   requiredTimes: z.number().min(1, { message: messages.times.min }).optional(),
   amount: z
     .number({

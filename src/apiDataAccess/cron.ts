@@ -94,6 +94,18 @@ const processPeriodicTransactions = async (minDate: Date, maxDate: Date) => {
           },
         });
       }
+      if (actionType === 'ADDRATE' && amount) {
+        const multiplyRateFactor = 1 + amount / 100;
+
+        const newChildAccount = await prisma.childAccount.update({
+          where: {
+            id: childAccount.id,
+          },
+          data: {
+            current: { multiply: multiplyRateFactor },
+          },
+        });
+      }
 
       if (!amount) {
         throw new APIError(
