@@ -1,17 +1,15 @@
 ### Todo next:
 
-1. Clean ui
-   - reintroduce piggi image
-   - account dropdown looks bad
-2. fix "component is changing an uncontrolled input to be controlled" (periodic changes and maybe account?)
-3. Add facebook?
-4. Race conditions when V'in task?
+1. Reintroduce piggi image
+2. Add facebook?
 
 ### Issues
 
 - parent lock sometimes acts as create instead of existing lock
   (maybe happens when using immediately on app load)
 - card styles prisma schema might not have cascade
+- Race conditions when tasks quickly added
+- "component is changing an uncontrolled input to be controlled" (periodic changes and maybe account?)
 
 ## Todos after deploy is somewhat ready
 

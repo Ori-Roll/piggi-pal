@@ -28,6 +28,8 @@ const schema = z.object({
     .max(1000, { message: `That's a lot of money!` }),
 });
 
+//TODO: This is not a modal, it's a form!
+
 const AddNewChildAccountModal = (props: AddNewChildAccountModalProps) => {
   const { onSubmitCallback } = props;
 

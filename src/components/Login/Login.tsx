@@ -15,12 +15,15 @@ import {
   Box,
 } from '@mantine/core';
 
-import YourSvg from '@/assets/pigibank_all.svg';
 import { useIsMobile } from '@/hooks/configHooks';
 
-import { GoogleButton } from '@/components/base/buttons/AuthButtons';
+import {
+  GoogleButton,
+  FacebookButton,
+} from '@/components/base/buttons/AuthButtons';
 import Disclaimer from '@/components/base/Disclaimer/Disclaimer';
 import { useRouter } from 'next/router';
+import YourSvg from '@/assets/pigibank_all.svg';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -103,16 +106,21 @@ export default function LoginPage() {
                 Sign in
               </Button>
             </Stack>
-          </form> */}
+          </form> 
           <p>Sign in with password temporarily unavailable</p>
 
-          <Divider label="Or continue with" labelPosition="center" my="lg" />
+          <Divider label="Or continue with" labelPosition="center" my="lg" />*/}
 
-          <Group grow mb="md" mt="md">
-            <GoogleButton />;
-            {/* <LoginButton auth={{ name: 'Google', id: 'google' }} /> */}
-            {/* <Button variant="default">Facebook</Button> */}
-          </Group>
+          <Flex
+            mb="md"
+            mt="md"
+            gap="1rem"
+            direction={isMobile ? 'column' : 'row'}
+            align={isMobile ? 'center' : 'start'}
+          >
+            <GoogleButton />
+            <FacebookButton disabled />
+          </Flex>
         </Paper>
         <img style={{ height: '620px' }} src={YourSvg} />
       </Flex>

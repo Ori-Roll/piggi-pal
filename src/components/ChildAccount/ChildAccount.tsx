@@ -68,10 +68,22 @@ const ChildAccount = (props: ChildAccountProps) => {
     return (
       <Center h="30vh">
         <Modal
-          title={'Create a new child account'}
+          withCloseButton={false}
           opened={addChildModalOpened}
           onClose={() => setAddChildModalOpened(false)}
         >
+          <Flex direction="column" gap="lg" align="center">
+            <Text size="lg" fw={700}>
+              Welcome to Piggi-pal!
+            </Text>
+            <Text size="md" ta="center">
+              This is where you can create an account for your child to track
+              his allowance, create tasks for him to accomplish and more
+            </Text>
+            <Text size="md" ta="center">
+              Start by creating a new account with an initial balance.
+            </Text>
+          </Flex>
           <AddNewChildAccountModal onSubmitCallback={onNewAccountCreated} />
         </Modal>
         <Flex direction="column" align="center" gap="lg">

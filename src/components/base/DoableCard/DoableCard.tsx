@@ -1,28 +1,32 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import {
   Box,
   Button,
   Flex,
   Loader,
+  Modal,
   Space,
   UnstyledButton,
+  Text,
+  UnstyledButtonProps,
 } from '@mantine/core';
-import { IconCheck, IconPencil } from '@tabler/icons-react';
+import { IconCheck, IconTrash } from '@tabler/icons-react';
 import chroma from 'chroma-js';
 import style from './DoableCard.module.css';
 import { getTextColorForBackground } from '@/utils/colors';
 import LayoutCard from '@/components/base/LayoutCard/LayoutCard';
+import ActionButton from '@/components/base/ActionButton/ActionButton';
 
 type DoableCardGeneralProps = {
   cardStyle?: DefaultStyle;
   loading?: boolean;
+  onDelete?: () => void;
 };
 
 type EditableProps<T> = {
   editableDeletable: true;
   checkable?: T;
   onEdit?: () => void;
-  onDelete?: () => void;
 };
 
 type CheckableProps<T> = {
@@ -53,7 +57,9 @@ const defaultStyle: DefaultStyle = {
 const DoableCard = <T extends boolean>(
   props: PropsWithChildren<DoableCardGeneralProps & DoableCardProps<T>>
 ) => {
-  const { children, cardStyle = defaultStyle, loading } = props;
+  const { children, cardStyle = defaultStyle, loading, onDelete } = props;
+
+  const [deleteModalOpened, setDeleteModalOpened] = useState(false);
 
   const { editableDeletable } = props as PropsWithChildren<
     DoableCardGeneralProps & EditableProps<T>
@@ -73,12 +79,49 @@ const DoableCard = <T extends boolean>(
 
   const backgroundColor = chroma('white').hex();
 
+  const deleteButtonDeleteColor = chroma('red').desaturate(2).hex();
+  const deleteButtonCancelColor = chroma(cardStyle.primaryColors).hex();
+
   return (
     <LayoutCard>
+      {onDelete && (
+        <Modal
+          opened={deleteModalOpened}
+          onClose={function (): void {
+            setDeleteModalOpened(false);
+          }}
+        >
+          <h2>Delete this task?</h2>
+          <Space h="xl" />
+          <Flex justify="center" gap="1rem">
+            <ActionButton
+              colorAccent={deleteButtonCancelColor}
+              onClick={() => {
+                setDeleteModalOpened(false);
+              }}
+            >
+              <Text c={deleteButtonCancelColor}>Cancel</Text>
+            </ActionButton>
+            <ActionButton
+              colorAccent={deleteButtonDeleteColor}
+              onClick={() => {
+                onDelete();
+                setDeleteModalOpened(false);
+              }}
+            >
+              <Text c={deleteButtonDeleteColor}>Delete</Text>
+            </ActionButton>
+          </Flex>
+        </Modal>
+      )}
       <Flex direction="column">
-        {editableDeletable && (
+        {editableDeletable && onDelete && (
           <>
-            <EditButton onEdit={() => {}} backgroundColor={backgroundColor} />
+            <DeleteButton
+              style={{ alignSelf: 'flex-end' }}
+              onDelete={() => setDeleteModalOpened(true)}
+              backgroundColor={backgroundColor}
+            />
             <Space h="0.4rem" />
           </>
         )}
@@ -142,19 +185,23 @@ const CheckMarkCircle = (props: CheckMarkCircleProps) => {
   );
 };
 
-type EditButtonProps = {
-  onEdit: () => void;
+type DeleteButtonProps = UnstyledButtonProps & {
+  onDelete: () => void;
   backgroundColor?: string;
 };
 
-const EditButton = (props: EditButtonProps) => {
-  const { onEdit, backgroundColor = 'black' } = props;
+const DeleteButton = (props: DeleteButtonProps) => {
+  const { onDelete, backgroundColor = 'black', ...restButtonProps } = props;
 
   const foregroundColor = getTextColorForBackground(backgroundColor);
 
   return (
-    <UnstyledButton className={style.edit_button} onClick={onEdit}>
-      <IconPencil
+    <UnstyledButton
+      className={style.edit_button}
+      onClick={onDelete}
+      {...restButtonProps}
+    >
+      <IconTrash
         className={style.in_icon}
         size="1.5rem"
         color={foregroundColor}

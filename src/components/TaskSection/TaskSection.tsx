@@ -45,7 +45,6 @@ function TaskSection(props: TaskSectionProps) {
   const {
     mutateAsync: updateTaskCheck,
     isPending: updateTaskCheckIsPending,
-
     variables: mutatingTaskVariables,
   } = useMutation({
     mutationFn: async (taskId: string) => {
@@ -90,7 +89,13 @@ function TaskSection(props: TaskSectionProps) {
             checkable={!editMode}
             editableDeletable={editMode}
             onEdit={editMode ? () => {} : undefined}
-            // onDelete={() => {}}
+            onDelete={
+              editMode
+                ? () => {
+                    console.log('delete task');
+                  }
+                : undefined
+            }
             checking={
               updateTaskCheckIsPending && mutatingTaskVariables === task.id
             }
