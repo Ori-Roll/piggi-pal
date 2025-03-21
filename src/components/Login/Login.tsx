@@ -1,13 +1,8 @@
 import { FormEvent, useEffect, useState } from 'react';
 import {
-  TextInput,
-  PasswordInput,
   Paper,
   Title,
   Button,
-  Divider,
-  Group,
-  Stack,
   Flex,
   Center,
   FlexProps,
@@ -24,6 +19,7 @@ import {
 import Disclaimer from '@/components/base/Disclaimer/Disclaimer';
 import { useRouter } from 'next/router';
 import YourSvg from '@/assets/pigibank_all.svg';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -80,7 +76,14 @@ export default function LoginPage() {
         </Box>
       </Modal>
       <Flex {...layoutStyle}>
-        <Paper w="100%">
+        <Flex
+          h={isMobile ? '90vh' : '100vh'}
+          w="100%"
+          direction="column"
+          align="center"
+          justify="center"
+        >
+          <Image height={200} src={YourSvg} alt="piggi-pal" />
           <Title ta="center" order={2} pt={40} pb={20}>
             Piggi pal
           </Title>
@@ -121,8 +124,7 @@ export default function LoginPage() {
             <GoogleButton />
             <FacebookButton disabled />
           </Flex>
-        </Paper>
-        <img style={{ height: '620px' }} src={YourSvg} />
+        </Flex>
       </Flex>
     </Center>
   );

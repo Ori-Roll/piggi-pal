@@ -9,6 +9,8 @@ import LayoutCard from '@/components/base/LayoutCard/LayoutCard';
 import TransactionsButtons from '@/components/TransactionsButtons/TransactionsButtons';
 import style from './CurrentSection.module.css';
 import { useIsMobile } from '@/hooks/configHooks';
+import PiggyBank from '@/assets/pigibank_JustPig.svg';
+import Image from 'next/image';
 
 type CurrentSectionProps = {
   childAccount: ChildAccount;
@@ -82,40 +84,57 @@ export const CurrentSection = (props: CurrentSectionProps) => {
       }}
     >
       <Flex
-        direction="column"
-        align={isMobile ? 'center' : 'flex-start'}
-        className={style.currentSection}
-        p="1rem"
-        gap="1.5rem"
+        direction="row"
+        align="center"
+        justify="flex-start"
+        gap="1rem"
+        pl="1rem"
       >
-        <Flex align="flex-end" justify="flex-end" gap="0.4rem">
-          <Text size="xl" lh="1.5rem">
-            Balance
-          </Text>
-          <Text size="sm" lh="1.3rem">
-            (what you have)
-          </Text>
-          {isPending && <Loader size="sm" />}
-        </Flex>
-        <Flex
-          direction={isMobile ? 'column' : 'row'}
-          align="center"
-          gap="2rem"
-          w="100%"
-        >
-          <Current
-            current={childAccount.current}
-            sign={'$'}
-            handleChange={handleCurrentChange}
-            edit={editMode}
+        {!isMobile && (
+          <Image
+            height={105}
+            src={PiggyBank}
+            alt="piggy-bank"
+            style={{ marginTop: '0.2rem' }}
           />
-          {editMode && (
-            <TransactionsButtons
-              disabled={isPending}
-              selectedChildAccount={childAccount}
-              childAccountMutationFn={mutateAsync}
+        )}
+
+        <Flex
+          direction="column"
+          align={isMobile ? 'center' : 'flex-start'}
+          className={style.currentSection}
+          p="1rem"
+          gap="1.5rem"
+        >
+          <Flex align="flex-end" justify="flex-end" gap="0.4rem">
+            <Text size="xl" lh="1.5rem">
+              Balance
+            </Text>
+            <Text size="sm" lh="1.3rem">
+              (what you have)
+            </Text>
+            {isPending && <Loader size="sm" />}
+          </Flex>
+          <Flex
+            direction={isMobile ? 'column' : 'row'}
+            align="center"
+            gap="2rem"
+            w="100%"
+          >
+            <Current
+              current={childAccount.current}
+              sign={'$'}
+              handleChange={handleCurrentChange}
+              edit={editMode}
             />
-          )}
+            {editMode && (
+              <TransactionsButtons
+                disabled={isPending}
+                selectedChildAccount={childAccount}
+                childAccountMutationFn={mutateAsync}
+              />
+            )}
+          </Flex>
         </Flex>
       </Flex>
     </LayoutCard>
