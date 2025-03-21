@@ -23,6 +23,7 @@ const DashboardLayout = () => {
         breakpoint: 'sm',
         collapsed: { mobile: !burgered },
       }}
+      className={style.dashboard_wrapper}
     >
       <ModalsController />
       <AppShell.Header hidden={!isMobile}>

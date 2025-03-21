@@ -17,9 +17,9 @@
 }
 
 .wrapper_mobile {
+  width: 100%;
 }
 .wrapper_desktop {
-  padding: 0 1rem;
   max-width: 1400px;
 }
 .grid_col_header {

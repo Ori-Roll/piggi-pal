@@ -78,7 +78,7 @@ const Navbar = (props: NavbarProps) => {
         </Flex>
       </Flex>
       <Flex direction="row" justify="center" align="center" h={'100%'}>
-        <LockWithPin />
+        <LockWithPin onFinished={toggleNavBarOpened} />
       </Flex>
       <ActionButton
         onClick={() => signOut()}

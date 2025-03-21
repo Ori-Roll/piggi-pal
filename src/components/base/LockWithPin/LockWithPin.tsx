@@ -8,10 +8,12 @@ import PinCodeCreate from './PinCodeCreate';
 import { useUserDataState } from '@/hooks/query/user';
 import queryClient from '@/config/queryClient';
 
-type LockWithPinProps = {};
+type LockWithPinProps = {
+  onFinished?: () => void;
+};
 
 const LockWithPin = (props: LockWithPinProps) => {
-  const {} = props;
+  const { onFinished } = props;
   const [modalOpened, setModalOpened] = useState(false);
 
   const toggleModalOpened = () => {
@@ -36,6 +38,7 @@ const LockWithPin = (props: LockWithPinProps) => {
   const handleValidated = () => {
     setEditMode();
     toggleModalOpened();
+    onFinished?.();
   };
 
   const handleCodeCreated = async () => {
