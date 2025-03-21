@@ -25,6 +25,9 @@ function TaskSection(props: TaskSectionProps) {
   const queryClient = useQueryClient();
   const editMode = useEditMode((state) => state.edit);
 
+  // TODO: Move these to a custom hook
+  // Check task mutation
+
   const updateChildAccountOnTaskCheck = useUpdateOnMutationCallback(
     ['currentChildAccount', childAccount.id],
     (newTaskId: Partial<Task>) => (old: ChildAccountWithAllData) => {
@@ -45,19 +48,56 @@ function TaskSection(props: TaskSectionProps) {
   const {
     mutateAsync: updateTaskCheck,
     isPending: updateTaskCheckIsPending,
-    variables: mutatingTaskVariables,
+    variables: mutatingUpdatingTaskVariables,
   } = useMutation({
     mutationFn: async (taskId: string) => {
       await tasksService.completeTask(taskId, childAccount.id);
     },
     onMutate: updateChildAccountOnTaskCheck,
-    onSettled: () => {
+    onSettled: async () => {
+      await queryClient.cancelQueries({
+        queryKey: ['currentChildAccount'],
+      });
+      queryClient.invalidateQueries({ queryKey: ['currentChildAccount'] });
+    },
+  });
+
+  // Delete task mutation
+
+  const updateChildAccountOnTaskDelete = useUpdateOnMutationCallback(
+    ['currentChildAccount', childAccount.id],
+    (newTaskId: Partial<Task>) => (old: ChildAccountWithAllData) => {
+      const newTasks = old.tasks.filter((task) => task.id !== newTaskId);
+      return {
+        ...old,
+        tasks: newTasks || [],
+      };
+    }
+  );
+
+  const {
+    mutateAsync: updateTaskDelete,
+    isPending: updateTaskDeleteIsPending,
+    variables: mutatingDeleteTaskVariables,
+  } = useMutation({
+    mutationFn: async (taskId: string) => {
+      await tasksService.deleteTask(taskId);
+    },
+    onMutate: updateChildAccountOnTaskDelete,
+    onSettled: async () => {
+      await queryClient.cancelQueries({
+        queryKey: ['currentChildAccount'],
+      });
       queryClient.invalidateQueries({ queryKey: ['currentChildAccount'] });
     },
   });
 
   const onCheck = (taskId: string) => {
     updateTaskCheck(taskId);
+  };
+
+  const onDelete = (taskId: string) => {
+    updateTaskDelete(taskId);
   };
 
   if (childAccount.tasks.length === 0) {
@@ -85,26 +125,21 @@ function TaskSection(props: TaskSectionProps) {
               onCheck(task.id);
             }}
             checked={task.completed}
-            loading={task.id === TEMPORARY}
+            loading={
+              task.id === TEMPORARY || mutatingDeleteTaskVariables === task.id
+            }
             checkable={!editMode}
             editableDeletable={editMode}
             onEdit={editMode ? () => {} : undefined}
-            onDelete={
-              editMode
-                ? () => {
-                    console.log('delete task');
-                  }
-                : undefined
-            }
+            onDelete={editMode ? () => onDelete(task.id) : undefined}
             checking={
-              updateTaskCheckIsPending && mutatingTaskVariables === task.id
+              updateTaskCheckIsPending &&
+              mutatingUpdatingTaskVariables === task.id
             }
           >
             <Text fw={700}>{task.title}</Text>
             <Text c="dimmed">{task.description}</Text>
-            {/* <AnimatedShake delay={i * 100}> */}
             <AmountWithSign amount={task.amount} fontSize={2.2} />
-            {/* </AnimatedShake> */}
           </DoableCard>
         ) : null
       )}
