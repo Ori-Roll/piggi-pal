@@ -1,7 +1,6 @@
 ### Todo next:
 
-1. Reintroduce piggi image
-2. Add facebook?
+1. Add facebook?
 
 ### Issues
 
@@ -10,6 +9,7 @@
 - card styles prisma schema might not have cascade
 - Race conditions when tasks quickly added
 - "component is changing an uncontrolled input to be controlled" (periodic changes and maybe account?)
+- The daily periodics work differently than the weekly (weekly works immediately, daily validations do not allow to pick today even though it's an option). Something doesn't work properly there.
 
 ## Todos after deploy is somewhat ready
 

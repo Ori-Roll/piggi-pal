@@ -102,7 +102,7 @@ const processPeriodicTransactions = async (minDate: Date, maxDate: Date) => {
             id: childAccount.id,
           },
           data: {
-            current: { multiply: multiplyRateFactor },
+            current: childAccount.current * multiplyRateFactor,
           },
         });
       }

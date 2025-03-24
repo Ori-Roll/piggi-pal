@@ -1,1 +1,1 @@
-curl -X GET "http://localhost:5500/api/cron/run-daily" -H "Authorization: your-secret-token"
+curl -X GET "http://localhost:3000/api/cron" -H "Authorization: Bearer API_KEY_NAME"
