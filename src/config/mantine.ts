@@ -77,6 +77,13 @@ const mantineTheme: MantineThemeOverride = createTheme({
         },
       }),
     },
+    AppShell: {
+      styles: (theme: MantineTheme) => ({
+        header: {
+          borderBottom: `none`,
+        },
+      }),
+    },
     // Menu: {
     //   styles: (theme: MantineTheme) => ({
     //     body: {

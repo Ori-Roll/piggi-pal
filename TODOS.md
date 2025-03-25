@@ -13,15 +13,19 @@
 
 ## Todos after deploy is somewhat ready
 
-1. Add Tasks delete ? and edit ?
+1. Add Tasks edit ?
 2. Add login with credentials
-3. Better performance - this can be checked in devtools performance tab
-4. Add validators to requests in all routes (using zod)
-5. remove all logs
-6. add account options with:
+3. Better form design
+   - split add rate from allowance
+   - better form design
+   - better input on mobile
+4. Better performance - this can be checked in devtools performance tab
+5. Add validators to requests in all routes (using zod)
+6. remove all logs
+7. add account options with:
    - choose sign ($/star) and other options
    - choose child user icon
-7. Add Investments
+8. Add Investments
 
 # later
 
